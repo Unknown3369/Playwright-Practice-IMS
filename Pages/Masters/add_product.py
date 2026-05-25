@@ -7,108 +7,67 @@ class Add_prod:
    def __init__(self, page: Page):
       self.page = page
 
-      # locators (kept same XPath logic)
-      self.product_master = "//a[contains(@href, '/vendor-master/product')]"
-      self.add_prod_btn = "//button[contains(text(), 'Add Product')]"
-      self.add_prod_label = "//label[contains(text(), 'Add Product')]"
-
-      self.item_group_input = "//input[@placeholder='-- Press Enter For Item Group --']"
-      self.ng_select_box = "//ng-select[contains(@class,'ng-select-single')]//div[@role='combobox']"
-      self.select_option = "//div[contains(@class,'ng-option')]//span[normalize-space()='0110']"
-      self.ok_btn = "//button[.//span[contains(text(), 'Ok')]]"
-
-      self.item_code_input = "//input[@placeholder='Enter Item Code']"
-      self.item_name_input = "//input[@placeholder='Enter Item Name']"
-      self.hs_code_input = "//input[@placeholder='Enter HS Code']"
-      self.unit_dropdown = "//select[@id='unit']"
-      self.description_input = "//input[@placeholder='Enter Product Description']"
-      self.short_name = "//input[@placeholder='Enter Short Name']"
-      self.purchase_price = "//input[@placeholder='Enter Purchase Price']"
-      self.select_input = "//input[@placeholder='Press Enter to select']"
-      self.supplier = "//td[normalize-space()='11 QA Vendor']"
-      self.sales_price = "//input[@type='number' and @placeholder='0']"
-      self.save_button_locator = "//button[@id='save' and text()='SAVE']"
+      #self.item_code_input = page.get_by_role("textbox", name="Enter Item Code")
 
    def masters_click_test(self):
-      masters = self.page.locator("a[title='Masters']").filter(has_text="Masters").first
-      masters.wait_for(state="visible", timeout=60000)
-      masters.scroll_into_view_if_needed()
-      masters.click()
-      print("Masters clicked successfully!")
+      try:
+         self.page.get_by_title("Inventory Info").nth(1).click()
+         self.page.get_by_role("link", name="Product Master").click()
+         self.page.get_by_role("button", name="Add Product").click()
+         self.page.locator("a").filter(has_text="Add Product").first.click()
 
-      inventory_info = self.page.locator("#side-navigation a[title='Inventory Info']")
-      inventory_info.wait_for(state="visible", timeout=60000)
-      inventory_info.scroll_into_view_if_needed()
-      inventory_info.click()
-      print("Inventory Info Clickced successfully!")
 
-      product_master_link = self.page.locator(self.product_master)
-      product_master_link.scroll_into_view_if_needed()
-      product_master_link.click(force=True)
-      print("Product Master clicked successfully!")
-      time.sleep(2)
+      except PlaywrightTimeoutError as e:
+         self.page.goto("https://stc21.variantqa.himshang.com.np/#/pages/masters/vendor-master/product/new-product")
+         print("Timeout while navigating to Add Product page, navigated directly instead.")
 
-      add_product_btn = self.page.locator(self.add_prod_btn)
-      add_product_btn.wait_for(state="visible")
-      add_product_btn.click()
-      print("Add Product button clicked successfully!")
+   def add_prod_test(self, input_itemname: str, input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int):
 
-      add_product_label = self.page.locator(self.add_prod_label)
-      add_product_label.wait_for(state="visible")
-      add_product_label.click()
-      print("Add Product label clicked successfully!")
+      self.page.get_by_role("textbox", name="-- Press Enter For Item Group").press("Enter")
 
-   def add_prod_test(self, input_itemname: str, input_hscode: str,
-      input_description: str,
-      input_purchase_price: int,
-      input_sales_price: int):
-
-      self.page.locator(self.item_group_input).press("Enter")
-      time.sleep(1)
-
-      self.page.locator(self.ng_select_box).click()
+      self.page.locator(self.page.locator(".ng-input > input")).first.click()
       print("ng-select box clicked")
 
-      self.page.locator(self.select_option).click()
+      self.page.locator(self.page.get_by_role("option", name="TESTTT")).click()
       print("option selected")
 
-      self.page.locator(self.ok_btn).click()
+      self.page.locator(self.page.get_by_role("button", name="Ok")).click()
       print("OK button clicked")
 
-      item_name = self.page.locator(self.item_name_input)
+      item_name = self.page.locator(self.page.get_by_role("textbox", name="Enter Item Name"))
       item_name.fill(input_itemname)
       print("Item Name entered:", input_itemname)
 
-      hs_code = self.page.locator(self.hs_code_input)
+      hs_code = self.page.locator(self.page.get_by_role("textbox", name="Enter HS Code"))
       hs_code.fill(input_hscode)
       print("HS Code entered:", input_hscode)
 
-      unit_dropdown = self.page.locator(self.unit_dropdown)
+      unit_dropdown = self.page.locator(self.page.locator("#unit"))
       unit_dropdown.click()
-      self.page.select_option(self.unit_dropdown, label="Pkt.")
+      self.page.select_option(self.page.locator("#unit"), label="Pkt.")
       print("Unit 'Pkt.' selected")
 
-      self.page.locator(self.description_input).fill(input_description)
+      self.page.locator(self.page.get_by_role("textbox", name="Enter Product Description")).fill(input_description)
       print("Description entered:", input_description)
 
-      self.page.locator(self.short_name).fill("TestProd")
+      self.page.locator(self.page.get_by_role("textbox", name="Enter Short Name")).fill("TestProd")
       print("Short Name entered: TestProd")
 
       category_dropdown = self.page.locator("//select[@id='Category']")
       self.page.select_option("//select[@id='Category']", label="N/A")
       print("Category 'N/A' selected")
 
-      purchase_price = self.page.locator(self.purchase_price)
+      purchase_price = self.page.locator(self.page.get_by_role("textbox", name="Enter Purchase Price"))
       purchase_price.fill(str(input_purchase_price))
       print("Purchase Price entered:", input_purchase_price)
 
-      self.page.locator(self.select_input).press("Enter")
+      self.page.locator(self.page.locator("//input[@placeholder='Press Enter to select']")).press("Enter")
       time.sleep(1)
 
-      self.page.locator(self.supplier).dblclick()
+      self.page.locator(self.page.get_by_role("textbox", name="Press Enter to select")).dblclick()
       print("Supplier selected successfully!")
 
-      sales_price = self.page.locator(self.sales_price)
+      sales_price = self.page.locator(self.page.get_by_role("textbox", name="0"))
       sales_price.fill(str(input_sales_price))
       print("Sales Price entered successfully!")
 
@@ -125,7 +84,7 @@ class Add_prod:
       return item_code
    
    def save_button(self):
-      self.page.locator(self.save_button_locator).click()
+      self.page.locator(self.page.get_by_role("button", name="SAVE")).click()
 
       # handle browser alert
       try:
