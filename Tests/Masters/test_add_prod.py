@@ -27,7 +27,7 @@ def test_add_prod():
       random_item_name = random_name()
       random_hs_code = str(random.randint(1000, 9999))
       random_description = "Test Product Description"
-      random_purchase_price = random.randint(50, 150)
+      random_purchase_price = random.randint(50, 180)
       random_sales_price = random.randint(200, 350)
 
       item_code = add_prod_page.add_prod_test(
@@ -38,7 +38,7 @@ def test_add_prod():
          input_sales_price=random_sales_price
       )
 
-      print("Generated Item Code:", item_code)
+      # print("Generated Item Code:", item_code)
 
       add_prod_page.save_button()
 

@@ -10,78 +10,111 @@ class Add_prod:
       #self.item_code_input = page.get_by_role("textbox", name="Enter Item Code")
 
    def masters_click_test(self):
-      try:
          self.page.get_by_title("Inventory Info").nth(1).click()
          self.page.get_by_role("link", name="Product Master").click()
          self.page.get_by_role("button", name="Add Product").click()
          self.page.locator("a").filter(has_text="Add Product").first.click()
 
+   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int):
 
-      except PlaywrightTimeoutError as e:
-         self.page.goto("https://stc21.variantqa.himshang.com.np/#/pages/masters/vendor-master/product/new-product")
-         print("Timeout while navigating to Add Product page, navigated directly instead.")
+      item_group = self.page.get_by_role(
+         "textbox",
+         name="-- Press Enter For Item Group"
+      )
 
-   def add_prod_test(self, input_itemname: str, input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int):
+      item_group.wait_for(state="visible", timeout=50000)
+      item_group.press("Enter")
 
-      self.page.get_by_role("textbox", name="-- Press Enter For Item Group").press("Enter")
-
-      self.page.locator(self.page.locator(".ng-input > input")).first.click()
+      # Wait for ng-select input
+      ng_select_input = self.page.locator(".ng-input > input").first
+      ng_select_input.wait_for(state="visible", timeout=50000)
+      ng_select_input.click()
       print("ng-select box clicked")
 
-      self.page.locator(self.page.get_by_role("option", name="TESTTT")).click()
+      # Wait for option
+      option = self.page.get_by_role("option", name="TESTTT")
+      option.wait_for(state="visible", timeout=50000)
+      option.click()
       print("option selected")
 
-      self.page.locator(self.page.get_by_role("button", name="Ok")).click()
+      ok_button = self.page.get_by_role("button", name="Ok")
+      ok_button.wait_for(state="visible", timeout=50000)
+      ok_button.click()
       print("OK button clicked")
 
-      item_name = self.page.locator(self.page.get_by_role("textbox", name="Enter Item Name"))
+      item_name = self.page.get_by_role(
+         "textbox",
+         name="Enter Item Name"
+      )
+
+      item_name.wait_for(state="visible", timeout=50000)
       item_name.fill(input_itemname)
       print("Item Name entered:", input_itemname)
 
-      hs_code = self.page.locator(self.page.get_by_role("textbox", name="Enter HS Code"))
+      hs_code = self.page.get_by_role(
+         "textbox",
+         name="Enter HS Code"
+      )
+
+      hs_code.wait_for(state="visible", timeout=50000)
       hs_code.fill(input_hscode)
       print("HS Code entered:", input_hscode)
 
-      unit_dropdown = self.page.locator(self.page.locator("#unit"))
-      unit_dropdown.click()
-      self.page.select_option(self.page.locator("#unit"), label="Pkt.")
+      unit_dropdown = self.page.locator("#unit")
+      unit_dropdown.wait_for(state="visible", timeout=50000)
+      unit_dropdown.select_option(label="Pkt.")
+
       print("Unit 'Pkt.' selected")
 
-      self.page.locator(self.page.get_by_role("textbox", name="Enter Product Description")).fill(input_description)
+      description = self.page.get_by_role(
+         "textbox",
+         name="Enter Product Description"
+      )
+
+      description.wait_for(state="visible", timeout=50000)
+      description.fill(input_description)
       print("Description entered:", input_description)
 
-      self.page.locator(self.page.get_by_role("textbox", name="Enter Short Name")).fill("TestProd")
+      short_name = self.page.get_by_role(
+         "textbox",
+         name="Enter Short Name"
+      )
+
+      short_name.wait_for(state="visible", timeout=50000)
+      short_name.fill("TestProd")
       print("Short Name entered: TestProd")
 
-      category_dropdown = self.page.locator("//select[@id='Category']")
-      self.page.select_option("//select[@id='Category']", label="N/A")
-      print("Category 'N/A' selected")
+      category_dropdown = self.page.locator("select[name=\"Category\"]")
+      category_dropdown.wait_for(state="visible", timeout=50000)
+      category_dropdown.select_option(label="ItemVariant")
+      print("Category 'ItemVariant' selected")
 
-      purchase_price = self.page.locator(self.page.get_by_role("textbox", name="Enter Purchase Price"))
+      purchase_price = self.page.get_by_placeholder("Enter Purchase Price").nth(1)
+      purchase_price.wait_for(state="visible", timeout=50000)
       purchase_price.fill(str(input_purchase_price))
       print("Purchase Price entered:", input_purchase_price)
 
-      self.page.locator(self.page.locator("//input[@placeholder='Press Enter to select']")).press("Enter")
-      time.sleep(1)
+      supplier_input = self.page.get_by_role("textbox",name="Press Enter to select").nth(0)
+      supplier_input.wait_for(state="visible", timeout=30000)
+      supplier_input.press("Enter")
+      vendor = self.page.locator("//td[contains(normalize-space(),'11 QA Vendor')]")
+      vendor.wait_for(state="visible", timeout=30000)
+      vendor.dblclick()
+      print("Supplier '11 QA Vendor' selected successfully!")
 
-      self.page.locator(self.page.get_by_role("textbox", name="Press Enter to select")).dblclick()
-      print("Supplier selected successfully!")
-
-      sales_price = self.page.locator(self.page.get_by_role("textbox", name="0"))
+      sales_price = self.page.locator("input[type='number'][placeholder='0']").first
+      sales_price.wait_for(state="visible", timeout=50000)
       sales_price.fill(str(input_sales_price))
       print("Sales Price entered successfully!")
 
-      item_code_locator = self.page.locator(
-         "//input[@placeholder='Enter Item Code' and @readonly]"
-      )
-
-      self.page.wait_for_function(
-         "el => el.value.trim() !== ''",
-         item_code_locator.element_handle()
-      )
-
-      item_code = item_code_locator.input_value()
-      return item_code
+      # item_code_locator = self.page.locator("input[placeholder='Enter Item Code']")
+      # item_code_locator.wait_for(state="visible")
+      # self.page.wait_for_function(
+      #    "el => el.value && el.value.trim() !== ''",
+      #    item_code_locator
+      # )
+      # item_code = item_code_locator.input_value()
+      # return item_code
    
    def save_button(self):
       self.page.locator(self.page.get_by_role("button", name="SAVE")).click()
