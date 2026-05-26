@@ -1,6 +1,8 @@
 from playwright.sync_api import Page, expect
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 import time
+import csv
+import os
 
 
 class Add_prod:
@@ -107,15 +109,6 @@ class Add_prod:
       sales_price.fill(str(input_sales_price))
       print("Sales Price entered successfully!")
 
-      # item_code_locator = self.page.locator("input[placeholder='Enter Item Code']")
-      # item_code_locator.wait_for(state="visible")
-      # self.page.wait_for_function(
-      #    "el => el.value && el.value.trim() !== ''",
-      #    item_code_locator
-      # )
-      # item_code = item_code_locator.input_value()
-      # return item_code
-   
    def save_button(self):
       self.page.locator("#save").click()
 
@@ -133,3 +126,12 @@ class Add_prod:
          pass
 
       time.sleep(1)
+
+   def save_product_to_csv(item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
+      file_exists = os.path.isfile(filename)
+      with open(filename, mode="a", newline="", encoding="utf-8") as file:
+         writer = csv.writer(file)
+      if not file_exists:
+         writer.writerow(["Item Name","HS Code","Description","Purchase Price","Sales Price"])
+      writer.writerow([item_name,hs_code,description,purchase_price,sales_price])
+      print(f"Product details saved to {filename}")
