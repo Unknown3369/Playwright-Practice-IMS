@@ -117,16 +117,14 @@ class Add_prod:
       # return item_code
    
    def save_button(self):
-      self.page.locator(self.page.get_by_role("button", name="SAVE")).click()
+      self.page.locator("#save").click()
 
-      # handle browser alert
       try:
-         self.page.wait_for_event("dialog", timeout=5000)
-         dialog = self.page.on("dialog", lambda d: d.accept())
+         dialog = self.page.wait_for_event("dialog", timeout=5000)
+         dialog.accept()
       except:
          pass
 
-      # handle modal OK
       try:
          self.page.locator(
             "//button[normalize-space()='OK' or normalize-space()='Ok' or normalize-space()='Close']"
