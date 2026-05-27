@@ -23,13 +23,7 @@ def save_product_to_csv(item_name,hs_code,description,purchase_price,sales_price
          writer.writerow(["Item Name","HS Code","Description","Purchase Price","Sales Price"])
 
       # Add product row
-      writer.writerow([
-            item_name,
-            hs_code,
-            description,
-            purchase_price,
-            sales_price
-      ])
+      writer.writerow([item_name,hs_code,description,purchase_price,sales_price])
 
    print(f"Saved product: {item_name}")
 
