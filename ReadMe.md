@@ -10,4 +10,4 @@ playwright install
 
 Run-
 
-python [file name]
+pytest -v -s
