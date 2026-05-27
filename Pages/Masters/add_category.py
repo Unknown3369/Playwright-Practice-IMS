@@ -5,7 +5,6 @@ class AddProductCategoryPage:
    def __init__(self, page):
       self.page = page
 
-
    def navigate_to_add_product(self):
          self.page.get_by_title("Inventory Info").nth(1).click()
          self.page.get_by_role("link", name="Product Category").click()

@@ -109,6 +109,12 @@ class Add_prod:
       sales_price.fill(str(input_sales_price))
       print("Sales Price entered successfully!")
 
+      item_code_element = self.page.locator("//input[@placeholder='Enter Item Code' and @readonly]")
+      expect(item_code_element).not_to_have_value("")
+      item_code = item_code_element.input_value().strip()
+      print("Generated Item Code:", item_code)
+      return item_code
+
    def save_button(self):
       self.page.locator("#save").click()
 
@@ -127,11 +133,11 @@ class Add_prod:
 
       time.sleep(1)
 
-   def save_product_to_csv(item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
+   def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
       file_exists = os.path.isfile(filename)
       with open(filename, mode="a", newline="", encoding="utf-8") as file:
          writer = csv.writer(file)
       if not file_exists:
-         writer.writerow(["Item Name","HS Code","Description","Purchase Price","Sales Price"])
-      writer.writerow([item_name,hs_code,description,purchase_price,sales_price])
+         writer.writerow(["Item Code","Item Name","HS Code","Description","Purchase Price","Sales Price"])
+      writer.writerow([item_code,item_name,hs_code,description,purchase_price,sales_price])
       print(f"Product details saved to {filename}")
