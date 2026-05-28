@@ -55,6 +55,7 @@ class DebitNote:
       self.page.wait_for_timeout(2000)
       item_name.press("Enter")
       self.page.wait_for_timeout(2000)
+      item_name.press("Enter")
       print("Item name entered successfully!")
 
       # Enter Quantity
@@ -67,11 +68,6 @@ class DebitNote:
 
    def save_button_click(self):
 
-      # Click Save Button
-      save_button = self.page.locator(self.save_button)
-      expect(save_button).to_be_enabled()
-      save_button.click()
-      print("Save button clicked successfully!")
       # Handle Alert
       dialog_message = None
 
@@ -80,5 +76,14 @@ class DebitNote:
             dialog_message = dialog.message
             print("Alert says:", dialog_message)
             dialog.accept()
-
       self.page.once("dialog", handle_dialog)
+
+      # Click Save Button
+      save_button = self.page.locator(self.save_button)
+      expect(save_button).to_be_enabled()
+      save_button.click()
+      print("Save button clicked successfully!")
+      
+      self.page.wait_for_timeout(1000)
+
+      return dialog_message
