@@ -1,3 +1,5 @@
+import os
+
 from playwright.sync_api import sync_playwright
 import pytest
 import allure
@@ -10,7 +12,8 @@ def test_login_to_ims():
 
    with sync_playwright() as p:
 
-      browser = p.chromium.launch(headless=True)
+      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
+      browser = p.chromium.launch(headless=headless_mode)
       page = browser.new_page()
 
       login_page = login(page)

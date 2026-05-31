@@ -30,7 +30,8 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
 
 def test_add_prod():
    with sync_playwright() as p:
-      browser = p.chromium.launch(headless=True)
+      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
+      browser = p.chromium.launch(headless=headless_mode)
       page = browser.new_page()
       login_page = login(page)
       add_prod_page = Add_prod(page)

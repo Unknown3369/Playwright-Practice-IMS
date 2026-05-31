@@ -13,7 +13,7 @@ class login:
    def perform_login(self, username: str, password: str):
 
       # Open login page (same as Selenium)
-      self.page.goto("http://stc21.webredirect.himshang.com.np")
+      self.page.goto("http://stc21.variantqa.himshang.com.np")
 
       # Username
       username_box = self.page.locator(self.username)
