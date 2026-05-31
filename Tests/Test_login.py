@@ -18,7 +18,7 @@ def test_login_to_ims():
 
       login_page = login(page)
 
-      login_page.perform_login("Saga", "Ims@1234")
+      login_page.perform_login("Testuser", "Test@1234")
 
       print("Login process completed.")
 

@@ -34,7 +34,7 @@ class Add_prod:
       print("ng-select box clicked")
 
       # Wait for option
-      option = self.page.get_by_role("option", name="TESTTT")
+      option = self.page.get_by_role("option", name="TestGroup")
       option.wait_for(state="visible", timeout=50000)
       option.click()
       print("option selected")
@@ -88,8 +88,8 @@ class Add_prod:
 
       category_dropdown = self.page.locator("select[name=\"Category\"]")
       category_dropdown.wait_for(state="visible", timeout=50000)
-      category_dropdown.select_option(label="ItemVariant")
-      print("Category 'ItemVariant' selected")
+      category_dropdown.select_option(label="N/A")
+      print("Category 'N/A' selected")
 
       purchase_price = self.page.get_by_placeholder("Enter Purchase Price").nth(1)
       purchase_price.wait_for(state="visible", timeout=50000)
