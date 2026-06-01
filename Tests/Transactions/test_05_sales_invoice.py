@@ -1,4 +1,5 @@
 import csv
+import os
 import random
 from playwright.sync_api import sync_playwright
 from Pages.Login import login
@@ -19,9 +20,8 @@ def test_sales_invoice():
 
    with sync_playwright() as p:
 
-      browser = p.chromium.launch(
-         headless=False
-      )
+      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
+      browser = p.chromium.launch(headless=headless_mode)
 
       page = browser.new_page()
       login_page = login(page)
