@@ -29,18 +29,19 @@ class OpeningStockPage:
       item_field.fill(item_code)
       self.page.wait_for_timeout(1000)
       item_field.press("Enter")
-      item_field.press("Enter")
       print("Item name entered successfully!")
       self.page.wait_for_timeout(1000)
+      time.sleep(1)
 
       quantity = self.page.locator("#quantityBarcode")
       quantity.wait_for(
             state="visible",
             timeout=30000
       )
-      quantity.clear()
       quantity.fill(str(enter_quantity))
       quantity.press("Enter")
+      quantity.press("Enter")
+      time.sleep(1)
 
       print(f"Quantity entered successfully! -> {enter_quantity}")
       self.page.wait_for_timeout(1000)

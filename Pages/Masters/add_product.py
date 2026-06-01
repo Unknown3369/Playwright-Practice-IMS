@@ -125,11 +125,11 @@ class Add_prod:
          pass
 
       try:
-         self.page.locator(
-            "//button[normalize-space()='OK' or normalize-space()='Ok' or normalize-space()='Close']"
-         ).click(timeout=10000)
-      except:
-         pass
+         ok_btn = self.page.get_by_role("button", name="OK")
+         ok_btn.wait_for(state="visible", timeout=30000)
+         ok_btn.click()
+      except PlaywrightTimeoutError:
+         print("No confirmation dialog appeared after saving.")
 
       time.sleep(1)
 

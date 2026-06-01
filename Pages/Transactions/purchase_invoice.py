@@ -13,7 +13,7 @@ class PurchaseInvoice:
       self.account = "#accountfield"
       self.account_name = "//div[normalize-space()='11 QA Vendor']"
       self.item_name = "//input[@id='barcodeField' and @placeholder='Enter Barcode']"
-      self.quantity = "#ALTERNATEQUANTIY0"
+      self.quantity = "#quantityBarcode"
       self.save_button = "//button[contains(text(),'SAVE')]"
 
    def purchase_invoice(self, invoice_value: int):
