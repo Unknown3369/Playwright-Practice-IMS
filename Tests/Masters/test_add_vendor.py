@@ -26,50 +26,29 @@ def random_address(length=12):
 def random_vat_no():
 
    return str(
-      random.randint(
-         100000000,
-         999999999
-      )
+      random.randint(100000000,999999999)
    )
 
 
 def random_email():
 
-   return (
-      "Vend_"
-      + uuid.uuid4().hex[:8]
-      + "@gmail.com"
-   )
+   return ("Vend_"+ uuid.uuid4().hex[:8]+ "@test.com")
 
 
 def random_mobile():
 
    return (
-      "98"
-      + str(
-         random.randint(
-            10000000,
-            99999999
-         )
-      )
+      "98"+ str(random.randint(10000000,99999999))
    )
 
 
-def write_vendor_to_csv(
-   data,
-   file_name="vendors.csv"
-):
+def write_vendor_to_csv(data,file_name="vendors.csv"):
 
    file_exists = os.path.isfile(
       file_name
    )
 
-   with open(
-      file_name,
-      mode="a",
-      newline="",
-      encoding="utf-8"
-   ) as file:
+   with open(file_name,mode="a",newline="",encoding="utf-8") as file:
 
       writer = csv.DictWriter(
          file,
