@@ -1,0 +1,50 @@
+
+import time
+
+from playwright.sync_api import Page
+
+
+class CreditNotePage:
+   def __init__(self, page: Page):
+      self.page = page
+
+   def navigate_to_credit_note(self):
+
+      self.page.get_by_title("Transactions").first.click()
+      self.page.get_by_title("Sales Transaction").nth(1).click()
+      self.page.get_by_role("link", name="Credit Note (Sales Return)").click()
+
+   def create_credit_note(self):
+
+      # --- Ref Bill No field ---
+      ref_bill = self.page.locator("#refbill")
+      ref_bill.scroll_into_view_if_needed()
+      ref_bill.click()
+      print("Clicked Ref Bill field")
+      
+         # Press ENTER to load vouchers
+      ref_bill.press("Enter")
+      print("Pressed ENTER to load vouchers")
+      
+         # --- Select voucher ---
+      voucher_title = "TI6-MAN-82/83"  # make dynamic later if needed
+      voucher = self.page.locator(f"//div[@title='{voucher_title}']")
+      voucher.wait_for(state="visible")
+      voucher.dblclick()
+      print("Voucher selected")
+      
+      # --- Remarks ---
+      remarks = self.page.locator("#remarksid")
+      remarks.scroll_into_view_if_needed()
+      remarks.fill("Credit note created for returned goods.")
+      print("Remarks entered")
+
+   def save_credit_note(self):
+         # --- Save ---
+      save_btn = self.page.locator("xpath=//button[contains(text(),'SAVE')]")
+      save_btn.scroll_into_view_if_needed()
+      save_btn.click()
+      print("Clicked SAVE")
+
+      time.sleep(2)  # wait for save to process, adjust as needed
+      

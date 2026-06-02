@@ -3,6 +3,15 @@ import pytest_html
 from datetime import datetime
 import os
 
+@pytest.fixture
+def page(browser):
+   page = browser.new_page()
+   yield page
+
+   if hasattr(page, "is_closed") and not page.is_closed():
+      page.screenshot(path="final_state.png")
+   page.close()
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
    outcome = yield

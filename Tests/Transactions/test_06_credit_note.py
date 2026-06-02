@@ -1,0 +1,22 @@
+import pytest
+from Pages.Login import login
+from Pages.Transactions.credit_note import CreditNotePage
+import os
+from playwright.sync_api import sync_playwright
+
+
+def test_generate_credit_note():
+   with sync_playwright() as p:
+
+      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
+      browser = p.chromium.launch(headless=headless_mode)
+
+      page = browser.new_page()
+      login_page = login(page)
+      credit_note_page = CreditNotePage(page)
+      login_page.perform_login("Testuser","Test@1234")
+      print("Logged into IMS")
+      credit_note_page.navigate_to_credit_note()
+      credit_note_page.create_credit_note()
+      credit_note_page.save_credit_note()
+      print("Credit Note created successfully")
