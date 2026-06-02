@@ -55,7 +55,7 @@ class DebitNote:
       self.page.wait_for_timeout(2000)
       item_name.press("Enter")
       self.page.wait_for_timeout(2000)
-      item_name.press("Enter")
+      # item_name.press("Enter")
       print("Item name entered successfully!")
 
       # Enter Quantity
@@ -77,6 +77,11 @@ class DebitNote:
             print("Alert says:", dialog_message)
             dialog.accept()
       self.page.once("dialog", handle_dialog)
+
+      #Handele Ok Button
+      ok_btn = self.page.get_by_role("button", name="OK")
+      ok_btn.wait_for(state="visible", timeout=30000)
+      ok_btn.click()
 
       # Click Save Button
       save_button = self.page.locator(self.save_button)

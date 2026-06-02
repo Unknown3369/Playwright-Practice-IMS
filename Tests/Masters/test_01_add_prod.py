@@ -40,7 +40,7 @@ def test_add_prod():
       page.wait_for_load_state("networkidle")
       page.wait_for_timeout(3000)
       
-      for i in range(2):
+      for i in range(5):
          add_prod_page.masters_click_test()
          random_item_name = random_name()
          random_hs_code = str(random.randint(1000, 9999))
