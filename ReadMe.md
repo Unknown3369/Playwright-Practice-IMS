@@ -13,19 +13,25 @@ This repository contains **QA test automation** for the WebPOS/IMS application u
 ## Repository Structure
 
 ```
-QA-TestCases/
-├── Pages/
-│   ├── Login.py              # Login page object model
-│   ├── Masters/
-│   └── __init__.py
-├── Tests/
-│   ├── Test_login.py         # Login test cases
-│   ├── Masters/
-│   └── __init__.py
-├── Jenkinsfile               # QA pipeline definition
-├── requirements.txt          # Python dependencies
-├── .gitignore
-└── README.md
+├───.pytest_cache
+│   └───v
+│       └───cache
+├───Pages
+│   ├───Masters
+│   │   └───__pycache__
+│   ├───Transactions
+│   │   └───__pycache__
+│   └───__pycache__
+├───Reports
+│   ├───assets
+│   └───screenshots
+├───Tests
+│   ├───Masters
+│   │   └───__pycache__
+│   ├───Transactions
+│   │   └───__pycache__
+│   └───__pycache__
+└───__pycache__
 ```
 
 ## Local Testing
