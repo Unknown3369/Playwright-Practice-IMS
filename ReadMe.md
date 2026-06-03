@@ -63,7 +63,10 @@ playwright install chromium
 
 ```bash
 # Run login tests (headed mode - browser visible)
-pytest Tests/Test_login.py -v
+pytest -v -s
+
+# Run with Playwright Reporting
+pytest --html=Reports/report.html --self-contained-html
 
 # Run login tests (headless mode - no browser window)
 HEADLESS=true pytest Tests/Test_login.py -v

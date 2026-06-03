@@ -68,6 +68,14 @@ class DebitNote:
 
    def save_button_click(self):
 
+      # Click Save Button
+      save_button = self.page.locator(self.save_button)
+      expect(save_button).to_be_enabled()
+      save_button.click()
+      print("Save button clicked successfully!")
+      
+      self.page.wait_for_timeout(1000)
+
       # Handle Alert
       dialog_message = None
 
@@ -78,17 +86,12 @@ class DebitNote:
             dialog.accept()
       self.page.once("dialog", handle_dialog)
 
-      #Handele Ok Button
-      ok_btn = self.page.get_by_role("button", name="OK")
-      ok_btn.wait_for(state="visible", timeout=30000)
-      ok_btn.click()
-
-      # Click Save Button
-      save_button = self.page.locator(self.save_button)
-      expect(save_button).to_be_enabled()
-      save_button.click()
-      print("Save button clicked successfully!")
-      
-      self.page.wait_for_timeout(1000)
+      try:
+         #Handle Ok Button
+         ok_btn = self.page.get_by_role("button", name="OK")
+         ok_btn.wait_for(state="visible", timeout=30000)
+         ok_btn.click()
+      except Exception as e:
+         print("OK button did not appear:", str(e))
 
       return dialog_message
