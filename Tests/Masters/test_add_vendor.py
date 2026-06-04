@@ -64,14 +64,12 @@ def write_vendor_to_csv(data,file_name="vendors.csv"):
 def test_create_vendor(page):
 
       login_page = login(page)
-
       login_page.perform_login("Testuser","Test@1234")
 
       print("Logged into IMS")
 
       vendor_page = AddVendor(page)
       vendor_page.open_add_vendor()
-
       vendor_name = random_name()
       vendor_address = random_address()
       vendor_vat = random_vat_no()
@@ -96,6 +94,4 @@ def test_create_vendor(page):
 
       write_vendor_to_csv(vendor_data)
 
-      print(
-         f"Vendor '{vendor_name}' created successfully!"
-      )
+      print(f"Vendor '{vendor_name}' created successfully!")

@@ -1,6 +1,4 @@
 Item Code,Item Name,HS Code,Description,Purchase Price,Sales Price
-1.2,prod_2ebc159d,8625,Test Product Description,107,233
-1.3,prod_912ad0b7,2896,Test Product Description,57,212
 1.4,prod_c3eb3533,3792,Test Product Description,116,298
 1.5,prod_c540b795,7306,Test Product Description,66,321
 1.6,prod_2069a3f1,9316,Test Product Description,112,291
@@ -74,3 +72,5 @@ Item Code,Item Name,HS Code,Description,Purchase Price,Sales Price
 1.80,prod_13e17e14,5091,Test Product Description,73,301
 1.81,prod_3bf20e44,3807,Test Product Description,180,310
 1.82,prod_dccff78c,4427,Test Product Description,62,296
+1.83,prod_18a64929,6258,Test Product Description,89,246
+1.84,prod_c7dae419,5643,Test Product Description,130,340

@@ -34,7 +34,7 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
    # add new product
    rows.append([item_code,item_name,hs_code,description,purchase_price,sales_price])
 
-   # 🔥 TRUE FIFO LOGIC (STRICT)
+   #TRUE FIFO LOGIC (STRICT)
    while len(rows) > MAX_PRODUCTS:
       rows.pop(0)   # remove oldest ONE BY ONE
 
@@ -45,6 +45,7 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
       writer.writerows(rows)
 
    print(f"FIFO updated: {len(rows)} rows")
+
 
 def test_add_prod(page):
    
