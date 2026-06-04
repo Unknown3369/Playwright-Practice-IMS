@@ -29,35 +29,32 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
    print(f"Saved product: {item_name}")
 
 
-def test_add_prod():
-   with sync_playwright() as p:
-      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
-      browser = p.chromium.launch(headless=headless_mode)
-      page = browser.new_page()
-      login_page = login(page)
-      add_prod_page = Add_prod(page)
-      login_page.perform_login("Testuser", "Test@1234")
-      page.wait_for_load_state("networkidle")
-      page.wait_for_timeout(3000)
-      
-      for i in range(2):
-         add_prod_page.masters_click_test()
-         random_item_name = random_name()
-         random_hs_code = str(random.randint(1000, 9999))
-         random_description = "Test Product Description"
-         random_purchase_price = random.randint(50, 180)
-         random_sales_price = random.randint(200, 350)
-         item_code = add_prod_page.add_prod_test(
-               input_itemname=random_item_name,
-               input_hscode=random_hs_code,
-               input_description=random_description,
-               input_purchase_price=random_purchase_price,
-               input_sales_price=random_sales_price
-         )
+def test_add_prod(page):
+   
+   login_page = login(page)
+   add_prod_page = Add_prod(page)
+   login_page.perform_login("Testuser", "Test@1234")
+   page.wait_for_load_state("networkidle")
+   page.wait_for_timeout(3000)
+   
+   for i in range(2):
+      add_prod_page.masters_click_test()
+      random_item_name = random_name()
+      random_hs_code = str(random.randint(1000, 9999))
+      random_description = "Test Product Description"
+      random_purchase_price = random.randint(50, 180)
+      random_sales_price = random.randint(200, 350)
+      item_code = add_prod_page.add_prod_test(
+         input_itemname=random_item_name,
+         input_hscode=random_hs_code,
+         input_description=random_description,
+         input_purchase_price=random_purchase_price,
+         input_sales_price=random_sales_price
+      )
 
-         add_prod_page.save_button()
+      add_prod_page.save_button()
 
-         save_product_to_csv(
+      save_product_to_csv(
             item_code=item_code,
             item_name=random_item_name,
             hs_code=random_hs_code,
@@ -66,8 +63,6 @@ def test_add_prod():
             sales_price=random_sales_price
          )
 
-         page.wait_for_timeout(2000)
+      page.wait_for_timeout(2000)
 
-         time.sleep(10)
-
-      browser.close()
+      time.sleep(10)

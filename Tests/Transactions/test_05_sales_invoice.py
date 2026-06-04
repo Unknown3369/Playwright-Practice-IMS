@@ -16,31 +16,22 @@ def read_products_from_csv(file_path):
    return products
 
 
-def test_sales_invoice():
+def test_sales_invoice(page):
 
-   with sync_playwright() as p:
+   login_page = login(page)
+   sales_invoice = SalesInvoice(page)
+   login_page.perform_login("Testuser","Test@1234")
 
-      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
-      browser = p.chromium.launch(headless=headless_mode)
+   ref_no = "REF" + str(random.randint(10,99)) + "-" + str(random.randint(1000,9999))
+   sales_invoice.enter_sales_invoice(ref_no)
 
-      page = browser.new_page()
-      login_page = login(page)
-      sales_invoice = SalesInvoice(page)
-      login_page.perform_login("Testuser","Test@1234")
+   products = read_products_from_csv(
+      "product_details.csv"
+   )
 
-      ref_no = "REF" + str(random.randint(10,99)) + "-" + str(random.randint(1000,9999))
-
-      sales_invoice.enter_sales_invoice(ref_no)
-
-      products = read_products_from_csv(
-         "product_details.csv"
-      )
-
-      for product in products:
-            item_code = product["Item Code"]
-            random_quantity = random.randint(4,20)
-            sales_invoice.sales_invoice_test(item_code,random_quantity)
-
-      sales_invoice.save_btn()
-
-      browser.close()
+   for product in products:
+         item_code = product["Item Code"]
+         random_quantity = random.randint(4,20)
+         sales_invoice.sales_invoice_test(item_code,random_quantity)
+   
+   sales_invoice.save_btn()

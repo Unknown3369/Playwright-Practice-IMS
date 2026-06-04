@@ -32,23 +32,7 @@ def random_phone():
    )
 
 
-def test_add_customer():
-
-   with sync_playwright() as p:
-
-      headless_mode = (
-         os.getenv(
-            "HEADLESS",
-            "false"
-         ).lower()
-         in ["true", "1", "yes"]
-      )
-
-      browser = p.chromium.launch(
-         headless=headless_mode
-      )
-
-      page = browser.new_page()
+def test_add_customer(page):
 
       login_page = login(page)
 
@@ -78,5 +62,3 @@ def test_add_customer():
       print(
          f"Customer '{customer_name}' added successfully!"
       )
-
-      browser.close()

@@ -20,17 +20,6 @@ def read_products_from_csv(file_path):
    return products
 
 
-@pytest.fixture(scope="function")
-def page():
-
-   with sync_playwright() as p:
-      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
-      browser = p.chromium.launch(headless=headless_mode)
-      page = browser.new_page()
-      yield page
-      browser.close()
-
-
 def test_purchase_invoice(page):
 
    login_page = login(page)

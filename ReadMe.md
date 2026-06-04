@@ -71,6 +71,9 @@ pytest --html=Reports/report.html --self-contained-html
 # Run login tests (headless mode - no browser window)
 HEADLESS=true pytest Tests/Test_login.py -v
 
+# Run Tests (Headless Mode, Rerun Tests on Failure)
+pytest --reruns 2 --html=Reports/report.html --self-contained-html -s
+
 # Run with Allure reporting
 pytest Tests/Test_login.py -v --alluredir=allure-results
 
@@ -176,7 +179,7 @@ For security in production, consider:
 - Jenkins credentials store
 - Secrets management tools
 
-## 🛠️ Maintenance
+## Maintenance
 
 ### Updating Tests
 

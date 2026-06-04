@@ -1,4 +1,7 @@
+from itertools import count
 import random
+import time
+import pandas as pd
 
 
 class BulkSalesPriceUpdate:
@@ -39,45 +42,28 @@ class BulkSalesPriceUpdate:
 
       ok_button.click()
       print("OK button clicked.")
+      time.sleep(20)
 
    def update_prices(self):
 
-      price_fields = [
-            "#newSpriceInc0",
-            "#newSpriceInc1",
-            "#newSpriceInc2",
-            "#newSpriceInc3",
-            "#newSpriceInc4"
-      ]
+      item_names = self.page.locator("input[id^='itemname']")
+      count = item_names.count()
 
-      for field in price_fields:
+      print(f"Found {count} products on page")
 
-         random_price = random.randint(200,250)
+      for i in range(count):
 
-         price_input = self.page.locator(field)
+         product_name = self.page.locator(f"#itemname{i}").input_value()
+         new_price = random.randint(200, 250)
+         price_input = self.page.locator(f"#newSpriceInc{i}")
+         price_input.fill(str(new_price))
+         print(f"{product_name} updated -> {new_price}")
 
-         price_input.wait_for(
-            state="visible",
-            timeout=30000
-         )
 
-         price_input.clear()
-         price_input.fill(str(random_price))
-
-         print(
-            f"{field} updated with price {random_price}"
-         )
-
-      save_button = self.page.get_by_role(
-         "button",
-         name="Save"
-      )
-
-      save_button.wait_for(
-         state="visible",
-         timeout=30000
-      )
-
+      save_button = self.page.get_by_role("button", name="Save")
+      save_button.wait_for(state="visible", timeout=30000)
       save_button.click()
 
-      print("Save button clicked.")
+      time.sleep(5)
+
+      print("All prices updated and Save clicked.")

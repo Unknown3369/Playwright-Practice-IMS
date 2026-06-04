@@ -8,13 +8,7 @@ from Pages.Login import login
 
 @allure.title("Login to IMS Application")
 @allure.description("This test logs into the IMS application using valid credentials and verifies the dashboard.")
-def test_login_to_ims():
-
-   with sync_playwright() as p:
-
-      headless_mode = os.getenv("HEADLESS", "false").lower() in ["true", "1", "yes"]
-      browser = p.chromium.launch(headless=headless_mode)
-      page = browser.new_page()
+def test_login_to_ims(page):
 
       login_page = login(page)
 
@@ -30,5 +24,3 @@ def test_login_to_ims():
       print("Dashboard page loaded successfully!")
 
       assert page.locator("xpath=//input[@id='Date']"), "Date input not found"
-
-      browser.close()

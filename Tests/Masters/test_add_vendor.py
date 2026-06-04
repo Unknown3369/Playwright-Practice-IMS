@@ -61,35 +61,15 @@ def write_vendor_to_csv(data,file_name="vendors.csv"):
       writer.writerow(data)
 
 
-def test_create_vendor():
-
-   with sync_playwright() as p:
-
-      headless_mode = (
-         os.getenv(
-            "HEADLESS",
-            "false"
-         ).lower()
-         in ["true", "1", "yes"]
-      )
-
-      browser = p.chromium.launch(
-         headless=headless_mode
-      )
-
-      page = browser.new_page()
+def test_create_vendor(page):
 
       login_page = login(page)
 
-      login_page.perform_login(
-         "Testuser",
-         "Test@1234"
-      )
+      login_page.perform_login("Testuser","Test@1234")
 
       print("Logged into IMS")
 
       vendor_page = AddVendor(page)
-
       vendor_page.open_add_vendor()
 
       vendor_name = random_name()
@@ -119,5 +99,3 @@ def test_create_vendor():
       print(
          f"Vendor '{vendor_name}' created successfully!"
       )
-
-      browser.close()
