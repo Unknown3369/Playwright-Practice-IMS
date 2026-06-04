@@ -7,6 +7,7 @@ import uuid
 import csv
 import os
 import time
+MAX_PRODUCTS = 75
 
 
 def random_name():
@@ -14,20 +15,36 @@ def random_name():
 
 
 def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
-   file_exists = os.path.isfile(filename)
 
-   with open(filename, mode="a", newline="", encoding="utf-8") as file:
-      writer = csv.writer(file)
+   header = ["Item Code", "Item Name", "HS Code", "Description", "Purchase Price", "Sales Price"]
 
-      # Write header if CSV doesn't exist
-      if not file_exists:
-         writer.writerow(["Item Code","Item Name","HS Code","Description","Purchase Price","Sales Price"])
+   # read file
+   rows = []
 
-      # Add product row
-      writer.writerow([item_code,item_name,hs_code,description,purchase_price,sales_price])
+   if os.path.exists(filename):
+      with open(filename, "r", newline="", encoding="utf-8") as f:
+         reader = list(csv.reader(f))
 
-   print(f"Saved product: {item_name}")
+         if reader:
+            if reader[0] == header:
+               rows = reader[1:]
+            else:
+               rows = reader
 
+   # add new product
+   rows.append([item_code,item_name,hs_code,description,purchase_price,sales_price])
+
+   # 🔥 TRUE FIFO LOGIC (STRICT)
+   while len(rows) > MAX_PRODUCTS:
+      rows.pop(0)   # remove oldest ONE BY ONE
+
+   # write back
+   with open(filename, "w", newline="", encoding="utf-8") as f:
+      writer = csv.writer(f)
+      writer.writerow(header)
+      writer.writerows(rows)
+
+   print(f"FIFO updated: {len(rows)} rows")
 
 def test_add_prod(page):
    
@@ -55,14 +72,13 @@ def test_add_prod(page):
       add_prod_page.save_button()
 
       save_product_to_csv(
-            item_code=item_code,
-            item_name=random_item_name,
-            hs_code=random_hs_code,
-            description=random_description,
-            purchase_price=random_purchase_price,
-            sales_price=random_sales_price
-         )
+         item_code=item_code,
+         item_name=random_item_name,
+         hs_code=random_hs_code,
+         description=random_description,
+         purchase_price=random_purchase_price,
+         sales_price=random_sales_price
+      )
 
       page.wait_for_timeout(2000)
-
       time.sleep(10)
