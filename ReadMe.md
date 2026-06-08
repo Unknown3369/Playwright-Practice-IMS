@@ -49,7 +49,7 @@ git clone https://github.com/Unknown3369/Playwright-Practice-IMS.git
 cd QA-TestCases
 
 # Create virtual environment
-python3 -m venv venv
+python3 -m venv venv   || python -m venv [environment name]
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
@@ -66,13 +66,7 @@ playwright install chromium
 pytest -v -s
 
 # Run with Playwright Reporting
-pytest --html=Reports/report.html --self-contained-html
-
-# Run login tests (headless mode - no browser window)
-HEADLESS=true pytest Tests/Test_login.py -v
-
-# Run Tests (Headless Mode, Rerun Tests on Failure)
-pytest --reruns 2 --html=Reports/report.html --self-contained-html -s
+pytest --html=Reports/report.html --self-contained-html -v -s
 
 # Run with Allure reporting
 pytest Tests/Test_login.py -v --alluredir=allure-results
