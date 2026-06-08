@@ -6,23 +6,34 @@ from playwright.sync_api import sync_playwright
 
 
 @pytest.fixture(scope="session")
+# def browser():
+
+#    while True:
+#       choice = input(
+#             "Run in headless mode? (y/n): "
+#       ).strip().lower()
+
+#       if choice in ["y", "n"]:
+#             break
+
+#       print("Please enter y or n.")
+
+#    headless_mode = choice == "y"
+
+#    with sync_playwright() as p:
+#       browser = p.chromium.launch(headless=headless_mode)
+#       yield browser
+#       browser.close()
+
 def browser():
 
-   while True:
-      choice = input(
-            "Run in headless mode? (y/n): "
-      ).strip().lower()
-
-      if choice in ["y", "n"]:
-            break
-
-      print("Please enter y or n.")
-
-   headless_mode = choice == "y"
-
    with sync_playwright() as p:
-      browser = p.chromium.launch(headless=headless_mode)
+      browser = p.chromium.launch(
+         headless=True
+      )
+
       yield browser
+
       browser.close()
 
 
