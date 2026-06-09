@@ -9,7 +9,6 @@ import os
 import time
 MAX_PRODUCTS = 10
 
-
 def random_name():
    return "prod_" + uuid.uuid4().hex[:8]
 

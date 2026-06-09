@@ -15,28 +15,28 @@ class AddProductGroupMasterPage:
          self.page.get_by_role("link", name="Product Group Master").click()
          self.page.get_by_role("button", name="Add Product Group").click()
 
-   @allure.step("Select Item Group as OCR test")
+   @allure.step("Select Item Group as TestGroup")
    def select_item_group(self):
 
       self.page.locator(
-            "//mat-icon[normalize-space(text())='open_in_new']"
+         "//mat-icon[normalize-space(text())='open_in_new']"
       ).click()
 
       self.page.wait_for_timeout(1000)
 
       self.page.locator(
-            "//input[@aria-autocomplete='list' and @type='text']"
-      ).fill("OCR")
+         "//input[@aria-autocomplete='list' and @type='text']"
+      ).first.fill("TestGroup")
 
       self.page.locator(
-            "//span[normalize-space()='OCR test']"
+         "//span[normalize-space()='TestGroup']"
       ).click()
 
       self.page.locator(
-            "//span[normalize-space()='Ok']"
+         "//span[normalize-space()='Ok']"
       ).click()
 
-      print("Selected Parent Group : OCR test")
+      print("Selected Parent Group : TestGroup")
 
       self.page.wait_for_timeout(2000)
 

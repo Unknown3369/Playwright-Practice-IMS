@@ -1,12 +1,11 @@
 Item Code,Item Name,HS Code,Description,Purchase Price,Sales Price
-1.76,prod_d3488ba4,4236,Test Product Description,129,283
-1.77,prod_dc14f02f,8183,Test Product Description,149,274
-1.78,prod_c3a9a46c,2060,Test Product Description,73,307
-1.79,prod_90274da1,5536,Test Product Description,96,227
-1.80,prod_13e17e14,5091,Test Product Description,73,301
-1.81,prod_3bf20e44,3807,Test Product Description,180,310
-1.82,prod_dccff78c,4427,Test Product Description,62,296
-1.83,prod_18a64929,6258,Test Product Description,89,246
-1.84,prod_c7dae419,5643,Test Product Description,130,340
-1.94,prod_a5a34714,8969,Test Product Description,169,212
-1.95,prod_51877612,6925,Test Product Description,131,291
+1.103,prod_3b4e2ee3,6991,Test Product Description,72,242
+1.104,prod_94789ff0,1992,Test Product Description,64,226
+1.105,prod_7e34b9ac,3829,Test Product Description,92,203
+1.106,prod_4f0fbe18,7729,Test Product Description,175,288
+1.107,prod_5d13986e,1205,Test Product Description,159,242
+1.108,prod_e40e319c,9482,Test Product Description,82,285
+1.109,prod_d0103c55,5505,Test Product Description,66,263
+1.110,prod_4e723058,9206,Test Product Description,87,282
+1.111,prod_ba2d2d32,8925,Test Product Description,51,327
+1.112,prod_e94d71f3,2235,Test Product Description,149,333

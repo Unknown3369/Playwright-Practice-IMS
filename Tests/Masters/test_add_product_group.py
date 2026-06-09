@@ -15,7 +15,6 @@ def test_add_product_group_master(page):
    login_page = login(page)
 
    try:
-
       login_page.perform_login("Testuser","Test@1234")
 
       add_group = AddProductGroupMasterPage(page)

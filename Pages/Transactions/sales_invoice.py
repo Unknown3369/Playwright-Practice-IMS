@@ -1,6 +1,6 @@
 from playwright.sync_api import Page
 import random
-
+import time
 
 class SalesInvoice:
 
@@ -75,6 +75,7 @@ class SalesInvoice:
       )
 
       quantity.press("Enter")
+      time.sleep(1)
 
       print(
          f"Quantity {enter_quantity} entered successfully!"
