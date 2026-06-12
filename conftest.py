@@ -29,8 +29,8 @@ def browser():
 
    with sync_playwright() as p:
       browser = p.chromium.launch(
-         headless=True
-         # headless=False
+         # headless=True
+         headless=False
       )
 
       yield browser
