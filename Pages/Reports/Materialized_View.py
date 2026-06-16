@@ -36,13 +36,3 @@ class MaterializedViewReportPage:
         print(f"Downloaded: {download.suggested_filename}")
         
         self.page.wait_for_timeout(2000)
-
-        # print("Verifying Materialized View Report table...")
-
-
-        # table = self.page.locator(self.report_table)
-        # expect(table).to_be_visible(timeout=15000)
-        # row_count = table.locator("tr").count()
-        # print(
-        #     f"Materialized View Report loaded with {row_count - 1} rows."
-        # )
