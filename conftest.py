@@ -40,7 +40,9 @@ def browser():
 
 @pytest.fixture
 def page(browser):
-   context = browser.new_context()
+   context = browser.new_context(
+      accept_downloads=True
+   )
    page = context.new_page()
 
    yield page
