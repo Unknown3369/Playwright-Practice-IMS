@@ -13,9 +13,9 @@ def random_name():
    return "prod_" + uuid.uuid4().hex[:8]
 
 
-def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
+def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,vatable,filename="product_details.csv"):
 
-   header = ["Item Code", "Item Name", "HS Code", "Description", "Purchase Price", "Sales Price"]
+   header = ["Item Code", "Item Name", "HS Code", "Description", "Purchase Price", "Sales Price", "Vatable"]
 
    # read file
    rows = []
@@ -31,7 +31,7 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
                rows = reader
 
    # add new product
-   rows.append([item_code,item_name,hs_code,description,purchase_price,sales_price])
+   rows.append([item_code,item_name,hs_code,description,purchase_price,sales_price,vatable])
 
    #TRUE FIFO LOGIC (STRICT)
    while len(rows) > MAX_PRODUCTS:
@@ -47,38 +47,32 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
 
 
 def test_add_prod(page):
-   
    login_page = login(page)
    add_prod_page = Add_prod(page)
    login_page.perform_login("Testuser", "Test@1234")
    page.wait_for_load_state("networkidle")
    page.wait_for_timeout(3000)
    
-   for i in range(5):
+   for i in range(2):
       add_prod_page.masters_click_test()
       random_item_name = random_name()
       random_hs_code = str(random.randint(1000, 9999))
+      
       random_description = "Test Product Description"
       random_purchase_price = random.randint(50, 180)
       random_sales_price = random.randint(200, 350)
-      item_code = add_prod_page.add_prod_test(
+      item_code, vatable_status = add_prod_page.add_prod_test(
          input_itemname=random_item_name,
          input_hscode=random_hs_code,
          input_description=random_description,
          input_purchase_price=random_purchase_price,
-         input_sales_price=random_sales_price
+         input_sales_price=random_sales_price,
+         iteration=i
       )
 
       add_prod_page.save_button()
 
-      save_product_to_csv(
-         item_code=item_code,
-         item_name=random_item_name,
-         hs_code=random_hs_code,
-         description=random_description,
-         purchase_price=random_purchase_price,
-         sales_price=random_sales_price
-      )
+      save_product_to_csv(item_code=item_code,item_name=random_item_name,hs_code=random_hs_code,description=random_description,purchase_price=random_purchase_price,sales_price=random_sales_price,vatable=vatable_status)
 
       page.wait_for_timeout(2000)
       time.sleep(10)

@@ -17,7 +17,8 @@ class Add_prod:
          self.page.get_by_role("button", name="Add Product").click()
          self.page.locator("a").filter(has_text="Add Product").first.click()
 
-   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int):
+
+   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int, iteration):
 
       item_group = self.page.get_by_role(
          "textbox",
@@ -61,6 +62,14 @@ class Add_prod:
       hs_code.wait_for(state="visible", timeout=50000)
       hs_code.fill(input_hscode)
       print("HS Code entered:", input_hscode)
+
+      vatable_item = self.page.get_by_role("checkbox").first
+      if iteration % 2 == 0:
+         vatable_item.check()
+         vatable_status = "Yes"
+      else:
+         vatable_item.uncheck()
+         vatable_status = "No"
 
       unit_dropdown = self.page.locator("#unit")
       unit_dropdown.wait_for(state="visible", timeout=50000)
@@ -113,7 +122,7 @@ class Add_prod:
       expect(item_code_element).not_to_have_value("")
       item_code = item_code_element.input_value().strip()
       print("Generated Item Code:", item_code)
-      return item_code
+      return item_code, vatable_status
 
    def save_button(self):
       self.page.locator("#save").click()
