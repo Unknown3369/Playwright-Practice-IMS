@@ -12,8 +12,10 @@ from Tests.IRD_Flow.test_07_sales_invoice import test_sales_invoice
 from Tests.IRD_Flow.test_08_sales_book_report import test_sales_book_report
 from Tests.IRD_Flow.test_09_materialized_report import test_materialized_view_report
 from Tests.IRD_Flow.test_10_credit_note import test_generate_credit_note
-from Tests.IRD_Flow.test_11_vat_sales_register_report import test_vat_sales_register_report
+from Tests.IRD_Flow.test_11_credit_note_report import test_generate_credit_note_book_report
+from Tests.IRD_Flow.test_13_vat_sales_register_report import test_vat_sales_register_report
 from Tests.IRD_Flow.test_14_debit_note import test_debit_note
+from Tests.IRD_Flow.test_15_debit_note_report import test_generate_debit_note_book_report
 from Tests.IRD_Flow.test_16_vat_purchase_report import test_vat_purchase_register_report
 
 
@@ -30,7 +32,9 @@ def test_ird_flow(page):
     test_sales_book_report(page)
     test_materialized_view_report(page)
     test_generate_credit_note(page)
+    test_generate_credit_note_book_report(page)
     test_materialized_view_report(page)
     test_vat_sales_register_report(page)
     test_debit_note(page)
+    test_generate_debit_note_book_report(page)
     test_vat_purchase_register_report(page)
