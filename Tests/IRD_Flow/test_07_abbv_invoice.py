@@ -15,7 +15,7 @@ def read_products_from_csv(file_path):
             products.append(row)
    return products
 
-def test_sales_invoice(page):
+def test_abbv_invoice(page):
 
    login_page = login(page)
    sales_invoice = AbbvInvoice(page)
