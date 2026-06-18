@@ -125,3 +125,13 @@ class AbbvInvoice:
       print("Final Save clicked!")
 
       self.page.wait_for_timeout(5000)
+
+      try:
+         print_voucher = self.page.get_by_role("button", name="Print")
+         print_voucher.wait_for( state="visible", timeout=30000).click()
+         print ("Print Voucher clicked successfully!")
+      
+      except:
+         print ("Print button not found!")
+
+      self.page.wait_for_timeout(5000)

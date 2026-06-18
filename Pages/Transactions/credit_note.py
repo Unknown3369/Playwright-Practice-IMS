@@ -45,6 +45,13 @@ class CreditNotePage:
       save_btn.scroll_into_view_if_needed()
       save_btn.click()
       print("Clicked SAVE")
+      try:
+         print_voucher = self.page.get_by_role("button", name="Print")
+         print_voucher.wait_for( state="visible", timeout=30000).click()
+         print ("Print Voucher clicked successfully!")
+      
+      except:
+         print ("Print button not found!")
 
-      time.sleep(2)  # wait for save to process, adjust as needed
+      self.page.wait_for_timeout(5000)
       

@@ -47,6 +47,7 @@ class PurchaseInvoice:
       self.page.locator(self.quantity).press("Enter")
       print("Quantity entered successfully!")
       self.page.wait_for_timeout(2000)
+
    def save_button_click(self):
 
       # Click save button
@@ -63,3 +64,12 @@ class PurchaseInvoice:
       self.page.once("dialog", handle_dialog)
 
       self.page.wait_for_timeout(3000)
+      try:
+         print_voucher = self.page.get_by_role("button", name="Print")
+         print_voucher.wait_for( state="visible", timeout=30000).click()
+         print ("Print Voucher clicked successfully!")
+      
+      except:
+         print ("Print button not found!")
+
+      self.page.wait_for_timeout(5000)

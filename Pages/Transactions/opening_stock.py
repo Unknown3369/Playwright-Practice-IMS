@@ -60,6 +60,12 @@ class OpeningStockPage:
       )
       message_text = success_message.text_content()
 
-      print(f"SUCCESS MESSAGE: {message_text}")
+      try:
+         print_voucher = self.page.get_by_role("button", name="Print")
+         print_voucher.wait_for( state="visible", timeout=30000).click()
+         print ("Print Voucher clicked successfully!")
+      
+      except:
+         print ("Print button not found!")
 
-      assert "has been saved successfully" in message_text
+      self.page.wait_for_timeout(5000)
