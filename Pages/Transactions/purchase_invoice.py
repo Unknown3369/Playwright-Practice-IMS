@@ -1,5 +1,9 @@
 from playwright.sync_api import Page
 import time
+import csv
+
+from datetime import datetime
+from pywinauto import Desktop
 
 
 class PurchaseInvoice:
@@ -15,22 +19,29 @@ class PurchaseInvoice:
       self.item_name = "//input[@id='barcodeField' and @placeholder='Enter Barcode']"
       self.quantity = "#quantityBarcode"
       self.save_button = "//button[contains(text(),'SAVE')]"
+   
+   def get_vendor_name():
+    with open("vendors.csv", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        row = next(reader)  # First row
+        return row["ACNAME"]
 
    def purchase_invoice(self, invoice_value: int):
-         self.page.get_by_title("Transactions").first.click()
-         self.page.get_by_title("Purchase Transaction").nth(1).click()
-         self.page.get_by_role("link", name="Purchase Invoice").click()
-         # Enter invoice number
-         self.page.locator(self.invoice_no).fill(str(invoice_value))
-         print(f"Invoice No '{invoice_value}' entered successfully!")
-         # Select Vendor
-         self.page.locator(self.account).click()
-         self.page.locator(self.account).press("Enter")
-         self.page.wait_for_timeout(5000)
-         print("Account field clicked successfully!")
-         # Select account name
-         self.page.locator(self.account_name).dblclick()
-         print("Account name selected successfully!")
+      vendor_name = PurchaseInvoice.get_vendor_name()
+      self.page.get_by_title("Transactions").first.click()
+      self.page.get_by_title("Purchase Transaction").nth(1).click()
+      self.page.get_by_role("link", name="Purchase Invoice").click()
+
+      self.page.locator(self.invoice_no).fill(str(invoice_value))
+      print(f"Invoice No '{invoice_value}' entered successfully!")
+
+      self.page.locator(self.account).click()
+      self.page.locator(self.account).press("Enter")
+      time.sleep(1)
+      self.page.locator(self.account).fill(vendor_name)
+
+      self.page.locator(f"//div[normalize-space()='{vendor_name}']").dblclick()
+      print(f"Vendor '{vendor_name}' selected successfully!")
 
    def purchase_invoice_test(self, item_code: str, enter_quantity: int):
 
@@ -53,23 +64,61 @@ class PurchaseInvoice:
       # Click save button
       self.page.locator(self.save_button).click()
       print("Save button clicked successfully!")
+
       # Handle alert
       dialog_message = None
+
       def handle_dialog(dialog):
-            nonlocal dialog_message
-            dialog_message = dialog.message
-            print("Alert says:", dialog_message)
-            dialog.accept()
+        nonlocal dialog_message
+        dialog_message = dialog.message
+        print("Alert says:", dialog_message)
+        dialog.accept()
 
       self.page.once("dialog", handle_dialog)
 
       self.page.wait_for_timeout(3000)
-      try:
-         print_voucher = self.page.get_by_role("button", name="Print")
-         print_voucher.wait_for( state="visible", timeout=30000).click()
-         print ("Print Voucher clicked successfully!")
-      
-      except:
-         print ("Print button not found!")
 
-      self.page.wait_for_timeout(5000)
+
+      # try:
+      #   print_voucher = self.page.locator("button:has-text('Print')")
+      #   print_voucher.wait_for(state="visible", timeout=30000)
+      #   print_voucher.click()
+
+      #   print("Print Voucher clicked successfully!")
+
+      #   # Wait for Chrome print preview
+      #   self.page.wait_for_timeout(5000)
+
+      #   # Press Enter on Chrome print preview's Print button
+      #   self.page.keyboard.press("Enter")
+
+      #   print("Print command sent.")
+
+      #   # Wait for Windows Save dialog
+      #   dialog = Desktop(backend="uia").window(
+      #       title_re=".*Save Print Output As.*"
+      #   )
+
+      #   dialog.wait("visible", timeout=30)
+
+      #   timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+      #   filename = f"Purchase_Invoice_{timestamp}.pdf"
+
+      #   # File name textbox
+      #   filename_box = dialog.child_window(
+      #       title="File name:",
+      #       control_type="Edit"
+      #   )
+
+      #   filename_box.set_edit_text(filename)
+
+      #   # Save button
+      #   dialog.child_window(
+      #       title="Save",
+      #       control_type="Button"
+      #   ).click()
+
+      #   print(f"PDF saved as: {filename}")
+
+      # except Exception as e:
+      #   print(f"Print process failed: {e}")

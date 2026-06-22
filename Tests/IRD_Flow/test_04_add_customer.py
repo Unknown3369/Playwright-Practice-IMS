@@ -1,6 +1,7 @@
 import os
 import random
 import uuid
+import csv
 
 from playwright.sync_api import sync_playwright
 
@@ -9,7 +10,7 @@ from Pages.Masters.add_customer import AddCustomer
 
 
 def random_name():
-   return "cust_" + uuid.uuid4().hex[:8]
+   return "IRD_Customer_" + uuid.uuid4().hex[:8]
 
 
 def random_address(length=12):
@@ -31,34 +32,66 @@ def random_phone():
       )
    )
 
+def clear_csv(filename="customers.csv"):
+   with open(filename, mode="w", newline="", encoding="utf-8") as file:
+      writer = csv.writer(file)
+      writer.writerow(["MainGroup","ACNAME","Address","Contact","Email"])
+   print("CSV reset complete.")
 
-def test_add_customer(page):
+def write_customer_to_csv(data,file_name="customers.csv"):
 
-      login_page = login(page)
+   file_exists = os.path.isfile(
+      file_name
+   )
 
-      add_customer = AddCustomer(page)
+   with open(file_name,mode="a",newline="",encoding="utf-8") as file:
 
-      login_page.perform_login(
-         "Testuser",
-         "Test@1234"
+      writer = csv.DictWriter(
+         file,
+         fieldnames=data.keys()
       )
 
-      page.wait_for_load_state(
+      if not file_exists:
+         writer.writeheader()
+
+      writer.writerow(data)
+
+def test_add_customer(page,config_data):
+   username = config_data["username"]
+   password = config_data["password"]
+
+   login_page = login(page)
+
+   add_customer = AddCustomer(page)
+
+   login_page.perform_login(username, password)
+
+   clear_csv("customers.csv")
+
+   page.wait_for_load_state(
          "networkidle"
       )
 
-      add_customer.open_add_customer()
+   add_customer.open_add_customer()
 
-      customer_name = random_name()
-      customer_address = random_address()
-      customer_contact = random_phone()
+   customer_name = random_name()
+   customer_address = random_address()
+   customer_contact = random_phone()
 
-      add_customer.add_customer(
-         customer_name,
-         customer_address,
-         customer_contact
-      )
+   add_customer.add_customer(
+      customer_name,
+      customer_address,
+      customer_contact
+   )
 
-      print(
-         f"Customer '{customer_name}' added successfully!"
-      )
+   customer_data = {
+      "MainGroup": "SUPPLIER",
+      "ACNAME": customer_name,
+      "Address": customer_address,
+      "VATNO": customer_contact,
+      "PARTYTYPE": "Customer"
+   }
+
+   write_customer_to_csv(customer_data)
+
+   print(f"Customer '{customer_name}' added successfully!")

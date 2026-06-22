@@ -5,7 +5,25 @@ import os
 from playwright.sync_api import sync_playwright
 
 
-@pytest.fixture(scope="session")
+def pytest_addoption(parser):
+    parser.addoption(
+        "--url",
+        action="store",
+        help="Application URL"
+    )
+    parser.addoption(
+        "--username",
+        action="store",
+        help="Login username"
+    )
+    parser.addoption(
+        "--password",
+        action="store",
+        help="Login password"
+    )
+
+
+# @pytest.fixture(scope="session")
 # def browser():
 
 #    while True:
@@ -25,8 +43,21 @@ from playwright.sync_api import sync_playwright
 #       yield browser
 #       browser.close()
 
-def browser():
+@pytest.fixture(scope="session")
+def config_data():
 
+    url = input("\nEnter URL: ").strip()
+    username = input("Enter Username: ").strip()
+    password = input("Enter Password: ").strip()
+
+    return {
+        "url": url,
+        "username": username,
+        "password": password
+    }
+
+@pytest.fixture(scope="session")
+def browser():
    with sync_playwright() as p:
       browser = p.chromium.launch(
          # headless=True
@@ -39,28 +70,36 @@ def browser():
 
 
 @pytest.fixture
-def page(browser):
-   context = browser.new_context(
-      accept_downloads=True
-   )
-   page = context.new_page()
+def page(browser, config_data):
+    context = browser.new_context(
+        accept_downloads=True
+    )
 
-   yield page
+    page = context.new_page()
 
-   # always capture final state screenshot per test
-   os.makedirs("reports/screenshots", exist_ok=True)
+    # Open the URL provided from terminal
+    page.goto(config_data["url"])
 
-   screenshot_path = (
-      f"reports/screenshots/final_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-   )
+    yield page
 
-   try:
-      if not page.is_closed():
-         page.screenshot(path=screenshot_path, full_page=True)
-   except Exception as e:
-      print(f"Final screenshot failed: {e}")
+    # Always capture final state screenshot per test
+    os.makedirs("reports/screenshots", exist_ok=True)
 
-   context.close()
+    screenshot_path = (
+        f"reports/screenshots/final_"
+        f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    )
+
+    try:
+        if not page.is_closed():
+            page.screenshot(
+                path=screenshot_path,
+                full_page=True
+            )
+    except Exception as e:
+        print(f"Final screenshot failed: {e}")
+
+    context.close()
 
 
 @pytest.hookimpl(hookwrapper=True)

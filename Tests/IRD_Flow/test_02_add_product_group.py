@@ -10,12 +10,14 @@ def random_group_name():
    return f"Group_{uuid.uuid4().hex[:6]}"
 
 
-def test_add_product_group_master(page):
+def test_add_product_group_master(page, config_data):
+   username = config_data["username"]
+   password = config_data["password"]
 
    login_page = login(page)
 
    try:
-      login_page.perform_login("Testuser","Test@1234")
+      login_page.perform_login(username, password)
 
       add_group = AddProductGroupMasterPage(page)
       add_group.navigate_to_add_product()

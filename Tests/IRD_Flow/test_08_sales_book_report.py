@@ -7,11 +7,14 @@ from Pages.Login import login
 from Pages.Reports.Sales_book_report import SalesBookReportPage
 
 
-def test_sales_book_report(page):
+def test_sales_book_report(page,config_data):
+    username = config_data["username"]
+    password = config_data["password"]
+    
     login_page = login(page)
     sales_report = SalesBookReportPage(page)
 
-    login_page.perform_login("Testuser", "Test@1234")
+    login_page.perform_login(username, password)
 
     sales_report.open_sales_book_report()
     sales_report.run_sales_book_report()

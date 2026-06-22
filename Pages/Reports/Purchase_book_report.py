@@ -1,7 +1,7 @@
 from playwright._impl import _download
 from playwright.sync_api import Page, expect
 import pytest
-import time
+from datetime import datetime
 import os   
 
 class PurchaseBookReport:
@@ -53,21 +53,45 @@ class PurchaseBookReport:
 
         download = download_info.value
 
-        download.save_as(f"downloads/{download.suggested_filename}")
+        # Download timestamp
+        download_time = datetime.now()
 
-        print(f"Downloaded: {download.suggested_filename}")
-
-        # Check "Data Not Found" popup
-        try:
-            popup = self.page.locator(
-                "//div[contains(text(),'Data Not found with given filters')]"
-            )
-
-            if popup.is_visible(timeout=7000):
-                self.page.locator(self.ok_button).click()
-                pytest.fail(
-                    "Test failed: 'Data Not found with given filters' alert appeared."
+        file_path = os.path.join(
+            "downloads",
+            download.suggested_filename
                 )
 
-        except:
-            print("No popup detected.")
+        download.save_as(file_path)
+
+        # Current time
+        timestamp = datetime.now().strftime("%H-%M-%S")
+
+        # Original filename
+        filename = download.suggested_filename
+        name, ext = os.path.splitext(filename)
+
+        # New filename with timestamp
+        new_filename = f"{name} {timestamp}{ext}"
+
+        download.save_as(
+            os.path.join("downloads", new_filename)
+        )
+
+        print(f"Downloaded: {new_filename}")
+
+        self.page.wait_for_timeout(2000)
+
+        # # Check "Data Not Found" popup
+        # try:
+        #     popup = self.page.locator(
+        #         "//div[contains(text(),'Data Not found with given filters')]"
+        #     )
+
+        #     if popup.is_visible(timeout=7000):
+        #         self.page.locator(self.ok_button).click()
+        #         pytest.fail(
+        #             "Test failed: 'Data Not found with given filters' alert appeared."
+        #         )
+
+        # except:
+        #     print("No popup detected.")

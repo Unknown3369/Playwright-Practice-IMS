@@ -3,11 +3,12 @@ from Pages.Login import login
 from Pages.Reports.Vat_purchase_register_report import VatPurchaseRegisterReportPage
 
 
-def test_vat_purchase_register_report(page):
+def test_vat_purchase_register_report(page,config_data):
+    username = config_data["username"]
+    password = config_data["password"]
 
     login_page = login(page)
-    login_page.perform_login(
-            "Testuser", "Test@1234")
+    login_page.perform_login(username, password)
 
     print("Logged into IMS")
 

@@ -1,6 +1,7 @@
 
 from playwright.sync_api import Page, expect
 import os
+from datetime import datetime
 
 class CreditNoteBookReportPage:
 
@@ -66,6 +67,21 @@ class CreditNoteBookReportPage:
 
         print("Clicked 'RUN' button successfully.")
 
+        # download_pdf = self.page.locator("svg[role='img'][data-icon='file-pdf']")
+        # os.makedirs("downloads", exist_ok=True)
+
+        # with self.page.expect_download(timeout=60000) as download_info:
+        #     download_pdf.click()
+
+        # download = download_info.value
+
+        # download.save_as(f"downloads/{download.suggested_filename}")
+
+        # print(f"Downloaded: {download.suggested_filename}")
+        
+        # self.page.wait_for_timeout(2000)
+
+
         download_pdf = self.page.locator("svg[role='img'][data-icon='file-pdf']")
         os.makedirs("downloads", exist_ok=True)
 
@@ -74,8 +90,20 @@ class CreditNoteBookReportPage:
 
         download = download_info.value
 
-        download.save_as(f"downloads/{download.suggested_filename}")
+        # Current time
+        timestamp = datetime.now().strftime("%H-%M-%S")
 
-        print(f"Downloaded: {download.suggested_filename}")
-        
+        # Original filename
+        filename = download.suggested_filename
+        name, ext = os.path.splitext(filename)
+
+        # New filename with timestamp
+        new_filename = f"{name} {timestamp}{ext}"
+
+        download.save_as(
+            os.path.join("downloads", new_filename)
+        )
+
+        print(f"Downloaded: {new_filename}")
+
         self.page.wait_for_timeout(2000)

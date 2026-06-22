@@ -20,18 +20,20 @@ def read_products_from_csv(file_path):
    return products
 
 
-def test_purchase_invoice(page):
-
+def test_purchase_invoice(page,config_data):
+   username = config_data["username"]
+   password = config_data["password"]
+   
    login_page = login(page)
    purchase_invoice = PurchaseInvoice(page)
-   login_page.perform_login("Testuser", "Test@1234")
+   login_page.perform_login(username, password)
    products = read_products_from_csv("product_details.csv")
-   random_invoice_no = random.randint(10000, 99999)
+   random_invoice_no = "IRD_REFNO." + str(random.randint(10000, 99999))
    purchase_invoice.purchase_invoice(random_invoice_no)
    for product in products:
 
       item_code = product['Item Code']
-      random_quantity = random.randint(10, 100)
+      random_quantity = random.randint(50, 100)
       purchase_invoice.purchase_invoice_test(
          item_code,
          random_quantity

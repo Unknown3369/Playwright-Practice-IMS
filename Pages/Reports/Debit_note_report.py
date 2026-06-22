@@ -1,7 +1,7 @@
 
 from playwright.sync_api import Page, expect
 import os
-
+from datetime import datetime
 
 class DebitNoteBookReportPage:
 
@@ -74,12 +74,32 @@ class DebitNoteBookReportPage:
 
         download = download_info.value
 
-        download.save_as(f"downloads/{download.suggested_filename}")
+        # Download timestamp
+        download_time = datetime.now()
 
-        print(f"Downloaded: {download.suggested_filename}")
+        file_path = os.path.join(
+            "downloads",
+            download.suggested_filename
+                )
+
+        download.save_as(file_path)
         
+        # Current time
+        timestamp = datetime.now().strftime("%H-%M-%S")
 
+        # Original filename
+        filename = download.suggested_filename
+        name, ext = os.path.splitext(filename)
 
-        self.page.wait_for_timeout(3000)
+        # New filename with timestamp
+        new_filename = f"{name} {timestamp}{ext}"
+
+        download.save_as(
+            os.path.join("downloads", new_filename)
+        )
+
+        print(f"Downloaded: {new_filename}")
+
+        self.page.wait_for_timeout(2000)
 
 

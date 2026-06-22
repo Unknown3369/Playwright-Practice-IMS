@@ -15,13 +15,15 @@ def read_products_from_csv(file_path):
             products.append(row)
    return products
 
-def test_sales_invoice(page):
+def test_sales_invoice(page,config_data):
+   username = config_data["username"]
+   password = config_data["password"]
 
    login_page = login(page)
    sales_invoice = SalesInvoice(page)
-   login_page.perform_login("Testuser","Test@1234")
+   login_page.perform_login(username, password)
 
-   ref_no = "REF" + str(random.randint(10,99)) + "-" + str(random.randint(1000,9999))
+   ref_no = "IRD_REF" + str(random.randint(10,99)) + "-" + str(random.randint(1000,9999))
    sales_invoice.enter_sales_invoice(ref_no)
 
    products = read_products_from_csv(

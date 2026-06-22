@@ -10,8 +10,14 @@ from Pages.Masters.add_vendor import AddVendor
 
 
 def random_name():
-   return "Vend_" + uuid.uuid4().hex[:8]
+   return "IRD_VENDOR_" + uuid.uuid4().hex[:8]
 
+
+def clear_csv(filename="vendors.csv"):
+   with open(filename, mode="w", newline="", encoding="utf-8") as file:
+      writer = csv.writer(file)
+      writer.writerow(["MainGroup","ACNAME","Address","VATNO","PARTYTYPE"])
+   print("CSV reset complete.")
 
 def random_address(length=12):
 
@@ -61,37 +67,41 @@ def write_vendor_to_csv(data,file_name="vendors.csv"):
       writer.writerow(data)
 
 
-def test_create_vendor(page):
+def test_create_vendor(page,config_data):
+   username = config_data["username"]
+   password = config_data["password"]
 
-      login_page = login(page)
-      login_page.perform_login("Testuser","Test@1234")
+   login_page = login(page)
+   login_page.perform_login(username, password)
 
-      print("Logged into IMS")
+   print("Logged into IMS")
+   
+   clear_csv("vendors.csv")
 
-      vendor_page = AddVendor(page)
-      vendor_page.open_add_vendor()
-      vendor_name = random_name()
-      vendor_address = random_address()
-      vendor_vat = random_vat_no()
-      vendor_email = random_email()
-      vendor_mobile = random_mobile()
+   vendor_page = AddVendor(page)
+   vendor_page.open_add_vendor()
+   vendor_name = random_name()
+   vendor_address = random_address()
+   vendor_vat = random_vat_no()
+   vendor_email = random_email()
+   vendor_mobile = random_mobile()
 
-      vendor_page.add_vendor(
-         vendor_name=vendor_name,
-         vendor_address=vendor_address,
-         vendor_vat_no=vendor_vat,
-         vendor_email=vendor_email,
-         vendor_mobile=vendor_mobile
-      )
+   vendor_page.add_vendor(
+      vendor_name=vendor_name,
+      vendor_address=vendor_address,
+      vendor_vat_no=vendor_vat,
+      vendor_email=vendor_email,
+      vendor_mobile=vendor_mobile
+   )
 
-      vendor_data = {
-         "MainGroup": "SUPPLIER",
-         "ACNAME": vendor_name,
-         "Address": vendor_address,
-         "VATNO": vendor_vat,
-         "PARTYTYPE": "Supplier"
-      }
+   vendor_data = {
+      "MainGroup": "SUPPLIER",
+      "ACNAME": vendor_name,
+      "Address": vendor_address,
+      "VATNO": vendor_vat,
+      "PARTYTYPE": "Supplier"
+   }
 
-      write_vendor_to_csv(vendor_data)
+   write_vendor_to_csv(vendor_data)
 
-      print(f"Vendor '{vendor_name}' created successfully!")
+   print(f"Vendor '{vendor_name}' created successfully!")

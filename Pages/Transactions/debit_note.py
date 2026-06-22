@@ -8,9 +8,6 @@ class DebitNote:
    def __init__(self, page: Page):
       self.page = page
 
-      self.transactions = "//span[contains(text(), 'Transactions')]"
-      self.pur_transaction = "text='Purchase Transaction'"
-      self.debit_note = "//span[normalize-space()='Debit Note (Purchase Return)']"
       self.ref_no = "#invoiceNO"
       self.return_mode = "#paymentTerms"
       self.supplier = "#customerselectid"

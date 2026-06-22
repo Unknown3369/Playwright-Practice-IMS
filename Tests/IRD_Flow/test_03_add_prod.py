@@ -10,7 +10,13 @@ import time
 MAX_PRODUCTS = 10
 
 def random_name():
-   return "prod_" + uuid.uuid4().hex[:8]
+   return "IRD_PRODUCT_" + uuid.uuid4().hex[:8]
+
+def clear_csv(filename="added_products.csv"):
+   with open(filename, mode="w", newline="", encoding="utf-8") as file:
+      writer = csv.writer(file)
+      writer.writerow(["Item Code", "Item Name", "HS Code", "Description", "Purchase Price", "Sales Price", "Vatable"])
+   print("CSV reset complete.")
 
 
 def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,vatable,filename="product_details.csv"):
@@ -46,10 +52,14 @@ def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,s
    print(f"FIFO updated: {len(rows)} rows")
 
 
-def test_add_prod(page):
+def test_add_prod(page, config_data):
+   
+   username = config_data["username"]
+   password = config_data["password"]
    login_page = login(page)
    add_prod_page = Add_prod(page)
-   login_page.perform_login("Testuser", "Test@1234")
+   login_page.perform_login(username, password)
+   clear_csv("product_details.csv")
    page.wait_for_load_state("networkidle")
    page.wait_for_timeout(3000)
    

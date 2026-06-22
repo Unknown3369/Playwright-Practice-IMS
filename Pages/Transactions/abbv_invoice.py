@@ -1,6 +1,8 @@
 from playwright.sync_api import Page
 import random
 import time
+import os
+from datetime import datetime
 
 class AbbvInvoice:
 
@@ -126,12 +128,15 @@ class AbbvInvoice:
 
       self.page.wait_for_timeout(5000)
 
-      try:
-         print_voucher = self.page.get_by_role("button", name="Print")
-         print_voucher.wait_for( state="visible", timeout=30000).click()
-         print ("Print Voucher clicked successfully!")
-      
-      except:
-         print ("Print button not found!")
+      #Print
+      timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-      self.page.wait_for_timeout(5000)
+      os.makedirs("invoices", exist_ok=True)
+
+      self.page.pdf(
+         path=f"invoices/Invoice_{timestamp}.pdf",
+         format="A4",
+         print_background=True
+      )
+
+      print("Invoice PDF saved successfully!")

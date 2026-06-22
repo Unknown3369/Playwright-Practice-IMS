@@ -6,13 +6,13 @@ from Pages.Reports.Materialized_View import MaterializedViewReportPage
 
 
 
-def test_materialized_view_report(page):
-
+def test_materialized_view_report(page,config_data):
+    username = config_data["username"]
+    password = config_data["password"]
+    
     login_page = login(page)
 
-    login_page.perform_login(
-        "Testuser", "Test@1234"
-    )
+    login_page.perform_login(username, password)
 
     print("Logged into IMS")
 

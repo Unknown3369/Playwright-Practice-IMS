@@ -1,5 +1,6 @@
 from playwright.sync_api import Page, expect
 import os
+from datetime import datetime
 
 class VatPurchaseRegisterReportPage:
 
@@ -34,8 +35,21 @@ class VatPurchaseRegisterReportPage:
             download_pdf.click()
 
         download = download_info.value
-        download.save_as(f"downloads/{download.suggested_filename}")
 
-        print(f"Downloaded: {download.suggested_filename}")
-        
+        # Current time
+        timestamp = datetime.now().strftime("%H-%M-%S")
+
+        # Original filename
+        filename = download.suggested_filename
+        name, ext = os.path.splitext(filename)
+
+        # New filename with timestamp
+        new_filename = f"{name} {timestamp}{ext}"
+
+        download.save_as(
+            os.path.join("downloads", new_filename)
+        )
+
+        print(f"Downloaded: {new_filename}")
+
         self.page.wait_for_timeout(2000)

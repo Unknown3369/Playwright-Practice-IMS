@@ -1,18 +1,16 @@
 import os
 
 from playwright.sync_api import sync_playwright
-import pytest
-import allure
 from Pages.Login import login
 
 
-@allure.title("Login to IMS Application")
-@allure.description("This test logs into the IMS application using valid credentials and verifies the dashboard.")
-def test_login_to_ims(page):
+def test_login_to_ims(page, config_data):
+
+      username = config_data["username"]
+      password = config_data["password"]
 
       login_page = login(page)
-
-      login_page.perform_login("Testuser", "Test@1234")
+      login_page.perform_login(username, password)
 
       print("Login process completed.")
 

@@ -18,14 +18,16 @@ def read_products_from_csv(file_path):
             products.append(row)
       return products
 
-def test_debit_note(page):
+def test_debit_note(page,config_data):
+   username = config_data["username"]
+   password = config_data["password"]
 
    login_page = login(page)
    debit_note = DebitNote(page)
    page.wait_for_timeout(15000)
-   login_page.perform_login("Testuser", "Test@1234")
+   login_page.perform_login(username, password)
    products = read_products_from_csv("product_details.csv")
-   random_ref_no = "REF_NO" + str(random.randint(10000, 99999))
+   random_ref_no = "IRD_REF_NO" + str(random.randint(10000, 99999))
    debit_note.enter_debit_note()
    debit_note.debit_note_entry(str(random_ref_no))
 

@@ -27,10 +27,11 @@ class CreditNotePage:
       print("Pressed ENTER to load vouchers")
       
          # --- Select voucher ---
-      voucher_title = "TI6-MAN-82/83"  # make dynamic later if needed
-      voucher = self.page.locator(f"//div[@title='{voucher_title}']")
+      voucher = self.page.locator("tbody tr").first
       voucher.wait_for(state="visible")
       voucher.dblclick()
+      print("Count:", self.page.locator("tbody tr").count())
+      print("Visible:", voucher.is_visible())
       print("Voucher selected")
       
       # --- Remarks ---

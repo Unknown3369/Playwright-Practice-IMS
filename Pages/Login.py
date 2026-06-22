@@ -12,9 +12,6 @@ class login:
 
    def perform_login(self, username: str, password: str):
 
-      # Open login page (same as Selenium)
-      self.page.goto("https://automation.variantqa.himshang.com.np")
-
       # Username
       username_box = self.page.locator(self.username)
       username_box.wait_for(state="visible", timeout=35000)
@@ -53,11 +50,7 @@ class login:
    def verify_login(self):
       current_url = self.page.url
 
-      if current_url == "https://automation.webredirect.himshang.com.np/#/pages/dashboard":
+      if "#/pages/dashboard" in current_url:
          print(f"Test Successful, tested on {current_url}")
-
-      elif current_url == "https://automation.variantqa.himshang.com.np/#/pages/dashboard":
-         print(f"Test Successful, tested on {current_url}")
-
       else:
          print(f"Login failed or unexpected URL: {current_url}")
