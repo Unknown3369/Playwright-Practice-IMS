@@ -71,32 +71,32 @@ class DebitNote:
       save_button.click()
       print("Save button clicked successfully!")
       
-      try:
-         print_voucher = self.page.get_by_role("button", name="Print")
-         print_voucher.wait_for( state="visible", timeout=30000).click()
-         print ("Print Voucher clicked successfully!")
+      # try:
+      #    print_voucher = self.page.get_by_role("button", name="Print")
+      #    print_voucher.wait_for( state="visible", timeout=30000).click()
+      #    print ("Print Voucher clicked successfully!")
       
-      except:
-         print ("Print button not found!")
+      # except:
+      #    print ("Print button not found!")
 
-      self.page.wait_for_timeout(5000)
+      # self.page.wait_for_timeout(5000)
 
-      # Handle Alert
-      dialog_message = None
+      # # Handle Alert
+      # dialog_message = None
 
-      def handle_dialog(dialog):
-            nonlocal dialog_message
-            dialog_message = dialog.message
-            print("Alert says:", dialog_message)
-            dialog.accept()
-      self.page.once("dialog", handle_dialog)
+      # def handle_dialog(dialog):
+      #       nonlocal dialog_message
+      #       dialog_message = dialog.message
+      #       print("Alert says:", dialog_message)
+      #       dialog.accept()
+      # self.page.once("dialog", handle_dialog)
 
-      try:
-         #Handle Ok Button
-         ok_btn = self.page.get_by_role("button", name="OK")
-         ok_btn.wait_for(state="visible", timeout=30000)
-         ok_btn.click()
-      except Exception as e:
-         print("OK button did not appear:", str(e))
+      # try:
+      #    #Handle Ok Button
+      #    ok_btn = self.page.get_by_role("button", name="OK")
+      #    ok_btn.wait_for(state="visible", timeout=30000)
+      #    ok_btn.click()
+      # except Exception as e:
+      #    print("OK button did not appear:", str(e))
 
-      return dialog_message
+      # return dialog_message
