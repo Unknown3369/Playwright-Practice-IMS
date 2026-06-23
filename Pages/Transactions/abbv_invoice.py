@@ -3,6 +3,7 @@ import random
 import time
 import os
 from datetime import datetime
+import csv
 
 class AbbvInvoice:
 
@@ -38,12 +39,18 @@ class AbbvInvoice:
       print("Customer popup opened!")
 
       # Select Customer
-      self.page.get_by_text(
-         "11 QA Customer",
-         exact=False
-      ).dblclick()
 
-      print("Customer selected successfully!")
+
+      with open("customers.csv", newline="", encoding="utf-8") as file:
+         reader = csv.DictReader(file)
+         customer = next(reader)["ACNAME"]
+
+         self.page.get_by_text(
+            customer,
+            exact=False
+         ).dblclick()
+
+      print(f"Customer selected successfully: {customer}")
 
    def sales_invoice_test(self,item_code: str,enter_quantity: int):
 
@@ -126,17 +133,82 @@ class AbbvInvoice:
       final_save.click()
       print("Final Save clicked!")
 
-      self.page.wait_for_timeout(5000)
+      
+      # -------------------------------------------------------
+      # Wait for the success alert modal to appear then vanish
+      # The alert modal blocks all button clicks until it closes
+      # -------------------------------------------------------
+      try:
+         # Wait for the alert modal to appear (up to 5s)
+         self.page.wait_for_selector(
+            "alert .modal.fade.in.show",
+            state="visible",
+            timeout=5000
+         )
+         print("Alert modal appeared — waiting for it to close...")
+         # Wait for it to disappear (up to 10s)
+         self.page.wait_for_selector(
+            "alert .modal.fade.in.show",
+            state="hidden",
+            timeout=10000
+         )
+         print("Alert modal closed.")
+      except Exception:
+         # Alert may not appear or may have already closed
+         pass
 
-      #Print
-      timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+      # Now safely click Balance Amount
+      amount_btn = self.page.locator(self.amount_btn)
+      amount_btn.wait_for(state="visible", timeout=30000)
+      amount_btn.click()
+      print("Balance Amount clicked!")
 
-      os.makedirs("invoices", exist_ok=True)
+      add_btn = self.page.locator(self.add_button)
+      add_btn.wait_for(state="visible", timeout=30000)
+      add_btn.click()
+      print("Add button clicked!")
 
-      self.page.pdf(
-         path=f"invoices/Invoice_{timestamp}.pdf",
-         format="A4",
-         print_background=True
-      )
+      final_save = self.page.locator(self.final_save)
+      final_save.wait_for(state="visible", timeout=30000)
 
-      print("Invoice PDF saved successfully!")
+      # -----------------------------------------------------------
+      # Intercept the PDF response the server sends after Final Save
+      # The app returns the invoice as application/pdf from the server.
+      # We capture the response body before Chrome's PDF viewer takes it.
+      # -----------------------------------------------------------
+      captured_pdf = []
+
+      def handle_response(response):
+         content_type = response.headers.get("content-type", "")
+         if "pdf" in content_type or response.url.lower().endswith(".pdf"):
+            try:
+               captured_pdf.append(response.body())
+               print(f"PDF response captured from: {response.url}")
+            except Exception as ex:
+               print(f"Could not read PDF body: {ex}")
+
+      self.page.on("response", handle_response)
+
+      final_save.click(force=True)
+      print("Final Save clicked!")
+
+      for i in range(4):
+         
+         # Wait up to 15s for the PDF to arrive
+         timeout = 15
+         import time as _time
+         start = _time.time()
+         while not captured_pdf and (_time.time() - start) < timeout:
+            self.page.wait_for_timeout(500)
+
+         self.page.remove_listener("response", handle_response)
+
+         if captured_pdf:
+            os.makedirs("invoices", exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            pdf_path = f"invoices/abbv_invoice_{timestamp}.pdf"
+            with open(pdf_path, "wb") as f:
+               f.write(captured_pdf[0])
+            print(f"Invoice successfully saved to {pdf_path}")
+         else:
+            print("No PDF response detected within timeout. Invoice not saved.")

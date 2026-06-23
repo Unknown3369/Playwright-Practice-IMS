@@ -1,13 +1,21 @@
 import random
 import uuid
 import pytest
-
+import csv
 from Pages.Login import login
 from Pages.Masters.add_product_group import (AddProductGroupMasterPage)
 
+def clear_csv(filename="product_groups.csv"):
+   with open(filename, mode="w", newline="", encoding="utf-8") as file:
+      writer = csv.writer(file)
+      writer.writerow(["Timestamp","Group Name","Group Code","Recommended Margin","Shelf Life"])
+   print("CSV reset complete.")
 
 def random_group_name():
    return f"Group_{uuid.uuid4().hex[:6]}"
+
+def random_group_code():
+   return f"{random.randint(1111, 9999)}"
 
 
 def test_add_product_group_master(page, config_data):
@@ -15,6 +23,7 @@ def test_add_product_group_master(page, config_data):
    password = config_data["password"]
 
    login_page = login(page)
+   clear_csv("product_groups.csv")
 
    try:
       login_page.perform_login(username, password)
@@ -25,6 +34,7 @@ def test_add_product_group_master(page, config_data):
 
       add_group.fill_group_details_and_save(
          group_name=random_group_name(),
+         group_code=random_group_code(),
          recommended_margin=random.randint(5, 20),
          shelf_life=random.randint(15, 90)
       )

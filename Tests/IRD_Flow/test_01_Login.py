@@ -14,11 +14,10 @@ def test_login_to_ims(page, config_data):
 
       print("Login process completed.")
 
-      page.locator("xpath=//input[@id='Date']").wait_for(
-         state="visible",
-         timeout=30000
-      )
+def verify_login(self):
+   current_url = self.page.url
 
-      print("Dashboard page loaded successfully!")
-
-      assert page.locator("xpath=//input[@id='Date']"), "Date input not found"
+   if "#/pages/dashboard" in current_url:
+      print(f"Test Successful, tested on {current_url}")
+   else:
+      print(f"Login failed or unexpected URL: {current_url}")

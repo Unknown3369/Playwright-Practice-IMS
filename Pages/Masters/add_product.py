@@ -18,7 +18,7 @@ class Add_prod:
          self.page.locator("a").filter(has_text="Add Product").first.click()
 
 
-   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,input_purchase_price: int,input_sales_price: int, iteration):
+   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,prod_group:str,input_purchase_price: int,vendor_name: str,input_sales_price: int, iteration):
 
       item_group = self.page.get_by_role(
          "textbox",
@@ -35,10 +35,10 @@ class Add_prod:
       print("ng-select box clicked")
 
       # Wait for option
-      option = self.page.get_by_role("option", name="TestGroup")
+      option = self.page.get_by_role("option", name=prod_group, exact=True)
       option.wait_for(state="visible", timeout=50000)
       option.click()
-      print("option selected")
+      print(f"Selected option: {prod_group}")
 
       ok_button = self.page.get_by_role("button", name="Ok")
       ok_button.wait_for(state="visible", timeout=50000)
@@ -105,13 +105,23 @@ class Add_prod:
       purchase_price.fill(str(input_purchase_price))
       print("Purchase Price entered:", input_purchase_price)
 
-      supplier_input = self.page.get_by_role("textbox",name="Press Enter to select").nth(0)
+
+      supplier_input = self.page.get_by_role(
+         "textbox",
+         name="Press Enter to select"
+      ).nth(0)
+
       supplier_input.wait_for(state="visible", timeout=30000)
       supplier_input.press("Enter")
-      vendor = self.page.locator("//td[contains(normalize-space(),'11 QA Vendor')]")
+
+      vendor = self.page.locator(
+         f"//td[contains(normalize-space(),'{vendor_name}')]"
+      )
+
       vendor.wait_for(state="visible", timeout=30000)
       vendor.dblclick()
-      print("Supplier '11 QA Vendor' selected successfully!")
+
+      print(f"Supplier '{vendor_name}' selected successfully!")
 
       sales_price = self.page.locator("input[type='number'][placeholder='0']").first
       sales_price.wait_for(state="visible", timeout=50000)

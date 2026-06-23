@@ -47,10 +47,3 @@ class login:
       except:
          print("No previous session popup detected.")
 
-   def verify_login(self):
-      current_url = self.page.url
-
-      if "#/pages/dashboard" in current_url:
-         print(f"Test Successful, tested on {current_url}")
-      else:
-         print(f"Login failed or unexpected URL: {current_url}")

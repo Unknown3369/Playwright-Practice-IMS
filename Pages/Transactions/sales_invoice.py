@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from pywinauto import Desktop
 import os
+import csv
 
 class SalesInvoice:
 
@@ -43,12 +44,16 @@ class SalesInvoice:
       print("Customer popup opened!")
 
       # Select Customer
-      self.page.get_by_text(
-         "11 QA Customer",
-         exact=False
-      ).dblclick()
+      with open("customers.csv", newline="", encoding="utf-8") as file:
+         reader = csv.DictReader(file)
+         customer = next(reader)["CustomerName"]
 
-      print("Customer selected successfully!")
+         self.page.get_by_text(
+            customer,
+            exact=False
+         ).dblclick()
+
+      print(f"Customer selected successfully: {customer}")
 
    def sales_invoice_test(self,item_code: str,enter_quantity: int):
 

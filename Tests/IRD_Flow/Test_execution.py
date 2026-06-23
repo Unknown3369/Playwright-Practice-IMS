@@ -2,9 +2,9 @@ from playwright.sync_api import sync_playwright
 
 from Tests.IRD_Flow.test_01_Login import test_login_to_ims
 from Tests.IRD_Flow.test_02_add_product_group import test_add_product_group_master
-from Tests.IRD_Flow.test_03_add_prod import test_add_prod
 from Tests.IRD_Flow.test_04_add_customer import test_add_customer
 from Tests.IRD_Flow.test_04_add_vendor import test_create_vendor
+from Tests.IRD_Flow.test_03_add_prod import test_add_prod
 from Tests.IRD_Flow.test_05_purchase_invoice import test_purchase_invoice
 from Tests.IRD_Flow.test_06_purchase_book_report import test_purchase_book_report
 from Tests.IRD_Flow.test_07_abbv_invoice import test_abbv_invoice
@@ -32,15 +32,15 @@ def test_ird_flow(page):
     if "test_add_product_group_master" not in SKIP_TESTS:
         test_add_product_group_master(page)
         print("Completed Test Add Product Group")
-    if "test_add_prod" not in SKIP_TESTS:
-        test_add_prod(page)
-        print("Completed Test Add Product")
     if "test_add_customer" not in SKIP_TESTS:
         test_add_customer(page)
         print("Completed Test Add Customer")
     if "test_create_vendor" not in SKIP_TESTS:
         test_create_vendor(page)                
         print("Completed Test Add Vendor")
+    if "test_add_prod" not in SKIP_TESTS:
+        test_add_prod(page)
+        print("Completed Test Add Product")
     if "test_purchase_invoice" not in SKIP_TESTS:
         test_purchase_invoice(page)
         print("Completed Test Generate Purchase invoice")

@@ -1,3 +1,4 @@
+from Tests.IRD_Flow import test_02_add_product_group
 import pytest
 from playwright.sync_api import sync_playwright
 from Pages.Login import login
@@ -18,6 +19,26 @@ def clear_csv(filename="added_products.csv"):
       writer.writerow(["Item Code", "Item Name", "HS Code", "Description", "Purchase Price", "Sales Price", "Vatable"])
    print("CSV reset complete.")
 
+def product_group(filename="product_groups.csv"):
+    with open(filename, mode="r", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        rows = list(reader)
+
+        if not rows:
+            raise Exception("No Product Groups found in CSV")
+
+        # Get the most recently added group
+        return rows[-1]["Group Name"]
+
+def get_vendor_from_csv(filename="vendors.csv"):
+    with open(filename, mode="r", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        rows = list(reader)
+
+    if not rows:
+        raise Exception("No vendors found in CSV")
+
+    return rows[-1]["ACNAME"]  # Use your actual column name
 
 def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,vatable,filename="product_details.csv"):
 
@@ -71,10 +92,14 @@ def test_add_prod(page, config_data):
       random_description = "Test Product Description"
       random_purchase_price = random.randint(50, 180)
       random_sales_price = random.randint(200, 350)
+      selected_group = product_group()
+      selected_vendor = get_vendor_from_csv()
       item_code, vatable_status = add_prod_page.add_prod_test(
          input_itemname=random_item_name,
          input_hscode=random_hs_code,
          input_description=random_description,
+         prod_group=selected_group,
+         vendor_name=selected_vendor,
          input_purchase_price=random_purchase_price,
          input_sales_price=random_sales_price,
          iteration=i

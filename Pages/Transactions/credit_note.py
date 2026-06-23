@@ -27,17 +27,19 @@ class CreditNotePage:
       print("Pressed ENTER to load vouchers")
       
          # --- Select voucher ---
-      voucher = self.page.locator("tbody tr").first
+      voucher = self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]").nth(0)
       voucher.wait_for(state="visible")
       voucher.dblclick()
-      print("Count:", self.page.locator("tbody tr").count())
+      print("Count:", self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]").count())
       print("Visible:", voucher.is_visible())
       print("Voucher selected")
+
+      self.wait_for_timeout(5000)
       
       # --- Remarks ---
       remarks = self.page.locator("#remarksid")
       remarks.scroll_into_view_if_needed()
-      remarks.fill("Credit note created for returned goods.")
+      remarks.fill("Credit note remarks.")
       print("Remarks entered")
 
    def save_credit_note(self):
