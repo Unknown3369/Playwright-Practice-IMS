@@ -30,11 +30,9 @@ class CreditNotePage:
       voucher = self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]").nth(0)
       voucher.wait_for(state="visible")
       voucher.dblclick()
-      print("Count:", self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]").count())
-      print("Visible:", voucher.is_visible())
       print("Voucher selected")
 
-      self.wait_for_timeout(5000)
+      self.page.wait_for_timeout(5000)
       
       # --- Remarks ---
       remarks = self.page.locator("#remarksid")
@@ -48,13 +46,6 @@ class CreditNotePage:
       save_btn.scroll_into_view_if_needed()
       save_btn.click()
       print("Clicked SAVE")
-      try:
-         print_voucher = self.page.get_by_role("button", name="Print")
-         print_voucher.wait_for( state="visible", timeout=30000).click()
-         print ("Print Voucher clicked successfully!")
-      
-      except:
-         print ("Print button not found!")
 
       self.page.wait_for_timeout(5000)
       

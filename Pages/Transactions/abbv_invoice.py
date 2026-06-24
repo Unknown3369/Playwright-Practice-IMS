@@ -37,19 +37,14 @@ class AbbvInvoice:
       customer.click()
       customer.press("Enter")
       print("Customer popup opened!")
+      time.sleep(10)
 
       # Select Customer
-
-
       with open("customers.csv", newline="", encoding="utf-8") as file:
          reader = csv.DictReader(file)
          customer = next(reader)["ACNAME"]
 
-         self.page.get_by_text(
-            customer,
-            exact=False
-         ).dblclick()
-
+         self.page.get_by_text(customer,exact=False).dblclick()
       print(f"Customer selected successfully: {customer}")
 
    def sales_invoice_test(self,item_code: str,enter_quantity: int):
@@ -95,45 +90,10 @@ class AbbvInvoice:
    def save_btn(self):
 
       save_btn = self.page.locator(self.save)
-
-      save_btn.wait_for(
-            state="visible",
-            timeout=30000
-      )
+      save_btn.wait_for(state="visible", timeout=30000)
       save_btn.click()
       print("Save button clicked!")
 
-      amount_btn = self.page.locator(
-         self.amount_btn
-      )
-      amount_btn.wait_for(
-         state="visible",
-         timeout=30000
-      )
-      amount_btn.click()
-      print("Balance Amount clicked!")
-
-      add_btn = self.page.locator(
-         self.add_button
-      )
-      add_btn.wait_for(
-         state="visible",
-         timeout=30000
-      )
-      add_btn.click()
-      print("Add button clicked!")
-
-      final_save = self.page.locator(
-         self.final_save
-      )
-      final_save.wait_for(
-         state="visible",
-         timeout=30000
-      )
-      final_save.click()
-      print("Final Save clicked!")
-
-      
       # -------------------------------------------------------
       # Wait for the success alert modal to appear then vanish
       # The alert modal blocks all button clicks until it closes
@@ -192,7 +152,7 @@ class AbbvInvoice:
       final_save.click(force=True)
       print("Final Save clicked!")
 
-      for i in range(4):
+      for i in range(1):
          
          # Wait up to 15s for the PDF to arrive
          timeout = 15
@@ -212,3 +172,9 @@ class AbbvInvoice:
             print(f"Invoice successfully saved to {pdf_path}")
          else:
             print("No PDF response detected within timeout. Invoice not saved.")
+
+      # -----------------------------------------------------------
+      # Settle the browser page before the test closes
+      # -----------------------------------------------------------
+      print("Settling page to prevent abrupt teardown errors...")
+      self.page.wait_for_timeout(2000)

@@ -18,6 +18,10 @@ class StockSummaryReport:
 
     def run_report(self):
 
+        branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
+
+        branch.select_option(label="ALL")
+
         run_button = self.page.locator(
             self.run_button
         )

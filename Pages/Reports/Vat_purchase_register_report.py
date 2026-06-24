@@ -19,6 +19,10 @@ class VatPurchaseRegisterReportPage:
         self.page.get_by_title("VAT Report").nth(1).click()
         self.page.get_by_role("link", name="VAT Purchase Register").click()
 
+        branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
+
+        branch.select_option(label="ALL")
+
         run_btn = self.page.locator(
                 self.run_btn
             )

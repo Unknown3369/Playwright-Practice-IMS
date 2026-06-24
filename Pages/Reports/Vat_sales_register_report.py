@@ -36,6 +36,10 @@ class VatSalesRegisterReportPage:
 
         # print("Selected customer: Carti")
 
+        branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
+
+        branch.select_option(label="ALL")
+
         self.page.locator(
                 self.run_btn
             ).click()

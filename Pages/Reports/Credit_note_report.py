@@ -54,6 +54,10 @@ class CreditNoteBookReportPage:
         # print("Selected 'Detail Report' radio button.")
 
         # self.page.wait_for_timeout(2000)
+    
+        branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
+
+        branch.select_option(label="ALL")
 
             # Run Button
         print("Clicking 'RUN' button...")
