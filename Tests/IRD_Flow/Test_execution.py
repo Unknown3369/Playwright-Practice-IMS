@@ -24,10 +24,10 @@ import os
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
 
 
-def test_ird_flow(page):
+def test_ird_flow(page, config_data):
 
     if "test_login_to_ims" not in SKIP_TESTS:
-        test_login_to_ims(page)
+        test_login_to_ims(page, config_data)
         print("Completed Test Login")
     if "test_add_product_group_master" not in SKIP_TESTS:
         test_add_product_group_master(page)

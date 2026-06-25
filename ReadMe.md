@@ -8,24 +8,33 @@ This repository contains **QA test automation** for the WebPOS/IMS application u
 - **Test Runner:** Pytest
 - **Reporting:** Allure Reports + HTML reports
 - **CI/CD:** Jenkins (separate pipeline from deployment)
-- **Application:** IMS/WebPOS on http://stc21.webredirect.himshang.com.np
+- **Application:** IMS/WebPOS on http://{}.variantqa.himshang.com.np
 
 ## Repository Structure
 
 ```
+C:.
 ├───.pytest_cache
 │   └───v
 │       └───cache
+├───downloads
+├───invoices
 ├───Pages
 │   ├───Masters
+│   │   └───__pycache__
+│   ├───Reports
 │   │   └───__pycache__
 │   ├───Transactions
 │   │   └───__pycache__
 │   └───__pycache__
 ├───Reports
-│   ├───assets
+│   ├───data
 │   └───screenshots
+├───scratch
+├───screenshots
 ├───Tests
+│   ├───IRD_Flow
+│   │   └───__pycache__
 │   ├───Masters
 │   │   └───__pycache__
 │   ├───Transactions
@@ -66,14 +75,9 @@ playwright install chromium
 pytest -v -s
 
 # Run with Playwright Reporting
-pytest --html=Reports/report.html --self-contained-html -v -s
+pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html 
+--self-contained-html -s
 
-# Run with Allure reporting
-pytest Tests/Test_login.py -v --alluredir=allure-results
-
-# Generate Allure HTML report
-allure generate allure-results -o allure-report --clean
-allure open allure-report
 ```
 
 ## Jenkins Pipeline
