@@ -24,28 +24,22 @@ class AbbvInvoice:
       self.page.get_by_title("Sales Transaction").nth(1).click()
       self.page.get_by_role("link", name="Abbreviated Tax Invoice").click()
 
-    #   # Ref No
-    #   self.page.locator(self.refno).fill(
-    #      str(ref_value)
-    #   )
-    #   print(f"Reference No {ref_value} entered successfully!")
+      # # Customer
+      # customer = self.page.locator(
+      #    self.customer_enter
+      # )
+      # customer.click()
+      # customer.press("Enter")
+      # print("Customer popup opened!")
+      # time.sleep(10)
 
-      # Customer
-      customer = self.page.locator(
-         self.customer_enter
-      )
-      customer.click()
-      customer.press("Enter")
-      print("Customer popup opened!")
-      time.sleep(10)
+      # # Select Customer
+      # with open("customers.csv", newline="", encoding="utf-8") as file:
+      #    reader = csv.DictReader(file)
+      #    customer = next(reader)["ACNAME"]
 
-      # Select Customer
-      with open("customers.csv", newline="", encoding="utf-8") as file:
-         reader = csv.DictReader(file)
-         customer = next(reader)["ACNAME"]
-
-         self.page.get_by_text(customer,exact=False).dblclick()
-      print(f"Customer selected successfully: {customer}")
+      #    self.page.get_by_text(customer,exact=False).dblclick()
+      # print(f"Customer selected successfully: {customer}")
 
    def sales_invoice_test(self,item_code: str,enter_quantity: int):
 
