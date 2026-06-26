@@ -23,26 +23,6 @@ def pytest_addoption(parser):
     )
 
 
-# @pytest.fixture(scope="session")
-# def browser():
-
-#    while True:
-#       choice = input(
-#             "Run in headless mode? (y/n): "
-#       ).strip().lower()
-
-#       if choice in ["y", "n"]:
-#             break
-
-#       print("Please enter y or n.")
-
-#    headless_mode = choice == "y"
-
-#    with sync_playwright() as p:
-#       browser = p.chromium.launch(headless=headless_mode)
-#       yield browser
-#       browser.close()
-
 @pytest.fixture(scope="session")
 def config_data():
 

@@ -181,6 +181,7 @@ class SalesInvoice:
             with open(pdf_path, "wb") as f:
                f.write(captured_pdf[0])
             print(f"Invoice successfully saved to {pdf_path}")
+            
          else:
             print("No PDF response detected within timeout. Invoice not saved.")
 

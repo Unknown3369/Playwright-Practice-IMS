@@ -23,11 +23,10 @@ def test_add_product_group_master(page, config_data):
    password = config_data["password"]
 
    login_page = login(page)
+   login_page.perform_login(username, password)
    clear_csv("product_groups.csv")
 
    try:
-      login_page.perform_login(username, password)
-
       add_group = AddProductGroupMasterPage(page)
       add_group.navigate_to_add_product()
       add_group.select_item_group()

@@ -19,10 +19,15 @@ class AbbvInvoice:
       self.final_save = "(//button[contains(text(),'SAVE') and contains(@class,'btn-info')])[last()]"
 
    def enter_sales_invoice(self, ref_value):
-
-      self.page.get_by_title("Transactions").first.click()
-      self.page.get_by_title("Sales Transaction").nth(1).click()
-      self.page.get_by_role("link", name="Abbreviated Tax Invoice").click()
+      try:
+         self.page.get_by_title("Transactions").first.click()
+         self.page.get_by_title("Sales Transaction").nth(1).click()
+         self.page.get_by_role("link", name="Abbreviated Tax Invoice").click()
+      
+      except:
+         self.page.get_by_title("Transactions").first.click()
+         self.page.get_by_title("Sales Transaction").nth(1).click()
+         self.page.get_by_role("link", name="Sales Bill").click()
 
       # # Customer
       # customer = self.page.locator(

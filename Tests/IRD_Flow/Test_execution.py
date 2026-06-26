@@ -30,59 +30,59 @@ def test_ird_flow(page, config_data):
         test_login_to_ims(page, config_data)
         print("Completed Test Login")
     if "test_add_product_group_master" not in SKIP_TESTS:
-        test_add_product_group_master(page)
+        test_add_product_group_master(page, config_data)
         print("Completed Test Add Product Group")
     if "test_add_customer" not in SKIP_TESTS:
-        test_add_customer(page)
+        test_add_customer(page, config_data)
         print("Completed Test Add Customer")
     if "test_create_vendor" not in SKIP_TESTS:
-        test_create_vendor(page)                
+        test_create_vendor(page, config_data)                
         print("Completed Test Add Vendor")
     if "test_add_prod" not in SKIP_TESTS:
-        test_add_prod(page)
+        test_add_prod(page, config_data)
         print("Completed Test Add Product")
     if "test_purchase_invoice" not in SKIP_TESTS:
-        test_purchase_invoice(page)
+        test_purchase_invoice(page, config_data)
         print("Completed Test Generate Purchase invoice")
     if "test_purchase_book_report" not in SKIP_TESTS:
-        test_purchase_book_report(page)
+        test_purchase_book_report(page, config_data)
         print("Completed Test Purchase Book Report")
     if "test_abbv_invoice" not in SKIP_TESTS:
-        test_abbv_invoice(page)
+        test_abbv_invoice(page, config_data)
         print("Completed Test Generate Abbreviated Invoice")
     if "test_sales_invoice" not in SKIP_TESTS:
-        test_sales_invoice(page)
+        test_sales_invoice(page, config_data)
         print("Completed Test Generate Sales Invoice")
     if "test_sales_book_report" not in SKIP_TESTS:
-        test_sales_book_report(page)
+        test_sales_book_report(page, config_data)
         print("Completed Test Sales Book Report")
     if "test_materialized_view_report" not in SKIP_TESTS:
-        test_materialized_view_report(page)
+        test_materialized_view_report(page, config_data)
         print("Completed Test Materialized View Report")
     if "test_generate_credit_note" not in SKIP_TESTS:
-        test_generate_credit_note(page)
+        test_generate_credit_note(page, config_data)
         print("Completed Test Generate Credit Note")
     if "test_generate_credit_note_book_report" not in SKIP_TESTS:
-        test_generate_credit_note_book_report(page)
+        test_generate_credit_note_book_report(page, config_data)
         print("Completed Test Generate Credit Note Book Report")
     if "test_materialized_view_report" not in SKIP_TESTS:
-        test_materialized_view_report(page)
+        test_materialized_view_report(page, config_data)
         print("Completed Test Materialized View Report")
     if "test_vat_sales_register_report" not in SKIP_TESTS:
-        test_vat_sales_register_report(page)
+        test_vat_sales_register_report(page, config_data)
         print("Completed Test VAT Sales Register Report")
     if "test_debit_note" not in SKIP_TESTS:
-        test_debit_note(page)
+        test_debit_note(page, config_data)
         print("Completed Test Generate Debit Note")
     if "test_generate_debit_note_book_report" not in SKIP_TESTS:
-        test_generate_debit_note_book_report(page)
+        test_generate_debit_note_book_report(page, config_data)
         print("Completed Test Generate Debit Note Book Report")
     if "test_vat_purchase_register_report" not in SKIP_TESTS:
-        test_vat_purchase_register_report(page)
+        test_vat_purchase_register_report(page, config_data)
         print("Completed Test VAT Purchase Register Report")
     if "test_stock_summary_report" not in SKIP_TESTS:
-        test_stock_summary_report(page)
+        test_stock_summary_report(page, config_data)
         print("Completed Test Stock Summary Report")
     if "test_transaction_activity_report" not in SKIP_TESTS:
-        test_transaction_activity_report(page)
+        test_transaction_activity_report(page, config_data)
         print("Completed Test Transaction Activity Report")
