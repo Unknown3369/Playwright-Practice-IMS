@@ -4,7 +4,6 @@ from playwright.sync_api import Page
 import random
 import time
 from datetime import datetime
-from pywinauto import Desktop
 import os
 import csv
 
