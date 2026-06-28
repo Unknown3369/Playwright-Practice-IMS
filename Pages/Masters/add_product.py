@@ -67,14 +67,15 @@ class Add_prod:
       if iteration % 2 == 0:
          vatable_item.check()
          vatable_status = "Yes"
+         print("Vatabale Item")
       else:
          vatable_item.uncheck()
          vatable_status = "No"
+         print("NonVat Item")
 
-      unit_dropdown = self.page.locator("#unit")
+      unit_dropdown = self.page.locator("//select[@id='unit']")
       unit_dropdown.wait_for(state="visible", timeout=50000)
       unit_dropdown.select_option(label="Pkt.")
-
       print("Unit 'Pkt.' selected")
 
       description = self.page.get_by_role(
