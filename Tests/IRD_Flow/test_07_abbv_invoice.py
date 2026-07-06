@@ -32,7 +32,7 @@ def test_abbv_invoice(page,config_data):
 
    for product in products:
          item_code = product["Item Code"]
-         random_quantity = random.randint(4,20)
+         random_quantity = 10
          sales_invoice.sales_invoice_test(item_code,random_quantity)
    
    sales_invoice.save_btn()

@@ -45,11 +45,15 @@ class PurchaseBookReport:
         self.page.locator(self.run_button).click()
         print("Run button clicked successfully!")
 
-        download_pdf = self.page.locator("svg[role='img'][data-icon='file-pdf']")
+        download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)
 
         with self.page.expect_download(timeout=60000) as download_info:
             download_pdf.click()
+            self.page.wait_for_timeout(1000)
+            default = self.page.locator("//span[normalize-space()='Default Format']")
+            default.page.wait_for_timeout(1500)
+            default.click()
 
         download = download_info.value
 
@@ -60,8 +64,6 @@ class PurchaseBookReport:
             "downloads",
             download.suggested_filename
                 )
-
-        download.save_as(file_path)
 
         # Current time
         timestamp = datetime.now().strftime("%H-%M-%S")

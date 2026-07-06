@@ -1,51 +1,141 @@
-
-import time
-
 from playwright.sync_api import Page
+import time as _time
+import csv
+from datetime import datetime
+import os
 
 
 class CreditNotePage:
-   def __init__(self, page: Page):
-      self.page = page
+    def __init__(self, page: Page):
+        self.page = page
 
-   def navigate_to_credit_note(self):
+        self.ref_bill = "#refbill"
+        self.customer = "#customerselectid"
+        self.item_name = "#barcodeField"
+        self.quantity = "#quantityBarcode"
+        self.remarks = "#remarksid"
+        self.save_button = "//button[normalize-space(text())='SAVE [End]']"
 
-      self.page.get_by_title("Transactions").first.click()
-      self.page.get_by_title("Sales Transaction").nth(1).click()
-      self.page.get_by_role("link", name="Credit Note (Sales Return)").click()
+    @staticmethod
+    def get_customer_name():
+        with open("customers.csv", newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            row = next(reader)
+            return row["ACNAME"]
 
-   def create_credit_note(self):
+    def navigate_to_credit_note(self):
 
-      # --- Ref Bill No field ---
-      ref_bill = self.page.locator("#refbill")
-      ref_bill.scroll_into_view_if_needed()
-      ref_bill.click()
-      print("Clicked Ref Bill field")
-      
-         # Press ENTER to load vouchers
-      ref_bill.press("Enter")
-      print("Pressed ENTER to load vouchers")
-      
-         # --- Select voucher ---
-      voucher = self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]").nth(0)
-      voucher.wait_for(state="visible")
-      voucher.dblclick()
-      print("Voucher selected")
+        transactions = self.page.get_by_title("Transactions").first
+        transactions.wait_for(state="visible", timeout=15000)
+        transactions.click()
+        self.page.wait_for_timeout(1000)
 
-      self.page.wait_for_timeout(5000)
-      
-      # --- Remarks ---
-      remarks = self.page.locator("#remarksid")
-      remarks.scroll_into_view_if_needed()
-      remarks.fill("Credit note remarks.")
-      print("Remarks entered")
+        sales_transaction = self.page.get_by_title("Sales Transaction").nth(1)
+        sales_transaction.wait_for(state="visible", timeout=15000)
+        sales_transaction.click()
+        self.page.wait_for_timeout(1000)
 
-   def save_credit_note(self):
-         # --- Save ---
-      save_btn = self.page.locator("xpath=//button[contains(text(),'SAVE')]")
-      save_btn.scroll_into_view_if_needed()
-      save_btn.click()
-      print("Clicked SAVE")
+        credit_note_link = self.page.get_by_role("link", name="Credit Note (Sales Return)")
+        credit_note_link.wait_for(state="visible", timeout=15000)
+        credit_note_link.click()
+        self.page.wait_for_timeout(2000)
 
-      self.page.wait_for_timeout(5000)
-      
+
+    def credit_note_entry(self):
+        customer_name = CreditNotePage.get_customer_name()
+        
+        ref_bill = self.page.locator(self.ref_bill)
+        ref_bill.scroll_into_view_if_needed()
+        ref_bill.click()
+        ref_bill.press("Enter")
+        print("Ref Bill field clicked and ENTER pressed")
+
+        voucher = self.page.locator("//div[contains(@class,'modal')]//tbody/tr[1]/td[2]")
+        voucher.wait_for(state="visible")
+        voucher.dblclick()
+        print("Voucher selected")
+
+        self.page.wait_for_timeout(3000)
+
+
+    
+
+    def save_credit_note(self):
+        remarks = self.page.locator(self.remarks)
+        remarks.fill("For IRD Document.")
+
+        save_btn = self.page.locator("//button[contains(text(),'SAVE')]")
+
+        print("Waiting for PDF response...")
+
+        with self.page.expect_response(
+            lambda r: r.url.endswith("/api/Pdf") and r.status == 200,
+            timeout=60000
+        ) as pdf_info:
+            save_btn.click()
+
+        pdf_response = pdf_info.value
+
+        print("PDF API captured:", pdf_response.url)
+
+        # Save raw response for inspection
+        os.makedirs("invoices", exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        body = pdf_response.body()
+        print("Content-Type :", pdf_response.headers.get("content-type"))
+        print("Body Length  :", len(body))
+
+        try:
+            print(body[:100].decode("utf-8"))
+        except Exception:
+            print(body[:20])
+
+        with open("invoices/credit_note.pdf", "wb") as f:
+            f.write(body)
+
+        print("PDF response saved.")
+
+#------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------
+
+        # # Wait for save to complete
+        # self.page.wait_for_timeout(6000)
+
+        # # Handle success popup if present
+        # try:
+        #     alert = self.page.locator("//div[contains(@class,'modal') and contains(@class,'show')]")
+
+        #     if alert.count() > 0 and alert.is_visible():
+        #         print(alert.inner_text())
+
+        #         ok = alert.locator("button").last
+        #         ok.click()
+
+        # except Exception:
+        #     pass
+
+        # # Save evidence
+        # os.makedirs("reports/screenshots", exist_ok=True)
+
+        # self.page.screenshot(
+        #     path="reports/screenshots/credit_note_saved.png",
+        #     full_page=True
+        # )
+
+        # with self.page.expect_response(
+        #     lambda r: "Pdf" in r.url
+        # ) as response_info:
+
+        #     save_btn.click()
+
+        #     response = response_info.value
+
+        #     print(response.url)
+        #     print(response.headers)
+
+        #     print(response.text())
+
+        #     print("Credit Note saved successfully.")

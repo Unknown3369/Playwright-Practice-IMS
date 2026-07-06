@@ -28,6 +28,7 @@ class login:
       login_btn.click()
 
       print("Login button clicked!")
+      self.page.wait_for_timeout(2000)
 
       # Handle "already logged in" popup
       try:
@@ -36,6 +37,7 @@ class login:
          popup_logout_btn.click()
 
          print("Detected previous session popup and clicked Logout.")
+         self.page.wait_for_timeout(2000)
 
          # retry login
          login_btn = self.page.locator(self.login_button)

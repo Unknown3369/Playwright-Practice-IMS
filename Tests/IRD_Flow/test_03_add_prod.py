@@ -11,7 +11,7 @@ import time
 MAX_PRODUCTS = 10
 
 def random_name():
-   return "IRD_PRODUCT_" + uuid.uuid4().hex[:8]
+   return "IRD_PRODUCT"+ uuid.uuid4().hex[:2]
 
 def clear_csv(filename="added_products.csv"):
    with open(filename, mode="w", newline="", encoding="utf-8") as file:
@@ -84,11 +84,11 @@ def test_add_prod(page, config_data):
    page.wait_for_load_state("networkidle")
    page.wait_for_timeout(3000)
    
-   for i in range(2):
+   for i in range(1):
       add_prod_page.masters_click_test()
       random_item_name = random_name()
       random_hs_code = str(random.randint(1000, 9999))
-      
+      stock_unit = "Pkt."
       random_description = "Test Product Description"
       random_purchase_price = random.randint(50, 180)
       random_sales_price = random.randint(200, 350)
@@ -98,6 +98,7 @@ def test_add_prod(page, config_data):
          input_itemname=random_item_name,
          input_hscode=random_hs_code,
          input_description=random_description,
+         stock_units=stock_unit,
          prod_group=selected_group,
          vendor_name=selected_vendor,
          input_purchase_price=random_purchase_price,

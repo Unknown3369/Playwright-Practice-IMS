@@ -34,7 +34,7 @@ def test_debit_note(page,config_data):
 
    for product in products:
       item_code = product["Item Code"]
-      random_quantity = random.randint(1, 5)
+      random_quantity = 10
       debit_note.debit_note_test(item_code, random_quantity)
       page.wait_for_timeout(1000)
 

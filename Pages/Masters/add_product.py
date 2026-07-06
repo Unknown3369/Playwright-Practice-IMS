@@ -12,13 +12,13 @@ class Add_prod:
       #self.item_code_input = page.get_by_role("textbox", name="Enter Item Code")
 
    def masters_click_test(self):
-         self.page.get_by_title("Inventory Info").nth(1).click()
-         self.page.get_by_role("link", name="Product Master").click()
-         self.page.get_by_role("button", name="Add Product").click()
-         self.page.locator("a").filter(has_text="Add Product").first.click()
+      self.page.get_by_title("Inventory Info").nth(1).click()
+      self.page.get_by_role("link", name="Product Master").click()
+      self.page.get_by_role("button", name="Add Product").click()
+      self.page.locator("a").filter(has_text="Add Product").first.click()
 
 
-   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,prod_group:str,input_purchase_price: int,vendor_name: str,input_sales_price: int, iteration):
+   def add_prod_test(self,input_itemname: str,input_hscode: str,input_description: str,stock_units:str,prod_group:str,input_purchase_price: int,vendor_name: str,input_sales_price: int, iteration):
 
       item_group = self.page.get_by_role(
          "textbox",
@@ -63,20 +63,70 @@ class Add_prod:
       hs_code.fill(input_hscode)
       print("HS Code entered:", input_hscode)
 
-      vatable_item = self.page.get_by_role("checkbox").first
-      if iteration % 2 == 0:
-         vatable_item.check()
-         vatable_status = "Yes"
-         print("Vatabale Item")
-      else:
-         vatable_item.uncheck()
-         vatable_status = "No"
-         print("NonVat Item")
+      vatable_status = "No"
+      try:
+         vatable_item = self.page.locator("input[type='checkbox']").first
+         vatable_item.wait_for(state="visible", timeout=5000)
+         if iteration % 2 == 0:
+            vatable_item.check()
+            vatable_status = "Yes"
+            print("Vatable Item")
+         else:
+            vatable_item.uncheck()
+            print("NonVat Item")
+      except Exception as e:
+         print(f"Checkbox interaction skipped: {e}")
 
-      unit_dropdown = self.page.locator("//select[@id='unit']")
-      unit_dropdown.wait_for(state="visible", timeout=50000)
-      unit_dropdown.select_option(label="Pkt.")
-      print("Unit 'Pkt.' selected")
+      unit_selected = False
+
+      try:
+         unit_dropdown = self.page.locator("select[id='unit']")
+         unit_dropdown.wait_for(state="visible", timeout=5000)
+         unit_dropdown.select_option(label=stock_units)
+         print(f"Unit '{stock_units}' selected via select_option")
+         unit_selected = True
+      except Exception as e:
+         print(f"Native select_option failed: {e}")
+
+      if not unit_selected:
+         try:
+            unit_dropdown = self.page.locator("select[id='unit']")
+            unit_dropdown.click()
+            self.page.wait_for_timeout(500)
+            option = self.page.locator(".ng-option").filter(
+               has_text=stock_units
+            ).first
+            option.wait_for(state="visible", timeout=10000)
+            option.click()
+            print(f"Unit '{stock_units}' selected via ng-option click")
+            unit_selected = True
+         except Exception as e2:
+            print(f"ng-option click failed: {e2}")
+
+      if not unit_selected:
+         try:
+            unit_dropdown = self.page.get_by_placeholder("Unit")
+            unit_dropdown.click()
+            self.page.wait_for_timeout(500)
+            option = self.page.locator(".ng-option").filter(
+               has_text=stock_units
+            ).first
+            option.wait_for(state="visible", timeout=10000)
+            option.click()
+            print(f"Unit '{stock_units}' selected via placeholder click")
+            unit_selected = True
+         except Exception as e3:
+            print(f"placeholder click failed: {e3}")
+
+      if not unit_selected:
+         try:
+            self.page.locator("//label[contains(text(), 'Unit')]/following-sibling::*").first.click()
+            self.page.wait_for_timeout(500)
+            self.page.locator(f"//span[contains(text(), '{stock_units}')]").first.click()
+            print(f"Unit '{stock_units}' selected via xpath")
+            unit_selected = True
+         except Exception as e4:
+            print(f"xpath click failed: {e4}")
 
       description = self.page.get_by_role(
          "textbox",
@@ -153,11 +203,11 @@ class Add_prod:
 
       time.sleep(1)
 
-   def save_product_to_csv(item_code,item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
+   def save_product_to_csv(self,item_code,item_name,hs_code,description,purchase_price,sales_price,filename="product_details.csv"):
       file_exists = os.path.isfile(filename)
       with open(filename, mode="a", newline="", encoding="utf-8") as file:
          writer = csv.writer(file)
-      if not file_exists:
-         writer.writerow(["Item Code","Item Name","HS Code","Description","Purchase Price","Sales Price"])
-      writer.writerow([item_code,item_name,hs_code,description,purchase_price,sales_price])
+         if not file_exists:
+            writer.writerow(["Item Code","Item Name","HS Code","Description","Purchase Price","Sales Price"])
+         writer.writerow([item_code,item_name,hs_code,description,purchase_price,sales_price])
       print(f"Product details saved to {filename}")

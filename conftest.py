@@ -24,11 +24,18 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def config_data():
+def config_data(request):
 
-    url = input("\nEnter URL: ").strip()
-    username = input("Enter Username: ").strip()
-    password = input("Enter Password: ").strip()
+    url = request.config.getoption("--url") or ""
+    username = request.config.getoption("--username") or ""
+    password = request.config.getoption("--password") or ""
+
+    if not url:
+        url = input("\nEnter URL: ").strip()
+    if not username:
+        username = input("Enter Username: ").strip()
+    if not password:
+        password = input("Enter Password: ").strip()
 
     return {
         "url": url,
@@ -40,8 +47,8 @@ def config_data():
 def browser():
    with sync_playwright() as p:
       browser = p.chromium.launch(
-         headless=True
-        #  headless=False
+        #  headless=True
+         headless=False
       )
 
       yield browser

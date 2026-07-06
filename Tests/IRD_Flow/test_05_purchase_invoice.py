@@ -33,7 +33,7 @@ def test_purchase_invoice(page,config_data):
    for product in products:
 
       item_code = product['Item Code']
-      random_quantity = random.randint(50, 100)
+      random_quantity = 20
       purchase_invoice.purchase_invoice_test(
          item_code,
          random_quantity

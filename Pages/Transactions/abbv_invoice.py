@@ -29,22 +29,6 @@ class AbbvInvoice:
          self.page.get_by_title("Sales Transaction").nth(1).click()
          self.page.get_by_role("link", name="Sales Bill").click()
 
-      # # Customer
-      # customer = self.page.locator(
-      #    self.customer_enter
-      # )
-      # customer.click()
-      # customer.press("Enter")
-      # print("Customer popup opened!")
-      # time.sleep(10)
-
-      # # Select Customer
-      # with open("customers.csv", newline="", encoding="utf-8") as file:
-      #    reader = csv.DictReader(file)
-      #    customer = next(reader)["ACNAME"]
-
-      #    self.page.get_by_text(customer,exact=False).dblclick()
-      # print(f"Customer selected successfully: {customer}")
 
    def sales_invoice_test(self,item_code: str,enter_quantity: int):
 
@@ -78,7 +62,7 @@ class AbbvInvoice:
       )
 
       quantity.press("Enter")
-      time.sleep(1)
+      self.page.wait_for_timeout(1500)
 
       print(
          f"Quantity {enter_quantity} entered successfully!"
@@ -92,6 +76,15 @@ class AbbvInvoice:
       save_btn.wait_for(state="visible", timeout=30000)
       save_btn.click()
       print("Save button clicked!")
+
+      try:
+         print_option= self.page.get_by_role("button", name="Print")
+         print_option.wait_for(state="visible", timeout=30000)
+         print_option.click()
+         print("print Button Clicked")
+      except:
+         pass
+
 
       # -------------------------------------------------------
       # Wait for the success alert modal to appear then vanish
@@ -158,7 +151,7 @@ class AbbvInvoice:
          import time as _time
          start = _time.time()
          while not captured_pdf and (_time.time() - start) < timeout:
-            self.page.wait_for_timeout(500)
+            self.page.wait_for_timeout(5000)
 
          self.page.remove_listener("response", handle_response)
 

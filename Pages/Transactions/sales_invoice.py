@@ -169,7 +169,7 @@ class SalesInvoice:
          import time as _time
          start = _time.time()
          while not captured_pdf and (_time.time() - start) < timeout:
-            self.page.wait_for_timeout(500)
+            self.page.wait_for_timeout(1000)
 
          self.page.remove_listener("response", handle_response)
 

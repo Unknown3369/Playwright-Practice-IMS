@@ -12,7 +12,7 @@ def clear_csv(filename="product_groups.csv"):
    print("CSV reset complete.")
 
 def random_group_name():
-   return f"Group_{uuid.uuid4().hex[:6]}"
+   return f"IRD_Group"
 
 def random_group_code():
    return f"{random.randint(1111, 9999)}"
