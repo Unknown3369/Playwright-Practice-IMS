@@ -1,7 +1,7 @@
 from conftest import browser
 from conftest import page
 from playwright.sync_api import Page
-import random
+import pytest
 import time
 from datetime import datetime
 import os
@@ -182,7 +182,7 @@ class SalesInvoice:
             print(f"Invoice successfully saved to {pdf_path}")
             
          else:
-            print("No PDF response detected within timeout. Invoice not saved.")
+            pytest.fail("No PDF response detected within timeout. Invoice not saved.")
 
       # -----------------------------------------------------------
       # Settle the browser page before the test closes

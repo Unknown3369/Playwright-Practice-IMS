@@ -114,6 +114,9 @@ def test_ird_flow(page, config_data):
 #----------------------------Sales Book Report------------------------------------------
     sales_book_report(page, config_data)
 
+#-----------------------------VAT Sales register Report---------------------------------
+    vat_sales_report(page, config_data)
+
 #----------------------------Materialized View Report-----------------------------------
     materialized_view_report(page, config_data)
 
@@ -134,6 +137,9 @@ def test_ird_flow(page, config_data):
     
 #-----------------------------VAT Sales register Report---------------------------------
     vat_sales_report(page, config_data)
+
+#-----------------------------VAT Purchase register Report-----------------------------
+    vat_purchase_report(page, config_data)
 
 #-----------------------------Debit Note-----------------------------------------------
     if "test_debit_note" not in SKIP_TESTS:

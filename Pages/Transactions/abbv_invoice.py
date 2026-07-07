@@ -4,6 +4,7 @@ import time
 import os
 from datetime import datetime
 import csv
+import pytest
 
 class AbbvInvoice:
 
@@ -163,8 +164,8 @@ class AbbvInvoice:
                f.write(captured_pdf[0])
             print(f"Invoice successfully saved to {pdf_path}")
          else:
-            print("No PDF response detected within timeout. Invoice not saved.")
-
+            pytest.fail("No PDF response detected within timeout. Invoice not saved.")
+            
       # -----------------------------------------------------------
       # Settle the browser page before the test closes
       # -----------------------------------------------------------
