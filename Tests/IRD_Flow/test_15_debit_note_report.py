@@ -15,5 +15,6 @@ def test_generate_debit_note_book_report(page,config_data):
 
     debit_report_page = DebitNoteBookReportPage(page)
     debit_report_page.generate_debit_note_book_report()
+    debit_report_page.download_debit_note_report()
 
     print("Debit Note Book Report generated successfully.")

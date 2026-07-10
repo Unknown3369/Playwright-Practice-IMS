@@ -2,6 +2,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class DebitNoteBookReportPage:
 
@@ -69,6 +70,9 @@ class DebitNoteBookReportPage:
         run_button.click()
 
         print("Clicked 'RUN' button successfully.")
+        time.sleep(5)
+    
+    def download_debit_note_report(self):
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)

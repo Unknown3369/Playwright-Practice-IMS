@@ -14,5 +14,6 @@ def test_vat_purchase_register_report(page,config_data):
 
     vat_purchase_report = VatPurchaseRegisterReportPage(page)
     vat_purchase_report.generate_vat_purchase_register_report()
+    vat_purchase_report.download_vat_purchase_report()
 
     print("Vat Purchase Register Report generated successfully.")  

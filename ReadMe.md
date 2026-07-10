@@ -1,18 +1,15 @@
 # QA-TestCases - Playwright Automation
 
-This repository contains **QA test automation** for the WebPOS/IMS application using **Playwright**. Tests run in a separate Jenkins pipeline from the main deployment pipeline.
+This repository contains **IRD Process automation** for the WebPOS/IMS application using **Playwright**. 
 
 ## Overview
 
 - **Framework:** Playwright (Python)
 - **Test Runner:** Pytest
-- **Reporting:** Allure Reports + HTML reports
-- **CI/CD:** Jenkins (separate pipeline from deployment)
 - **Application:** IMS/WebPOS on http://{}.variantqa.himshang.com.np
 
 ## Repository Structure
 
-```
 C:.
 ├───.pytest_cache
 │   └───v
@@ -36,12 +33,9 @@ C:.
 │   ├───IRD_Flow
 │   │   └───__pycache__
 │   ├───Masters
-│   │   └───__pycache__
 │   ├───Transactions
-│   │   └───__pycache__
 │   └───__pycache__
 └───__pycache__
-```
 
 ## Local Testing
 
@@ -55,7 +49,7 @@ C:.
 
 # Clone the repository
 git clone https://github.com/Unknown3369/Playwright-Practice-IMS.git
-cd QA-TestCases
+cd Playwright-Practice-IMS
 
 # Create virtual environment
 python3 -m venv venv   || python -m venv [environment name]
@@ -72,18 +66,21 @@ playwright install chromium
 ### Running Tests Locally
 
 (If you want to run the rest in headless mode,update the conftest.py file 
-change the following code
+change the following code[line 50]
+
     browser = p.chromium.launch(
          headless=True
       )
 )
 
-# Run login tests
-pytest -v -s
 
-# Run with Playwright Reporting
+# Run test [IRD Flow] with report
 pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s
 
-# Skip Certain Tests
+# Skip Certain Tests [IRD Flow]
 $env:SKIP_TESTS="TEST_NAME_HERE"
 pytest Tests/IRD_Flow/Test_execution.py --reruns 2 -v --html=Reports/report.html --self-contained-html -s
+
+
+###################################################################################################################
+Updated By: Sagan Krishna Tamrakar

@@ -18,6 +18,7 @@ def test_materialized_view_report(page,config_data):
 
     materialized_view_report = MaterializedViewReportPage(page)
     materialized_view_report.generate_materialized_view_report()
+    materialized_view_report.download_materialized_view_report()
 
     print("Materialized View Report generated successfully.")
 

@@ -2,7 +2,7 @@ from playwright.sync_api import Page
 import os
 from datetime import datetime
 
-class Reprint_invoice:
+class invoice_reprint:
     def  __init__(self, page: Page):
         self.page = page
     
@@ -16,6 +16,8 @@ class Reprint_invoice:
         self.page.get_by_role("button", name="VIEW F4").click()
         self.page.wait_for_timeout(1000)
         self.page.locator("tbody tr").first.locator("td").nth(1).dblclick()
+        self.page.get_by_role("button", name="PRINT F8").click()
+
 
         captured_pdf = []
 

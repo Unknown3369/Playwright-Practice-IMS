@@ -15,5 +15,6 @@ def test_generate_credit_note_book_report(page,config_data):
    print("Logged into IMS")
 
    credit_report_page.generate_credit_note_book_report()
+   credit_report_page.download_credit_note_report()
 
    print("Credit Note Book Report generated successfully.")

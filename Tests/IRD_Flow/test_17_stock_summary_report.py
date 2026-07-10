@@ -17,5 +17,6 @@ def test_stock_summary_report(page,config_data):
     stock_report = StockSummaryReport(page)
     stock_report.open_stock_summary_report()
     stock_report.run_report()
+    stock_report.download_stock_summary_report()
 
     print("Stock Summary Report generated successfully.")

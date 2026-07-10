@@ -3,6 +3,7 @@ from playwright.sync_api import Page, expect
 import pytest
 from datetime import datetime
 import os   
+import time
 
 class PurchaseBookReport:
     def __init__(self, page: Page):
@@ -44,6 +45,7 @@ class PurchaseBookReport:
         # Run Report
         self.page.locator(self.run_button).click()
         print("Run button clicked successfully!")
+        time.sleep(5)
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)

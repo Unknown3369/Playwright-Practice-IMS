@@ -13,7 +13,7 @@ from Tests.IRD_Flow.test_08_sales_book_report import test_sales_book_report
 from Tests.IRD_Flow.test_09_materialized_report import test_materialized_view_report
 from Tests.IRD_Flow.test_10_credit_note import test_generate_credit_note
 from Tests.IRD_Flow.test_11_credit_note_report import test_generate_credit_note_book_report
-from Tests.IRD_Flow.test_13_vat_sales_register_report import test_vat_sales_register_report
+from Tests.IRD_Flow.test_11_vat_sales_register_report import test_vat_sales_register_report
 from Tests.IRD_Flow.test_14_debit_note import test_debit_note
 from Tests.IRD_Flow.test_15_debit_note_report import test_generate_debit_note_book_report
 from Tests.IRD_Flow.test_16_vat_purchase_report import test_vat_purchase_register_report
@@ -21,6 +21,7 @@ from Tests.IRD_Flow.test_17_stock_summary_report import test_stock_summary_repor
 from Tests.IRD_Flow.test_18_transaction_activity_report import test_transaction_activity_report
 from Tests.IRD_Flow.test_reprint_sales_invoice import test_reprint_invoice
 from Tests.IRD_Flow.test_reprint_credit_note import test_reprint_credit_note
+from Tests.IRD_Flow.test_run_reports import test_print_all_final_reports
 
 import os
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
@@ -153,6 +154,11 @@ def test_ird_flow(page, config_data):
 
 #-----------------------------Stock Summary Report-------------------------------------
     stock_summary_report(page,config_data)
+
+#-----------------------------Reprint Reports---------------------------------------------------------
+    if "test_print_all_final_reports" not in SKIP_TESTS:
+        test_print_all_final_reports(page, config_data)
+        print("Completed Test Print All Final Reports")
 
 #-----------------------------Transacction Activity Report-----------------------------
     transaction_activity_report(page, config_data)

@@ -1,6 +1,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class StockSummaryReport:
 
@@ -28,8 +29,12 @@ class StockSummaryReport:
 
         run_button.scroll_into_view_if_needed()
         run_button.click()
+        time.sleep(5)
 
         print("Run button clicked successfully!")
+
+    def download_stock_summary_report(self):
+        
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)
 

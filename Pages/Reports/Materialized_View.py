@@ -2,6 +2,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class MaterializedViewReportPage:
 
@@ -20,8 +21,11 @@ class MaterializedViewReportPage:
 
         # Run Button
         self.page.locator(self.run_btn).click()
+        time.sleep(5)
 
         print("Clicked RUN button")
+    
+    def download_materialized_view_report(self):
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)

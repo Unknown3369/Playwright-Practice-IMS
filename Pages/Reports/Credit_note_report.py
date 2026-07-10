@@ -2,6 +2,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class CreditNoteBookReportPage:
 
@@ -85,13 +86,14 @@ class CreditNoteBookReportPage:
         
         # self.page.wait_for_timeout(2000)
 
-
+    def download_credit_note_report(self):
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)
 
         with self.page.expect_download(timeout=60000) as download_info:
             download_pdf.click()
             self.page.wait_for_timeout(1000)
+            time.sleep(10)
             default = self.page.locator("//span[normalize-space()='Default Format']")
             default.page.wait_for_timeout(1500)
             default.click()

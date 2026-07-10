@@ -1,6 +1,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class VatPurchaseRegisterReportPage:
 
@@ -29,8 +30,11 @@ class VatPurchaseRegisterReportPage:
 
         run_btn.scroll_into_view_if_needed()
         run_btn.click()
+        time.sleep(5)
 
         print("RUN button clicked to generate report.")
+
+    def download_vat_purchase_report(self):
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)

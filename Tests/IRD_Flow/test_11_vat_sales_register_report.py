@@ -15,4 +15,5 @@ def test_vat_sales_register_report(page,config_data):
 
     vat_sales_report = VatSalesRegisterReportPage(page)
     vat_sales_report.generate_vat_sales_register_report()
+    vat_sales_report.download_vat_sales_report()
     print("VAT Sales Register Report generated successfully.")
