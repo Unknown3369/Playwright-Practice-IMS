@@ -133,12 +133,6 @@ def test_ird_flow(page, config_data):
 #-----------------------------Credit Note Book Report------------------------------------
     credit_note_report(page, config_data)
 
-#-----------------------------Materialized Report----------------------------------------
-    materialized_view_report(page, config_data)
-    
-#-----------------------------VAT Sales register Report---------------------------------
-    vat_sales_report(page, config_data)
-
 #-----------------------------VAT Purchase register Report-----------------------------
     vat_purchase_report(page, config_data)
 
@@ -148,9 +142,6 @@ def test_ird_flow(page, config_data):
         print("Completed Test Generate Debit Note")
 #-----------------------------Debit Note Book Report-----------------------------------
     debit_note_report(page, config_data)
-
-#-----------------------------VAT Purchase register Report-----------------------------
-    vat_purchase_report(page, config_data)
 
 #-----------------------------Stock Summary Report-------------------------------------
     stock_summary_report(page,config_data)

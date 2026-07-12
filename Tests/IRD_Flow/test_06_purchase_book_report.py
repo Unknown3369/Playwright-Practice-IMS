@@ -1,4 +1,3 @@
-import allure
 import time
 import os
 
@@ -17,18 +16,3 @@ def test_purchase_book_report(page,config_data):
     purchase_report.open_purchase_book_report()
 
     time.sleep(10)
-
-    with allure.step("Report Generated - capturing screenshot"):
-        os.makedirs("screenshots", exist_ok=True)
-
-        screenshot_path = (
-            f"screenshots/purchase_report_{int(time.time())}.png"
-        )
-
-        page.screenshot(path=screenshot_path)
-
-        allure.attach.file(
-            screenshot_path,
-            name="Purchase Report Generated",
-            attachment_type=allure.attachment_type.PNG
-        )

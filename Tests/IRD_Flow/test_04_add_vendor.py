@@ -19,14 +19,16 @@ def clear_csv(filename="vendors.csv"):
       writer.writerow(["MainGroup","ACNAME","Address","VATNO","PARTYTYPE"])
    print("CSV reset complete.")
 
-def random_address(length=12):
+def random_address(length=5):
 
-   letters = "abcdefghijklmnopqrstuvwxyz"
+   # letters = "abcdefghijklmnopqrstuvwxyz"
 
-   return "".join(
-      random.choice(letters)
-      for _ in range(length)
-   )
+   # return "".join(
+   #    random.choice(letters)
+   #    for _ in range(length)
+   # )
+
+   return ("Kath_mandu")
 
 
 def random_vat_no():

@@ -1,22 +1,18 @@
-import allure
 from playwright.sync_api import Page
 import os
 from datetime import datetime
 import csv
 
-@allure.feature("Add Product Group Master")
 class AddProductGroupMasterPage:
 
    def __init__(self, page: Page):
       self.page = page
 
-   @allure.step("Navigate to Add Product Group Master page")
    def navigate_to_add_product(self):
          self.page.get_by_title("Inventory Info").nth(1).click()
          self.page.get_by_role("link", name="Product Group Master").click()
          self.page.get_by_role("button", name="Add Product Group").click()
 
-   @allure.step("Select Item Group as TestGroup")
    def select_item_group(self):
 
       # self.page.locator(
@@ -77,14 +73,7 @@ class AddProductGroupMasterPage:
 
     print(f"Saved group '{group_name}' to CSV")
 
-   @allure.step("Fill Product Group Details and Save")
-   def fill_group_details_and_save(
-        self,
-        group_name,
-        group_code,
-        recommended_margin,
-        shelf_life
-):
+   def fill_group_details_and_save(self,group_name,group_code,recommended_margin,shelf_life):
 
     print("Filling Product Group Details")
 

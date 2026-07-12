@@ -10,7 +10,7 @@
 | **Automation library** | Playwright (sync API), `playwright==1.48.0` |
 | **Test runner** | Pytest 9.x, run in **sequential, single-browser-session** style (not isolated per-test) |
 | **Design pattern** | Page Object Model (POM), one class per screen/feature |
-| **Reporting** | `pytest-html` report + full-page screenshots per test, plus optional Allure decorators on some page objects |
+| **Reporting** | `pytest-html` report + full-page screenshots per test|
 | **Author** | Sagan Krishna Tamrakar |
 
 This is not a classic "one test = one independent scenario" suite. It automates a single **continuous business journey** — the full IRD tax-compliance flow of an IMS system, from login through creating masters, raising invoices, and pulling every statutory report — chained together into one long run (`test_ird_flow`).
@@ -192,7 +192,6 @@ Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF in
 - Every screen has a dedicated class in `Pages/<Area>/<name>.py` (`Masters`, `Transactions`, `Reports`, or top-level for shared screens like `Login`).
 - Constructors take a Playwright `Page` and store it as `self.page`; most locators are defined as XPath strings in `__init__` (a carry-over from an earlier Selenium suite, per the code comments), though newer Report page objects mix in Playwright's built-in role/title locators (`get_by_role`, `get_by_title`).
 - Business actions are exposed as methods (e.g. `perform_login`, `add_prod_test`, `save_button`, `generate_materialized_view_report`, `download_materialized_view_report`) that test modules call in sequence.
-- Some Master page objects (e.g. `AddProductGroupMasterPage`) are decorated with `@allure.feature` / `@allure.step`, indicating partial Allure reporting support alongside pytest-html.
 - Data created during a run (product groups, vendors, customers, products) is persisted to CSV files at the repo root so downstream steps (e.g. "add a product to the most recently created group") can look it up without holding shared in-memory state across the numbered test modules.
 - Report downloads follow a common pattern: click **Run** → click an export/PDF icon → intercept via `page.expect_download()` → save into `downloads/` with a timestamped filename.
 
@@ -216,7 +215,6 @@ Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF in
 
 - `playwright==1.48.0`, `pytest-playwright==0.8.0`
 - `pytest==9.0.3`, `pytest-html==4.1.1`, `pytest-base-url==2.1.0`, `pytest-rerunfailures==16.3`, `pytest-xdist==3.8.0`, `pytest-metadata==3.1.1`
-- `allure-pytest==2.16.0`, `allure-python-commons==2.16.0` (optional Allure reporting)
 - `pandas`, `openpyxl` (data/report handling)
 - `PyAutoGUI`, `keyboard`, `pyperclip` (native OS interaction, likely used for file-download dialogs or clipboard-based debugging in `scratch/`)
 - `Flask`, `Flask-SocketIO` (present but not referenced by the test flow itself — likely for an auxiliary tool, not required to run the suite)
