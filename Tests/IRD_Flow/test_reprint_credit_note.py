@@ -1,4 +1,4 @@
-
+import time
 from Pages.invoice_reprint import invoice_reprint
 from Pages.Login import login
 
@@ -10,4 +10,6 @@ def test_reprint_credit_note(page, config_data):
     login_page.perform_login(username, password)
     reprint_invoice = invoice_reprint(page)
     reprint_invoice.reprint_invoice()
+
+
 
