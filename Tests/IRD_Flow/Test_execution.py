@@ -77,7 +77,7 @@ def test_ird_flow(page, config_data):
         test_login_to_ims(page, config_data)
         print("Completed Test Login")
 
-#---------------------------Add Product/Customer/Vendor/Product_Group-----------------
+#---------------------------Add Product/Customer/Vendor/Product_Group------------------
     if "test_add_product_group_master" not in SKIP_TESTS:
         test_add_product_group_master(page, config_data)
         print("Completed Test Add Product Group")
@@ -91,15 +91,15 @@ def test_ird_flow(page, config_data):
         test_add_prod(page, config_data)
         print("Completed Test Add Product")
 
-#----------------------------Purchase Invoice-----------------------------------------
+#----------------------------Purchase Invoice------------------------------------------
     if "test_purchase_invoice" not in SKIP_TESTS:
         test_purchase_invoice(page, config_data)
         print("Completed Test Generate Purchase invoice")
 
-#----------------------------Purchase Book Report-------------------------------------
+#----------------------------Purchase Book Report--------------------------------------
     purchase_book_report(page, config_data)
 
-#----------------------------Abbv Invoice/ Sales Bill-----------------------------------
+#----------------------------Abbv Invoice/ Sales Bill----------------------------------
     if "test_abbv_invoice" not in SKIP_TESTS:
         test_abbv_invoice(page, config_data)
         print("Completed Test Generate Abbreviated Invoice")
@@ -112,16 +112,16 @@ def test_ird_flow(page, config_data):
         for i in range (3):
             test_reprint_invoice(page, config_data)
             print("Completed Test Reprint Invoice")
-#----------------------------Sales Book Report------------------------------------------
+#----------------------------Sales Book Report-----------------------------------------
     sales_book_report(page, config_data)
 
-#-----------------------------VAT Sales register Report---------------------------------
+#-----------------------------VAT Sales register Report--------------------------------
     vat_sales_report(page, config_data)
 
-#----------------------------Materialized View Report-----------------------------------
+#----------------------------Materialized View Report----------------------------------
     materialized_view_report(page, config_data)
 
-#----------------------------Credit Note------------------------------------------------
+#----------------------------Credit Note-----------------------------------------------
     if "test_generate_credit_note" not in SKIP_TESTS:
         test_generate_credit_note(page, config_data)
         print("Completed Test Generate Credit Note")
@@ -130,7 +130,7 @@ def test_ird_flow(page, config_data):
             test_reprint_credit_note(page, config_data)
             print("Completed Test Reprint Credit Note")
 
-#-----------------------------Credit Note Book Report------------------------------------
+#-----------------------------Credit Note Book Report----------------------------------
     credit_note_report(page, config_data)
 
 #-----------------------------VAT Purchase register Report-----------------------------
@@ -146,7 +146,7 @@ def test_ird_flow(page, config_data):
 #-----------------------------Stock Summary Report-------------------------------------
     stock_summary_report(page,config_data)
 
-#-----------------------------Reprint Reports---------------------------------------------------------
+#-----------------------------Reprint Reports------------------------------------------
     if "test_print_all_final_reports" not in SKIP_TESTS:
         test_print_all_final_reports(page, config_data)
         print("Completed Test Print All Final Reports")
