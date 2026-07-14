@@ -3,6 +3,7 @@
 ## 1. Overview
 
 | | |
+|---|---|
 | **Purpose** | End-to-end UI automation of the IRD (Inland Revenue Department) invoicing/reporting workflow for an Inventory Management System (IMS/WebPOS) |
 | **Application under test** | `http://{env}.variantqa.himshang.com.np` (URL supplied at runtime) |
 | **Language** | Python 3.10+ |
@@ -16,7 +17,19 @@ This is not a classic "one test = one independent scenario" suite. It automates 
 
 ---
 
-## 2. Repository Structure
+## 2. Workspace Environment
+
+| Property | Value |
+|---|---|
+| **Current time** | `2026-07-14T12:11:40+05:45` |
+| **Working directory** | `C:\Users\sagan\OneDrive\Documents\Playwright-Practice-IMS` |
+| **Workspace root** | `C:\Users\sagan\OneDrive\Documents\Playwright-Practice-IMS` |
+| **Visible file** | `documentation.md` |
+| **Open tabs** | `Tests/IRD_Flow/Test_execution.py`, `ReadMe.md`, `documentation.md`, `Tests/Masters/test_10_bulk_price_change.py`, `conftest.py` |
+
+---
+
+## 3. Repository Structure
 
 ```
 Playwright-Practice-IMS/
@@ -54,20 +67,20 @@ Playwright-Practice-IMS/
 
 ---
 
-## 3. How the Framework Runs
+## 4. How the Framework Runs
 
-### 3.1 Fixtures (`conftest.py`)
+### 4.1 Fixtures (`conftest.py`)
 
 - **`config_data`** *(session scope)* — Reads `--url`, `--username`, `--password` from CLI options; if any are missing, **prompts interactively** via `input()`. This means the suite is not fully non-interactive unless all three CLI flags are passed.
 - **`browser`** *(session scope)* — Launches a single Chromium instance for the whole session (`headless=False` by default). One browser instance is shared across all tests in the run.
 - **`page`** *(function scope)* — Creates a fresh browser **context** per test (with `accept_downloads=True`), opens `config_data["url"]`, yields the page, then:
-  - Takes a full-page "final state" screenshot into `reports/screenshots/final_<timestamp>.png`
+  - Takes a full-page "final state" screenshot into `Reports/screenshots/final_<timestamp>.png`
   - Closes the context
 - **`pytest_runtest_makereport`** hook — After every test's `call` phase, takes a full-page screenshot named `<test_name>_<timestamp>.png` into `Reports/screenshots/` and attaches it to the pytest-html report via `pytest_html.extras.png`.
 
 > ⚠️ Because `page` is function-scoped but `browser` is session-scoped, **every test gets a brand-new context** (and therefore a fresh, logged-out page) — but the *orchestrator* (`Test_execution.py`) calls the individual `test_*` functions directly as plain Python functions within **one single test (`test_ird_flow`)**, so in practice the whole IRD journey runs inside **one shared page/context**, logging in once at the start.
 
-### 3.2 Two ways this codebase is exercised
+### 4.2 Two ways this codebase is exercised
 
 1. **Orchestrated end-to-end flow** — `Tests/IRD_Flow/Test_execution.py::test_ird_flow`
    Imports every numbered `test_XX_*` function from `Tests/IRD_Flow/` and calls them **in sequence, in one pytest test**, simulating a real user walking through the entire IRD compliance process. Skipping individual steps is supported via the `SKIP_TESTS` environment variable (see §4).
@@ -76,14 +89,14 @@ Playwright-Practice-IMS/
 
 ---
 
-## 4. Running the Suite
+## 54. Running the Suite
 
-### 4.1 Prerequisites
+### 5.1 Prerequisites
 
 - Python 3.10+
 - Git
 
-### 4.2 Setup
+### 5.2 Setup
 
 ```bash
 git clone https://github.com/Unknown3369/Playwright-Practice-IMS.git
@@ -100,15 +113,15 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-### 4.3 Run headless vs headed
+### .3 Run headless vs headed
 
-By default the suite launches **headed** Chromium (`headless=False` in `conftest.py`, line ~50). To run headless, edit that fixture:
+By default the suite launches **headless** Chromium (`headless=True` in `conftest.py`, line ~50). To run headed, edit that fixture:
 
 ```python
-browser = p.chromium.launch(headless=True)
+browser = p.chromium.launch(headless=False)
 ```
 
-### 4.4 Run the full IRD flow with an HTML report
+### 5.4 Run the full IRD flow with an HTML report
 
 ```bash
 pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s
@@ -124,7 +137,7 @@ pytest Tests/IRD_Flow/Test_execution.py \
   -v --html=Reports/report.html --self-contained-html -s
 ```
 
-### 4.5 Skip specific steps
+### 5.5 Skip specific steps
 
 Set the `SKIP_TESTS` environment variable to a comma-separated list of the internal step names, then rerun:
 
@@ -142,7 +155,7 @@ pytest Tests/IRD_Flow/Test_execution.py --reruns 2 -v --html=Reports/report.html
 
 Valid skip-names correspond to the identifiers checked in `Test_execution.py` (e.g. `test_login_to_ims`, `test_add_product_group_master`, `test_add_customer`, `test_create_vendor`, `test_add_prod`, `test_purchase_invoice`, `test_purchase_book_report`, `test_abbv_invoice`, `test_sales_invoice`, `test_reprint_sales_invoice`, `test_sales_book_report`, `test_vat_sales_register_report`, `test_materialized_view_report`, `test_generate_credit_note`, `test_reprint_credit_note`, `test_generate_credit_note_book_report`, `test_vat_purchase_register_report`, `test_debit_note`, `test_generate_debit_note_book_report`, `test_stock_summary_report`, `test_print_all_final_reports`, `test_transaction_activity_report`).
 
-### 4.6 Run a standalone test
+### 5.6 Run a standalone test
 
 ```bash
 pytest Tests/Masters/test_10_bulk_price_change.py -v
@@ -153,7 +166,7 @@ pytest Tests/Transactions/test_03_opening_stock.py -v
 
 ---
 
-## 5. The IRD Flow — Business Steps in Order
+## 6. The IRD Flow — Business Steps in Order
 
 `test_ird_flow` (in `Test_execution.py`) walks through the following sequence on a single logged-in session:
 
@@ -173,21 +186,18 @@ pytest Tests/Transactions/test_03_opening_stock.py -v
 14. **Credit Note** (`test_10_credit_note.py`) — generates a credit note against the sales invoice.
 15. **Reprint Credit Note** (`test_reprint_credit_note.py`) — reprinted 3 times.
 16. **Credit Note Book Report** (`test_11_credit_note_report.py`).
-17. **Materialized View Report** (re-run).
-18. **VAT Sales Register Report** (re-run).
-19. **VAT Purchase Register Report** (`test_16_vat_purchase_report.py`).
-20. **Debit Note** (`test_14_debit_note.py`).
-21. **Debit Note Book Report** (`test_15_debit_note_report.py`).
-22. **VAT Purchase Register Report** (re-run).
-23. **Stock Summary Report** (`test_17_stock_summary_report.py`).
-24. **Print All Final Reports** (`test_run_reports.py` → `test_print_all_final_reports`) — re-runs and downloads Materialized View, Credit Note Book, Debit Note Book, VAT Sales Register, VAT Purchase Register and Stock Summary reports back-to-back.
-25. **Transaction Activity Report** (`test_18_transaction_activity_report.py`).
+17. **VAT Purchase Register Report** (`test_16_vat_purchase_report.py`).
+18. **Debit Note** (`test_14_debit_note.py`).
+19. **Debit Note Book Report** (`test_15_debit_note_report.py`).
+20. **Stock Summary Report** (`test_17_stock_summary_report.py`).
+21. **Print All Final Reports** (`test_run_reports.py` → `test_print_all_final_reports`) — re-runs and downloads Materialized View, Credit Note Book, Debit Note Book, VAT Sales Register, VAT Purchase Register and Stock Summary reports back-to-back.
+22. **Transaction Activity Report** (`test_18_transaction_activity_report.py`).
 
-Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF into `downloads/` and takes screenshots — some pages also save extra copies into `screenshots/`.
+Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `downloads/` and takes screenshots — some pages also save extra copies into `screenshots/`.
 
 ---
 
-## 6. Page Object Model Conventions
+## 7. Page Object Model Conventions
 
 - Every screen has a dedicated class in `Pages/<Area>/<name>.py` (`Masters`, `Transactions`, `Reports`, or top-level for shared screens like `Login`).
 - Constructors take a Playwright `Page` and store it as `self.page`; most locators are defined as XPath strings in `__init__` (a carry-over from an earlier Selenium suite, per the code comments), though newer Report page objects mix in Playwright's built-in role/title locators (`get_by_role`, `get_by_title`).
@@ -197,7 +207,7 @@ Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF in
 
 ---
 
-## 7. Data & Artifacts Generated by a Run
+## 8. Data & Artifacts Generated by a Run
 
 | File/Folder | Purpose |
 |---|---|
@@ -211,7 +221,7 @@ Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF in
 
 ---
 
-## 8. Key Dependencies (from `requirements.txt`)
+## 9. Key Dependencies (from `requirements.txt`)
 
 - `playwright==1.48.0`, `pytest-playwright==0.8.0`
 - `pytest==9.0.3`, `pytest-html==4.1.1`, `pytest-base-url==2.1.0`, `pytest-rerunfailures==16.3`, `pytest-xdist==3.8.0`, `pytest-metadata==3.1.1`
@@ -221,19 +231,19 @@ Each report step (steps 7, 11–13, 16, 18–19, 21–24, 25) downloads a PDF in
 
 ---
 
-## 9. Known Gotchas / Notes for Future Maintainers
+## 10. Known Gotchas / Notes for Future Maintainers
 
 - **Interactive prompts**: If `--url`/`--username`/`--password` aren't passed on the CLI, the suite will block on `input()` — this will hang unattended CI runs. Always pass all three flags in automated pipelines.
 - **Not test-isolated**: `test_ird_flow` is a single giant test made of 20+ chained steps sharing one page/session. A failure partway through will short-circuit the rest of the journey (report steps depend on data created by earlier steps).
 - **Hardcoded credentials** in `Tests/Masters/test_10_bulk_price_change.py` and `Tests/Transactions/test_03_opening_stock.py` — these will need updating if the test account changes, and should ideally be migrated to `config_data`.
-- **Headed by default**: `conftest.py` launches Chromium with `headless=False`; switch to `headless=True` for CI.
+- **Headless by default**: `conftest.py` launches Chromium with `headless=True`; switch to `headless=False` for debugging.
 - **XPath-heavy locators**: many Page Objects use verbose XPath strings inherited from a prior Selenium suite; some (e.g. `select_supplier_list` in `Purchase_book_report.py`) hardcode specific business values (like a vendor name) and will break if that reference data changes.
 - **Timing**: the suite relies heavily on `page.wait_for_timeout(...)` and `time.sleep(...)` fixed delays rather than pure Playwright auto-waiting, which can make runs slower and occasionally flaky on slower environments.
 - **`SKIP_TESTS` scope**: skipping only prevents the *named* step from running — it does not automatically adjust or skip downstream steps that depend on data the skipped step would have produced.
 
 ---
 
-## 10. Quick Reference — Common Commands
+## 11. Quick Reference — Common Commands
 
 ```bash
 # Full IRD flow, headed, with HTML report
