@@ -17,19 +17,7 @@ This is not a classic "one test = one independent scenario" suite. It automates 
 
 ---
 
-## 2. Workspace Environment
-
-| Property | Value |
-|---|---|
-| **Current time** | `2026-07-14T12:11:40+05:45` |
-| **Working directory** | `C:\Users\sagan\OneDrive\Documents\Playwright-Practice-IMS` |
-| **Workspace root** | `C:\Users\sagan\OneDrive\Documents\Playwright-Practice-IMS` |
-| **Visible file** | `documentation.md` |
-| **Open tabs** | `Tests/IRD_Flow/Test_execution.py`, `ReadMe.md`, `documentation.md`, `Tests/Masters/test_10_bulk_price_change.py`, `conftest.py` |
-
----
-
-## 3. Repository Structure
+## 2. Repository Structure
 
 ```
 Playwright-Practice-IMS/
@@ -67,9 +55,9 @@ Playwright-Practice-IMS/
 
 ---
 
-## 4. How the Framework Runs
+## 3. How the Framework Runs
 
-### 4.1 Fixtures (`conftest.py`)
+### 3.1 Fixtures (`conftest.py`)
 
 - **`config_data`** *(session scope)* — Reads `--url`, `--username`, `--password` from CLI options; if any are missing, **prompts interactively** via `input()`. This means the suite is not fully non-interactive unless all three CLI flags are passed.
 - **`browser`** *(session scope)* — Launches a single Chromium instance for the whole session (`headless=False` by default). One browser instance is shared across all tests in the run.
@@ -80,7 +68,7 @@ Playwright-Practice-IMS/
 
 > ⚠️ Because `page` is function-scoped but `browser` is session-scoped, **every test gets a brand-new context** (and therefore a fresh, logged-out page) — but the *orchestrator* (`Test_execution.py`) calls the individual `test_*` functions directly as plain Python functions within **one single test (`test_ird_flow`)**, so in practice the whole IRD journey runs inside **one shared page/context**, logging in once at the start.
 
-### 4.2 Two ways this codebase is exercised
+### 3.2 Two ways this codebase is exercised
 
 1. **Orchestrated end-to-end flow** — `Tests/IRD_Flow/Test_execution.py::test_ird_flow`
    Imports every numbered `test_XX_*` function from `Tests/IRD_Flow/` and calls them **in sequence, in one pytest test**, simulating a real user walking through the entire IRD compliance process. Skipping individual steps is supported via the `SKIP_TESTS` environment variable (see §4).
@@ -89,14 +77,14 @@ Playwright-Practice-IMS/
 
 ---
 
-## 54. Running the Suite
+## 4. Running the Suite
 
-### 5.1 Prerequisites
+### 4.1 Prerequisites
 
 - Python 3.10+
 - Git
 
-### 5.2 Setup
+### 4.2 Setup
 
 ```bash
 git clone https://github.com/Unknown3369/Playwright-Practice-IMS.git
@@ -113,7 +101,7 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-### .3 Run headless vs headed
+### 4.3 Run headless vs headed
 
 By default the suite launches **headless** Chromium (`headless=True` in `conftest.py`, line ~50). To run headed, edit that fixture:
 
@@ -121,7 +109,7 @@ By default the suite launches **headless** Chromium (`headless=True` in `conftes
 browser = p.chromium.launch(headless=False)
 ```
 
-### 5.4 Run the full IRD flow with an HTML report
+### 4.4 Run the full IRD flow with an HTML report
 
 ```bash
 pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s
@@ -137,7 +125,7 @@ pytest Tests/IRD_Flow/Test_execution.py \
   -v --html=Reports/report.html --self-contained-html -s
 ```
 
-### 5.5 Skip specific steps
+### 4.5 Skip specific steps
 
 Set the `SKIP_TESTS` environment variable to a comma-separated list of the internal step names, then rerun:
 
@@ -155,7 +143,7 @@ pytest Tests/IRD_Flow/Test_execution.py --reruns 2 -v --html=Reports/report.html
 
 Valid skip-names correspond to the identifiers checked in `Test_execution.py` (e.g. `test_login_to_ims`, `test_add_product_group_master`, `test_add_customer`, `test_create_vendor`, `test_add_prod`, `test_purchase_invoice`, `test_purchase_book_report`, `test_abbv_invoice`, `test_sales_invoice`, `test_reprint_sales_invoice`, `test_sales_book_report`, `test_vat_sales_register_report`, `test_materialized_view_report`, `test_generate_credit_note`, `test_reprint_credit_note`, `test_generate_credit_note_book_report`, `test_vat_purchase_register_report`, `test_debit_note`, `test_generate_debit_note_book_report`, `test_stock_summary_report`, `test_print_all_final_reports`, `test_transaction_activity_report`).
 
-### 5.6 Run a standalone test
+### 4.6 Run a standalone test
 
 ```bash
 pytest Tests/Masters/test_10_bulk_price_change.py -v
@@ -166,7 +154,7 @@ pytest Tests/Transactions/test_03_opening_stock.py -v
 
 ---
 
-## 6. The IRD Flow — Business Steps in Order
+## 5. The IRD Flow — Business Steps in Order
 
 `test_ird_flow` (in `Test_execution.py`) walks through the following sequence on a single logged-in session:
 
@@ -197,7 +185,7 @@ Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `d
 
 ---
 
-## 7. Page Object Model Conventions
+## 6. Page Object Model Conventions
 
 - Every screen has a dedicated class in `Pages/<Area>/<name>.py` (`Masters`, `Transactions`, `Reports`, or top-level for shared screens like `Login`).
 - Constructors take a Playwright `Page` and store it as `self.page`; most locators are defined as XPath strings in `__init__` (a carry-over from an earlier Selenium suite, per the code comments), though newer Report page objects mix in Playwright's built-in role/title locators (`get_by_role`, `get_by_title`).
@@ -207,7 +195,7 @@ Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `d
 
 ---
 
-## 8. Data & Artifacts Generated by a Run
+## 7. Data & Artifacts Generated by a Run
 
 | File/Folder | Purpose |
 |---|---|
@@ -221,7 +209,7 @@ Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `d
 
 ---
 
-## 9. Key Dependencies (from `requirements.txt`)
+## 8. Key Dependencies (from `requirements.txt`)
 
 - `playwright==1.48.0`, `pytest-playwright==0.8.0`
 - `pytest==9.0.3`, `pytest-html==4.1.1`, `pytest-base-url==2.1.0`, `pytest-rerunfailures==16.3`, `pytest-xdist==3.8.0`, `pytest-metadata==3.1.1`
@@ -231,7 +219,7 @@ Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `d
 
 ---
 
-## 10. Known Gotchas / Notes for Future Maintainers
+## 9. Known Gotchas / Notes for Future Maintainers
 
 - **Interactive prompts**: If `--url`/`--username`/`--password` aren't passed on the CLI, the suite will block on `input()` — this will hang unattended CI runs. Always pass all three flags in automated pipelines.
 - **Not test-isolated**: `test_ird_flow` is a single giant test made of 20+ chained steps sharing one page/session. A failure partway through will short-circuit the rest of the journey (report steps depend on data created by earlier steps).
@@ -243,7 +231,7 @@ Each report step (steps 7, 11–13, 16, 17, 19–21, 22) downloads a PDF into `d
 
 ---
 
-## 11. Quick Reference — Common Commands
+## 10. Quick Reference — Common Commands
 
 ```bash
 # Full IRD flow, headed, with HTML report
