@@ -3,7 +3,6 @@
 ## 1. Overview
 
 | | |
-|---|---|
 | **Purpose** | End-to-end UI automation of the IRD (Inland Revenue Department) invoicing/reporting workflow for an Inventory Management System (IMS/WebPOS) |
 | **Application under test** | `http://{env}.variantqa.himshang.com.np` (URL supplied at runtime) |
 | **Language** | Python 3.10+ |
@@ -13,7 +12,7 @@
 | **Reporting** | `pytest-html` report + full-page screenshots per test|
 | **Author** | Sagan Krishna Tamrakar |
 
-This is not a classic "one test = one independent scenario" suite. It automates a single **continuous business journey** — the full IRD tax-compliance flow of an IMS system, from login through creating masters, raising invoices, and pulling every statutory report — chained together into one long run (`test_ird_flow`).
+This is not a classic "one test = one independent scenario" suite. It automates a single **continuous business journey** — the full IRD tax-compliance flow of an IMS system, from login through creating masters, raising invoices, and pulling every necessary report — chained together into one long run (`test_ird_flow`).
 
 ---
 
@@ -25,30 +24,30 @@ Playwright-Practice-IMS/
 ├── generate_pdf.py              # Standalone helper: renders an HTML invoice to PDF via headless Chromium
 ├── requirements.txt             # Pinned Python dependencies
 ├── ReadMe.md                    # Original project README
-├── customers.csv                # Rolling log of customers created during runs
-├── vendors.csv                  # Rolling log of vendors created during runs
-├── product_groups.csv           # Rolling log of product groups created during runs
-├── product_details.csv          # FIFO log (max 10 rows) of products created during runs
+├── customers.csv                # Log of customers created during runs
+├── vendors.csv                  # Log of vendors created during runs
+├── product_groups.csv           # Log of product groups created during runs
+├── product_details.csv          # FIFO Log (max 10 rows) of products created during runs
 │
 ├── Pages/                       # Page Object Model classes
 │   ├── Login.py                 # Login + "already logged in" popup handling
 │   ├── invoice_reprint.py / reprint_invoice.py
 │   ├── Masters/                 # Add Category / Customer / Product / Product Group / Vendor / Bulk price change
 │   ├── Transactions/            # Purchase Invoice, Sales Invoice, Abbreviated Invoice, Credit Note, Debit Note, Opening Stock
-│   └── Reports/                 # Purchase/Sales/Credit/Debit book reports, VAT registers, Stock Summary,
-│                                 # Transaction Activity, Materialized View
+│   └── Reports/                 # Purchase/Sales/Credit/Debit book reports, VAT registers, Stock Summary, Transaction Activity, Materialized View
 │
 ├── Tests/                       # Pytest test modules
-│   ├── IRD_Flow/                # The main, numbered end-to-end IRD journey (test_01 … test_18 + reprints)
-│   │   └── Test_execution.py    # Orchestrator that calls each numbered test in business order
-│   ├── Masters/                 # Standalone master-data tests (e.g. bulk price change) — hardcoded creds
-│   └── Transactions/            # Standalone transaction tests (e.g. opening stock) — hardcoded creds
+│   ├── IRD_Flow/                # The main end-to-end IRD journey
+│   │   └── Test_execution.py    # Calls each numbered test in business order
+│   ├── Masters/                 # Standalone master-data tests (e.g. bulk price change) — hardcoded creds (Not Requiredfor IRD Flow)
+│   └── Transactions/            # Standalone transaction tests (e.g. opening stock) — hardcoded creds (Not required for IRD Flow)
 │
 ├── Reports/
 │   ├── report.html              # Generated pytest-html report (after a run)
 │   └── screenshots/             # Per-test + final-state screenshots, embedded into the HTML report
 ├── screenshots/                 # Ad-hoc screenshots saved by individual report page objects (e.g. purchase/sales reports)
-├── downloads/                   # PDFs/exports downloaded during report tests
+├── downloads/                   # PDFs/Excel Exports downloaded during report tests
+├── invoices/                    # PDFs of Invoices downloaded during tests
 ├── scratch/                     # Developer scratch scripts and DOM dumps used for debugging locators
 └── .pytest_cache/
 ```
@@ -150,6 +149,7 @@ pytest Tests/Masters/test_10_bulk_price_change.py -v
 pytest Tests/Transactions/test_03_opening_stock.py -v
 ```
 (These use hardcoded credentials `Testuser` / `Test@1234` and don't require `--url`/`--username`/`--password`, but do rely on `config_data`'s URL prompt since the `page` fixture always calls it.)
+**Note:** Only tests from Tests/Masters & Tests/Transactions doesnt require `--url`/`--username`/`--password`.
 
 ---
 
