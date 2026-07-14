@@ -10,17 +10,17 @@ from Pages.Masters.add_customer import AddCustomer
 
 
 def random_name():
-   return "IRD_Customer_" + uuid.uuid4().hex[:8]
-
+   return "IRD_Customer_" + uuid.uuid4().hex[:2]
 
 def random_address(length=12):
 
-   letters = "abcdefghijklmnopqrstuvwxyz"
+   # letters = "abcdefghijklmnopqrstuvwxyz"
 
-   return "".join(
-      random.choice(letters)
-      for _ in range(length)
-   )
+   # return "".join(
+   #    random.choice(letters)
+   #    for _ in range(length)
+   # )
+   return "Kath_mandu"
 
 
 def random_phone():

@@ -10,7 +10,7 @@ from Pages.Masters.add_vendor import AddVendor
 
 
 def random_name():
-   return "IRD_VENDOR_" + uuid.uuid4().hex[:8]
+   return "IRD_VENDOR_" + uuid.uuid4().hex[:2]
 
 
 def clear_csv(filename="vendors.csv"):
