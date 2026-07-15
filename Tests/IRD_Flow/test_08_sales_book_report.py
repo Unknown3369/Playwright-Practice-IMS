@@ -10,11 +10,13 @@ def test_sales_book_report(page,config_data):
     username = config_data["username"]
     password = config_data["password"]
     
-    login_page = login(page)
+    try:
+        login_page = login(page)
+        login_page.perform_login(username, password)
+    except:
+        print('Already logged In')
+
     sales_report = SalesBookReportPage(page)
-
-    login_page.perform_login(username, password)
-
     sales_report.open_sales_book_report()
     sales_report.run_sales_book_report()
 

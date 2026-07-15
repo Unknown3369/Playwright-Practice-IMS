@@ -3,14 +3,12 @@ import os
 import random
 import uuid
 
-from playwright.sync_api import sync_playwright
-
 from Pages.Login import login
 from Pages.Masters.add_vendor import AddVendor
 
 
 def random_name():
-   return "IRD_VENDOR_" + uuid.uuid4().hex[:2]
+   return ("IRD_VENDOR_" +uuid.uuid4().hex[:2])
 
 
 def clear_csv(filename="vendors.csv"):
@@ -19,75 +17,54 @@ def clear_csv(filename="vendors.csv"):
       writer.writerow(["MainGroup","ACNAME","Address","VATNO","PARTYTYPE"])
    print("CSV reset complete.")
 
-def random_address(length=5):
-
-   # letters = "abcdefghijklmnopqrstuvwxyz"
-
-   # return "".join(
-   #    random.choice(letters)
-   #    for _ in range(length)
-   # )
-
-   return ("Kath_mandu")
-
 
 def random_vat_no():
-
-   return str(
-      random.randint(100000000,999999999)
-   )
+   return str(random.randint(100000000,999999999))
 
 
 def random_email():
-
-   return ("Vend_"+ uuid.uuid4().hex[:8]+ "@test.com")
+   return ("Vend_" + uuid.uuid4().hex[:8] +"@test.com")
 
 
 def random_mobile():
-
-   return (
-      "98"+ str(random.randint(10000000,99999999))
-   )
+   return ("98" +str(random.randint(10000000,99999999)))
 
 
 def write_vendor_to_csv(data,file_name="vendors.csv"):
 
-   file_exists = os.path.isfile(
-      file_name
-   )
+   file_exists = os.path.isfile(file_name)
 
    with open(file_name,mode="a",newline="",encoding="utf-8") as file:
 
-      writer = csv.DictWriter(
-         file,
-         fieldnames=data.keys()
-      )
+      writer = csv.DictWriter(file,fieldnames=data.keys())
 
       if not file_exists:
          writer.writeheader()
-
       writer.writerow(data)
 
 
 def test_create_vendor(page,config_data):
+
    username = config_data["username"]
    password = config_data["password"]
 
-   login_page = login(page)
-   login_page.perform_login(username, password)
+   try:
+      login_page = login(page)
+      login_page.perform_login(username,password)
 
-   print("Logged into IMS")
-   
+   except:
+      print("Already logged in")
+
    clear_csv("vendors.csv")
 
    vendor_page = AddVendor(page)
    vendor_page.open_add_vendor()
    vendor_name = random_name()
-   vendor_address = random_address()
+   vendor_address = input("Enter Vendor Address: ")
+
    vendor_vat = random_vat_no()
    vendor_email = random_email()
    vendor_mobile = random_mobile()
-
    vendor_page.add_vendor(
       vendor_name=vendor_name,
       vendor_address=vendor_address,
@@ -103,7 +80,5 @@ def test_create_vendor(page,config_data):
       "VATNO": vendor_vat,
       "PARTYTYPE": "Supplier"
    }
-
    write_vendor_to_csv(vendor_data)
-
    print(f"Vendor '{vendor_name}' created successfully!")

@@ -19,9 +19,13 @@ def test_sales_invoice(page,config_data):
    username = config_data["username"]
    password = config_data["password"]
 
-   login_page = login(page)
+   try:
+      login_page = login(page)
+      login_page.perform_login(username, password)
+   except:
+      print("Already Logged In")
+      
    sales_invoice = SalesInvoice(page)
-   login_page.perform_login(username, password)
 
    ref_no = "IRD_REF" + str(random.randint(10,99)) + "-" + str(random.randint(1000,9999))
    sales_invoice.enter_sales_invoice(ref_no)

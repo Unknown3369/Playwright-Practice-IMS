@@ -23,10 +23,13 @@ def test_debit_note(page,config_data):
    username = config_data["username"]
    password = config_data["password"]
 
-   login_page = login(page)
+   try:
+      login_page = login(page)
+      login_page.perform_login(username, password)
+   except:
+      print('Already Logged In')
+
    debit_note = DebitNote(page)
-   page.wait_for_timeout(15000)
-   login_page.perform_login(username, password)
    products = read_products_from_csv("product_details.csv")
    random_ref_no = "IRD_REF_NO" + str(random.randint(10000, 99999))
    debit_note.enter_debit_note()

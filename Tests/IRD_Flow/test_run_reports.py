@@ -15,8 +15,10 @@ def test_print_all_final_reports(page, config_data):
     login_page = login(page)
     materialized_view_report_page = MaterializedViewReportPage(page)
 
-    login_page.perform_login(username, password)
-    print("Logged into IMS")
+    try:
+        login_page.perform_login(username, password)
+    except:
+        print("Logged into IMS")
 
     materialized_view_report_page.generate_materialized_view_report()
     materialized_view_report_page.download_materialized_view_report()

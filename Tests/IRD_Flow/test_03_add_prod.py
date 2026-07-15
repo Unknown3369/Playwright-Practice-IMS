@@ -77,9 +77,12 @@ def test_add_prod(page, config_data):
    
    username = config_data["username"]
    password = config_data["password"]
-   login_page = login(page)
+   try:
+      login_page = login(page)
+      login_page.perform_login(username, password)
+   except: 
+      print("Already logged in")
    add_prod_page = Add_prod(page)
-   login_page.perform_login(username, password)
    clear_csv("product_details.csv")
    page.wait_for_load_state("networkidle")
    page.wait_for_timeout(3000)

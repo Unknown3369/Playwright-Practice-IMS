@@ -5,8 +5,11 @@ def test_reprint_invoice(page, config_data):
     username = config_data["username"]
     password = config_data["password"]
 
-    login_page = login(page)
-    login_page.perform_login(username, password)
+    try:
+        login_page = login(page)
+        login_page.perform_login(username, password)
+    except:
+        print('Already Logged in')
     reprint_invoice = Reprint_invoice(page)
     reprint_invoice.reprint_invoice()
 

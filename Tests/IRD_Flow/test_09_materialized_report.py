@@ -9,11 +9,12 @@ def test_materialized_view_report(page,config_data):
     username = config_data["username"]
     password = config_data["password"]
     
-    login_page = login(page)
+    try:
+        login_page = login(page)
+        login_page.perform_login(username, password)
+    except:
+        print('Already logged In')
 
-    login_page.perform_login(username, password)
-
-    print("Logged into IMS")
 
     materialized_view_report = MaterializedViewReportPage(page)
     materialized_view_report.generate_materialized_view_report()

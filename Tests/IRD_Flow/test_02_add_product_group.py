@@ -21,9 +21,12 @@ def random_group_code():
 def test_add_product_group_master(page, config_data):
    username = config_data["username"]
    password = config_data["password"]
+   try:
+      login_page = login(page)
+      login_page.perform_login(username, password)
+   except: 
+      print("Already Logged In")
 
-   login_page = login(page)
-   login_page.perform_login(username, password)
    clear_csv("product_groups.csv")
 
    try:

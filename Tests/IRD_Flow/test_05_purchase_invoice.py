@@ -1,7 +1,7 @@
+from conftest import browser
 import csv
-import os
 import random
-import pytest
+import time
 from playwright.sync_api import sync_playwright
 
 from Pages.Login import login
@@ -23,10 +23,14 @@ def read_products_from_csv(file_path):
 def test_purchase_invoice(page,config_data):
    username = config_data["username"]
    password = config_data["password"]
+   try:
+      login_page = login(page)
+
+      login_page.perform_login(username, password)
+   except: 
+      print("Already Logged In")
    
-   login_page = login(page)
    purchase_invoice = PurchaseInvoice(page)
-   login_page.perform_login(username, password)
    products = read_products_from_csv("product_details.csv")
    random_invoice_no = "IRD_REFNO." + str(random.randint(10000, 99999))
    purchase_invoice.purchase_invoice(random_invoice_no)
