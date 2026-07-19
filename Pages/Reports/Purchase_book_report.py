@@ -27,6 +27,7 @@ class PurchaseBookReport:
     def open_purchase_book_report(self):
 
         self.page.get_by_title("Reports").first.click()
+        time.sleep(1)
         self.page.get_by_title("Purchase Reports").nth(1).click()
         self.page.get_by_role("link", name="Purchase Book Report").click()
 

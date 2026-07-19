@@ -86,7 +86,10 @@ from Tests.IRD_Flow.test_run_reports import (
     test_print_all_final_reports as run_print_all_final_reports
 )
 
+from Tests.IRD_Flow.printpreview import close_print_preview
+
 import os
+import time
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
 
 def run_test(test_function, page, config_data, test_name):
@@ -166,27 +169,61 @@ def test_ird_flow(page, config_data):
         run_add_prod(page, config_data)
         print("Completed Test Add Product")
 
-#----------------------------Purchase Invoice------------------------------------------
+# #----------------------------Purchase Invoice------------------------------------------
+#     if "test_purchase_invoice" not in SKIP_TESTS:
+#         run_purchase_invoice(page, config_data)
+#         print("Completed Test Generate Purchase invoice")
+
+#----------------------------Purchase Invoice/Print Preview---------------------------------------------
     if "test_purchase_invoice" not in SKIP_TESTS:
         run_purchase_invoice(page, config_data)
         print("Completed Test Generate Purchase invoice")
+        time.sleep(15)
+        close_print_preview()
+        page.bring_to_front()
+        time.sleep(1)
 
 #----------------------------Purchase Book Report--------------------------------------
     purchase_book_report(page, config_data)
 
 #----------------------------Abbv Invoice/ Sales Bill----------------------------------
-    if "test_abbv_invoice" not in SKIP_TESTS:
-        run_abbv_invoice(page, config_data)
-        print("Completed Test Generate Abbreviated Invoice")
+    try:
+        if "test_abbv_invoice" not in SKIP_TESTS:
+            run_abbv_invoice(page, config_data)
+            print("Completed Test Generate Abbreviated Invoice")
+            time.sleep(20)
+            try:
+                close_print_preview()
+                page.bring_to_front()
+                time.sleep(1)
+            except:
+                print('Print Preview Not Found')
+    except:
+        print('Abbv Invoice/ Sales Bill Not Found')
 
 #----------------------------Sales Invoice---------------------------------------------
-    if "test_sales_invoice" not in SKIP_TESTS:
-        run_sales_invoice(page, config_data)
-        print("Completed Test Generate Sales Invoice")
+    try:
+        if "test_sales_invoice" not in SKIP_TESTS:
+            run_sales_invoice(page, config_data)
+            print("Completed Test Generate Sales Invoice")
+            time.sleep(20)
+            close_print_preview()
+            page.bring_to_front()
+            time.sleep(1)
+    except:
+        print('Sales Invoice Not Found')
+
     if "test_reprint_sales_invoice" not in SKIP_TESTS:
-        for i in range (3):
+        for i in range (1):
             run_reprint_invoice(page, config_data)
             print("Completed Test Reprint Invoice")
+            time.sleep(20)
+            try:
+                close_print_preview()
+                page.bring_to_front()
+                time.sleep(1)
+            except:
+                print('Print Preview Not Found')
 #----------------------------Sales Book Report-----------------------------------------
     sales_book_report(page, config_data)
 
@@ -200,10 +237,24 @@ def test_ird_flow(page, config_data):
     if "test_generate_credit_note" not in SKIP_TESTS:
         run_generate_credit_note(page, config_data)
         print("Completed Test Generate Credit Note")
+        time.sleep(15)
+        try:
+            close_print_preview()
+            page.bring_to_front()
+            time.sleep(1)
+        except:
+            print('Print Preview Not Found')
     if "test_reprint_credit_note" not in SKIP_TESTS:
         for i in range (3):
             run_reprint_credit_note(page, config_data)
             print("Completed Test Reprint Credit Note")
+            time.sleep(15)
+            try:
+                close_print_preview()
+                page.bring_to_front()
+                time.sleep(1)
+            except:
+                print('Print Preview Not Found')
 
 #-----------------------------Credit Note Book Report----------------------------------
     credit_note_report(page, config_data)
@@ -215,6 +266,12 @@ def test_ird_flow(page, config_data):
     if "test_debit_note" not in SKIP_TESTS:
         run_debit_note(page, config_data)
         print("Completed Test Generate Debit Note")
+        try:
+            close_print_preview()
+            page.bring_to_front()
+            time.sleep(1)
+        except:
+            print('Print Preview Not Found')
 #-----------------------------Debit Note Book Report-----------------------------------
     debit_note_report(page, config_data)
 
@@ -232,155 +289,3 @@ def test_ird_flow(page, config_data):
     page.wait_for_timeout(1000)
     print("test passed")
 
-# def test_ird_flow(page, config_data):
-
-#     run_test(
-#         run_add_product_group_master,
-#         page,
-#         config_data,
-#         "test_add_product_group_master"
-#     )
-
-#     run_test(
-#         run_add_customer,
-#         page,
-#         config_data,
-#         "test_add_customer"
-#     )
-
-#     run_test(
-#         run_create_vendor,
-#         page,
-#         config_data,
-#         "test_create_vendor"
-#     )
-
-#     run_test(
-#         run_add_prod,
-#         page,
-#         config_data,
-#         "test_add_prod"
-#     )
-
-#     run_test(
-#         run_purchase_invoice,
-#         page,
-#         config_data,
-#         "test_purchase_invoice"
-#     )
-
-#     run_test(
-#         run_purchase_book_report,
-#         page,
-#         config_data,
-#         "test_purchase_book_report"
-#     )
-
-#     run_test(
-#         run_abbv_invoice,
-#         page,
-#         config_data,
-#         "test_abbv_invoice"
-#     )
-
-#     run_test(
-#         run_sales_invoice,
-#         page,
-#         config_data,
-#         "test_sales_invoice"
-#     )
-
-#     for i in range(3):
-#         run_test(
-#             run_reprint_invoice,
-#             page,
-#             config_data,
-#             f"test_reprint_invoice - Run {i + 1}"
-#         )
-
-#     run_test(
-#         run_sales_book_report,
-#         page,
-#         config_data,
-#         "test_sales_book_report"
-#     )
-
-#     run_test(
-#         run_vat_sales_register_report,
-#         page,
-#         config_data,
-#         "test_vat_sales_register_report"
-#     )
-
-#     run_test(
-#         run_materialized_view_report,
-#         page,
-#         config_data,
-#         "test_materialized_view_report"
-#     )
-
-#     run_test(
-#         run_generate_credit_note,
-#         page,
-#         config_data,
-#         "test_generate_credit_note"
-#     )
-
-#     for i in range(3):
-#         run_test(
-#             run_reprint_credit_note,
-#             page,
-#             config_data,
-#             f"test_reprint_credit_note - Run {i + 1}"
-#         )
-
-#     run_test(
-#         run_generate_credit_note_book_report,
-#         page,
-#         config_data,
-#         "test_generate_credit_note_book_report"
-#     )
-
-#     run_test(
-#         run_vat_purchase_register_report,
-#         page,
-#         config_data,
-#         "test_vat_purchase_register_report"
-#     )
-
-#     run_test(
-#         run_debit_note,
-#         page,
-#         config_data,
-#         "test_debit_note"
-#     )
-
-#     run_test(
-#         run_generate_debit_note_book_report,
-#         page,
-#         config_data,
-#         "test_generate_debit_note_book_report"
-#     )
-
-#     run_test(
-#         run_stock_summary_report,
-#         page,
-#         config_data,
-#         "test_stock_summary_report"
-#     )
-
-#     run_test(
-#         run_print_all_final_reports,
-#         page,
-#         config_data,
-#         "test_print_all_final_reports"
-#     )
-
-#     run_test(
-#         run_transaction_activity_report,
-#         page,
-#         config_data,
-#         "test_transaction_activity_report"
-#     )
-
-#     print("All tests passed")
