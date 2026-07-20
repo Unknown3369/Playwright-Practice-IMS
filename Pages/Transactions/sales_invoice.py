@@ -82,7 +82,7 @@ class SalesInvoice:
          timeout=30000
       )
 
-      time.sleep(1)
+      time.sleep(2)
 
       quantity.fill(
          str(enter_quantity)
