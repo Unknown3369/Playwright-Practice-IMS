@@ -3,7 +3,7 @@ import time
 import csv
 from datetime import datetime
 import os
-import pyautogui
+
 # from pywinauto import Desktop
 
 class PurchaseInvoice:
@@ -90,7 +90,8 @@ class PurchaseInvoice:
     print("Save button clicked successfully!")
 
     time.sleep(3)
-
+    
+    import pyautogui
     pyautogui.click(1008, 710)
 
     print("Print button clicked!")
