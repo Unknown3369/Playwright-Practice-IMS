@@ -183,6 +183,13 @@ def test_ird_flow(page, config_data):
         page.bring_to_front()
         time.sleep(1)
 
+    try:
+        close_print_preview()
+        page.bring_to_front()
+        time.sleep(1)
+    except:
+        pass
+
 #----------------------------Purchase Book Report--------------------------------------
     purchase_book_report(page, config_data)
 
