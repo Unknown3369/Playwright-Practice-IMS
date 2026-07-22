@@ -1,12 +1,9 @@
 from glob import escape
-import pyautogui
 from playwright.sync_api import Page
 import time
 import csv
 from datetime import datetime
 import os
-
-# from pywinauto import Desktop
 
 class PurchaseInvoice:
    def __init__(self, page: Page):
@@ -61,24 +58,6 @@ class PurchaseInvoice:
       print("Quantity entered successfully!")
       self.page.wait_for_timeout(2000)
 
-   # def save_button_click(self):
-
-   #    # Click save button
-   #    self.page.locator(self.save_button).click()
-   #    print("Save button clicked successfully!")
-
-   #    # Handle alert
-   #    dialog_message = None
-
-   #    def handle_dialog(dialog):
-   #      nonlocal dialog_message
-   #      dialog_message = dialog.message
-   #      print("Alert says:", dialog_message)
-   #      dialog.accept()
-
-   #    self.page.once("dialog", handle_dialog)
-
-   #    self.page.wait_for_timeout(3000)
 
    def save_button_click(self):
 
@@ -92,11 +71,8 @@ class PurchaseInvoice:
     print("Save button clicked successfully!")
 
     time.sleep(3)
-    
-    import pyautogui
-    pyautogui.click(1008, 710)
 
     print("Print button clicked!")
 
     time.sleep(5)
-    pyautogui.press("esc")
+    self.page.keyboard.press("esc")

@@ -1,14 +1,11 @@
 import time
 
-
-
-def close_print_preview():
+def close_print_preview(page):
     print("Closing Chrome Print Preview...")
 
     time.sleep(20)
     
-    import pyautogui
-    pyautogui.press("esc")
+    page.keyboard.press("esc")
 
     time.sleep(3)
 

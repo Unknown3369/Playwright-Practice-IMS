@@ -90,7 +90,6 @@ from Tests.IRD_Flow.printpreview import close_print_preview
 
 import os
 import time
-import pyautogui
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
 
 def run_test(test_function, page, config_data, test_name):
@@ -202,7 +201,7 @@ def test_ird_flow(page, config_data):
         time.sleep(25)
 
     try:
-        close_print_preview()
+        close_print_preview(page)
         page.bring_to_front()
         time.sleep(1)
     except:
@@ -217,9 +216,9 @@ def test_ird_flow(page, config_data):
         run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
         print("Completed Test Generate Abbreviated Invoice")
         time.sleep(20)
-        pyautogui.press("esc")
+        page.keyboard.press("esc")
         try:
-            close_print_preview()
+            close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
         except:
@@ -231,8 +230,8 @@ def test_ird_flow(page, config_data):
             run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
             print("Completed Test Generate Sales Invoice")
             time.sleep(20)
-            pyautogui.press("esc")
-            close_print_preview()
+            page.keyboard.press("esc")
+            close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
 
@@ -243,14 +242,14 @@ def test_ird_flow(page, config_data):
             print("Completed Test Reprint Invoice")
             time.sleep(20)
             try:
-                close_print_preview()
+                close_print_preview(page)
                 page.bring_to_front()
                 time.sleep(1)
-                pyautogui.press("esc")
+                page.keyboard.press("esc")
             except:
                 print('Print Preview Not Found')
 #----------------------------Sales Book Report-----------------------------------------
-    pyautogui.press("esc")
+    page.keyboard.press("esc")
     sales_book_report(page, config_data)
 
 #-----------------------------VAT Sales register Report--------------------------------
@@ -264,9 +263,9 @@ def test_ird_flow(page, config_data):
         run_test(run_generate_credit_note, page, config_data, "test_generate_credit_note")
         print("Completed Test Generate Credit Note")
         time.sleep(20)
-        pyautogui.press("esc")
+        page.keyboard.press("esc")
         try:
-            close_print_preview()
+            close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
         except:
@@ -277,7 +276,7 @@ def test_ird_flow(page, config_data):
             print("Completed Test Reprint Credit Note")
             time.sleep(15)
             try:
-                close_print_preview()
+                close_print_preview(page)
                 page.bring_to_front()
                 time.sleep(1)
             except:
@@ -294,9 +293,9 @@ def test_ird_flow(page, config_data):
         run_test(run_debit_note, page, config_data, "test_debit_note")
         print("Completed Test Generate Debit Note")
         time.sleep(15)
-        pyautogui.press("esc")
+        page.keyboard.press("esc")
         try:
-            close_print_preview()
+            close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
         except:
