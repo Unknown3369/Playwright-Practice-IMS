@@ -21,6 +21,16 @@ def pytest_addoption(parser):
         action="store",
         help="Login password"
     )
+    parser.addoption(
+        "--customer-address",
+        action="store",
+        help="Customer address"
+    )
+    parser.addoption(
+        "--vender-address",
+        action="store",
+        help="Vender address"
+    )
 
 
 @pytest.fixture(scope="session")
@@ -29,6 +39,8 @@ def config_data(request):
     url = request.config.getoption("--url") or ""
     username = request.config.getoption("--username") or ""
     password = request.config.getoption("--password") or ""
+    customer_address = request.config.getoption("--customer-address") or ""
+    vender_address = request.config.getoption("--vender-address") or ""
 
     if not url:
         url = input("\nEnter URL: ").strip()
@@ -36,11 +48,17 @@ def config_data(request):
         username = input("Enter Username: ").strip()
     if not password:
         password = input("Enter Password: ").strip()
+    if not customer_address:
+        customer_address = input("Enter Customer Address: ").strip()
+    if not vender_address:
+        vender_address = input("Enter Vender Address: ").strip()
 
     return {
         "url": url,
         "username": username,
-        "password": password
+        "password": password,
+        "customer_address": customer_address,
+        "vender_address": vender_address,
     }
 
 @pytest.fixture(scope="session")
@@ -68,24 +86,24 @@ def page(browser, config_data):
 
     yield page
 
-    # Always capture final state screenshot per test
-    os.makedirs("reports/screenshots", exist_ok=True)
+    # # Always capture final state screenshot per test
+    # os.makedirs("reports/screenshots", exist_ok=True)
 
-    screenshot_path = (
-        f"reports/screenshots/final_"
-        f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    )
+    # screenshot_path = (
+    #     f"reports/screenshots/final_"
+    #     f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    # )
 
-    try:
-        if not page.is_closed():
-            page.screenshot(
-                path=screenshot_path,
-                full_page=True
-            )
-    except Exception as e:
-        print(f"Final screenshot failed: {e}")
+    # try:
+    #     if not page.is_closed():
+    #         page.screenshot(
+    #             path=screenshot_path,
+    #             full_page=True
+    #         )
+    # except Exception as e:
+    #     print(f"Final screenshot failed: {e}")
 
-    context.close()
+    # context.close()
 
 
 @pytest.hookimpl(hookwrapper=True)

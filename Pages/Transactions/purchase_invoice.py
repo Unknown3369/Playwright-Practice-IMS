@@ -1,3 +1,5 @@
+from glob import escape
+import pyautogui
 from playwright.sync_api import Page
 import time
 import csv
@@ -97,3 +99,4 @@ class PurchaseInvoice:
     print("Print button clicked!")
 
     time.sleep(5)
+    pyautogui.press("esc")

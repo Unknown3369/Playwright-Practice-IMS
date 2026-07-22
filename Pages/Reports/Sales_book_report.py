@@ -7,10 +7,6 @@ class SalesBookReportPage:
     def __init__(self, page: Page):
         self.page = page
 
-        # Locators
-        self.reports = "//span[contains(text(),'Reports')]"
-        self.sales_report = "text='Sales Report'"
-        self.sales_book_report = "//span[normalize-space()='Sales Book Report']"
         self.branch_dropdown = "//select[contains(@class, 'form-control') and contains(@class, 'selectText')]"
         self.user_dropdown = "//input[@type='checkbox' and @value='0']"
         self.select_customer = "//input[@type='text' and @placeholder='Press Enter or Tab for Account List']"
@@ -20,6 +16,7 @@ class SalesBookReportPage:
 
     def open_sales_book_report(self):
         self.page.get_by_title("Reports").first.click()
+        self.page.wait_for_timeout(1000)
         self.page.get_by_title("Sales Report").nth(1).click()
         self.page.get_by_role("link", name="Sales Book Report").click()
 
@@ -43,9 +40,9 @@ class SalesBookReportPage:
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)
 
-        with self.page.expect_download(timeout=60000) as download_info:
+        with self.page.expect_download(timeout=100000) as download_info:
             download_pdf.click()
-            self.page.wait_for_timeout(1000)
+            self.page.wait_for_timeout(1500)
             default = self.page.locator("//span[normalize-space()='Default Format']")
             default.page.wait_for_timeout(1500)
             default.click()

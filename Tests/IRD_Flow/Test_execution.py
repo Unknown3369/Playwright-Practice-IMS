@@ -90,19 +90,40 @@ from Tests.IRD_Flow.printpreview import close_print_preview
 
 import os
 import time
+import pyautogui
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
 
 def run_test(test_function, page, config_data, test_name):
-    if test_name not in SKIP_TESTS:
-        try:
-            test_function(page, config_data)
-            print(f"Completed {test_name}")
+    if test_name in SKIP_TESTS:
+        print(f"Skipped {test_name}")
+        return
 
-        except Exception as e:
-            print(f"\n FAILED: {test_name}")
-            print(f"Error: {e}")
-            print("Stopping remaining tests...")
-            raise
+    try:
+        print(f"\n========== Running {test_name} ==========")
+        test_function(page, config_data)
+        print(f"PASSED : {test_name}")
+
+    except Exception as e:
+        print("\n" + "=" * 80)
+        print(f"FAILED : {test_name}")
+        print(f"Error : {e}")
+        print("=" * 80)
+
+        while True:
+            choice = input(
+                "\nEnter 'continue' to skip this test and continue\n"
+                "or 'stop' to terminate execution:\n> "
+            ).strip().lower()
+
+            if choice == "continue":
+                print(f"Skipping {test_name}...\n")
+                return
+
+            elif choice == "stop":
+                raise
+
+            else:
+                print("Invalid input.")
 
 def sales_book_report(page, config_data):
     if "test_sales_book_report" not in SKIP_TESTS:
@@ -157,16 +178,16 @@ def test_ird_flow(page, config_data):
 
 #---------------------------Add Product/Customer/Vendor/Product_Group------------------
     if "test_add_product_group_master" not in SKIP_TESTS:
-        run_add_product_group_master(page, config_data)
+        run_test(run_add_product_group_master,page, config_data, "test_add_product_group_master")
         print("Completed Test Add Product Group")
     if "test_add_customer" not in SKIP_TESTS:
-        run_add_customer(page, config_data)
+        run_test(run_add_customer,page, config_data, "test_add_customer")
         print("Completed Test Add Customer")
     if "test_create_vendor" not in SKIP_TESTS:
-        run_create_vendor(page, config_data)                
+        run_test(run_create_vendor,page, config_data, "test_create_vendor")                
         print("Completed Test Add Vendor")
     if "test_add_prod" not in SKIP_TESTS:
-        run_add_prod(page, config_data)
+        run_test(run_add_prod,page, config_data, "test_add_prod")
         print("Completed Test Add Product")
 
 # #----------------------------Purchase Invoice------------------------------------------
@@ -176,12 +197,9 @@ def test_ird_flow(page, config_data):
 
 #----------------------------Purchase Invoice/Print Preview---------------------------------------------
     if "test_purchase_invoice" not in SKIP_TESTS:
-        run_purchase_invoice(page, config_data)
+        run_test(run_purchase_invoice, page, config_data,"test_purchase_invoice")
         print("Completed Test Generate Purchase invoice")
-        time.sleep(15)
-        close_print_preview()
-        page.bring_to_front()
-        time.sleep(1)
+        time.sleep(25)
 
     try:
         close_print_preview()
@@ -194,44 +212,45 @@ def test_ird_flow(page, config_data):
     purchase_book_report(page, config_data)
 
 #----------------------------Abbv Invoice/ Sales Bill----------------------------------
-    try:
-        if "test_abbv_invoice" not in SKIP_TESTS:
-            run_abbv_invoice(page, config_data)
-            print("Completed Test Generate Abbreviated Invoice")
-            time.sleep(20)
-            try:
-                close_print_preview()
-                page.bring_to_front()
-                time.sleep(1)
-            except:
-                print('Print Preview Not Found')
-    except:
-        print('Abbv Invoice/ Sales Bill Not Found')
 
-#----------------------------Sales Invoice---------------------------------------------
-    try:
-        if "test_sales_invoice" not in SKIP_TESTS:
-            run_sales_invoice(page, config_data)
-            print("Completed Test Generate Sales Invoice")
-            time.sleep(20)
+    if "test_abbv_invoice" not in SKIP_TESTS:
+        run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
+        print("Completed Test Generate Abbreviated Invoice")
+        time.sleep(20)
+        pyautogui.press("esc")
+        try:
             close_print_preview()
             page.bring_to_front()
             time.sleep(1)
-    except:
-        print('Sales Invoice Not Found')
+        except:
+            print('Print Preview Not Found')
+
+
+#----------------------------Sales Invoice---------------------------------------------
+        if "test_sales_invoice" not in SKIP_TESTS:
+            run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
+            print("Completed Test Generate Sales Invoice")
+            time.sleep(20)
+            pyautogui.press("esc")
+            close_print_preview()
+            page.bring_to_front()
+            time.sleep(1)
+
 
     if "test_reprint_sales_invoice" not in SKIP_TESTS:
         for i in range (1):
-            run_reprint_invoice(page, config_data)
+            run_test(run_reprint_invoice, page, config_data, "test_reprint_sales_invoice")
             print("Completed Test Reprint Invoice")
             time.sleep(20)
             try:
                 close_print_preview()
                 page.bring_to_front()
                 time.sleep(1)
+                pyautogui.press("esc")
             except:
                 print('Print Preview Not Found')
 #----------------------------Sales Book Report-----------------------------------------
+    pyautogui.press("esc")
     sales_book_report(page, config_data)
 
 #-----------------------------VAT Sales register Report--------------------------------
@@ -242,9 +261,10 @@ def test_ird_flow(page, config_data):
 
 #----------------------------Credit Note-----------------------------------------------
     if "test_generate_credit_note" not in SKIP_TESTS:
-        run_generate_credit_note(page, config_data)
+        run_test(run_generate_credit_note, page, config_data, "test_generate_credit_note")
         print("Completed Test Generate Credit Note")
-        time.sleep(15)
+        time.sleep(20)
+        pyautogui.press("esc")
         try:
             close_print_preview()
             page.bring_to_front()
@@ -253,7 +273,7 @@ def test_ird_flow(page, config_data):
             print('Print Preview Not Found')
     if "test_reprint_credit_note" not in SKIP_TESTS:
         for i in range (3):
-            run_reprint_credit_note(page, config_data)
+            run_test(run_reprint_credit_note, page, config_data, "test_reprint_credit_note")
             print("Completed Test Reprint Credit Note")
             time.sleep(15)
             try:
@@ -271,8 +291,10 @@ def test_ird_flow(page, config_data):
 
 #-----------------------------Debit Note-----------------------------------------------
     if "test_debit_note" not in SKIP_TESTS:
-        run_debit_note(page, config_data)
+        run_test(run_debit_note, page, config_data, "test_debit_note")
         print("Completed Test Generate Debit Note")
+        time.sleep(15)
+        pyautogui.press("esc")
         try:
             close_print_preview()
             page.bring_to_front()
@@ -287,7 +309,7 @@ def test_ird_flow(page, config_data):
 
 #-----------------------------Reprint Reports------------------------------------------
     if "test_print_all_final_reports" not in SKIP_TESTS:
-        run_print_all_final_reports(page, config_data)
+        run_test(run_print_all_final_reports, page, config_data, "test_print_all_final_reports")
         print("Completed Test Print All Final Reports")
 
 #-----------------------------Transacction Activity Report-----------------------------

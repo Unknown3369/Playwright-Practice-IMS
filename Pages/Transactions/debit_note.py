@@ -65,6 +65,7 @@ class DebitNote:
       quantity = self.page.locator(self.quantity)
       quantity.clear()
       quantity.fill(str(enter_quantity))
+      time.sleep(1)
       quantity.press("Enter")
       print("Quantity entered successfully!")
       self.page.wait_for_timeout(1000)

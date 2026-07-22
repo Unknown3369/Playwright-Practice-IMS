@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-
+import time
 class login:
    def __init__(self, page: Page):
       self.page = page
@@ -29,6 +29,7 @@ class login:
 
       print("Login button clicked!")
       self.page.wait_for_timeout(2000)
+      time.sleep(6)
 
       # Handle "already logged in" popup
       try:

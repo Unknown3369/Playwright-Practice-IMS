@@ -51,7 +51,7 @@ def test_add_customer(page,config_data):
    page.wait_for_load_state("networkidle")
    add_customer.open_add_customer()
    customer_name = random_name()
-   customer_address = input("Enter Customer Address: ")
+   customer_address = config_data["customer_address"]
    customer_contact = random_phone()
    add_customer.add_customer(customer_name,customer_address,customer_contact)
    customer_data = {

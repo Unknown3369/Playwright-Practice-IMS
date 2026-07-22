@@ -60,7 +60,7 @@ def test_create_vendor(page,config_data):
    vendor_page = AddVendor(page)
    vendor_page.open_add_vendor()
    vendor_name = random_name()
-   vendor_address = input("Enter Vendor Address: ")
+   vendor_address = config_data["vender_address"]
 
    vendor_vat = random_vat_no()
    vendor_email = random_email()
