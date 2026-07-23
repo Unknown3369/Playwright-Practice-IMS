@@ -207,6 +207,8 @@ def test_ird_flow(page, config_data):
     except:
         pass
 
+    time.sleep(4)
+
 #----------------------------Purchase Book Report--------------------------------------
     purchase_book_report(page, config_data)
 
@@ -250,6 +252,7 @@ def test_ird_flow(page, config_data):
                 print('Print Preview Not Found')
 #----------------------------Sales Book Report-----------------------------------------
     page.keyboard.press("esc")
+    time.sleep(4)
     sales_book_report(page, config_data)
 
 #-----------------------------VAT Sales register Report--------------------------------
@@ -281,6 +284,7 @@ def test_ird_flow(page, config_data):
                 time.sleep(1)
             except:
                 print('Print Preview Not Found')
+    time.sleep(4)
 
 #-----------------------------Credit Note Book Report----------------------------------
     credit_note_report(page, config_data)
@@ -300,6 +304,7 @@ def test_ird_flow(page, config_data):
             time.sleep(1)
         except:
             print('Print Preview Not Found')
+    time.sleep(4)
 #-----------------------------Debit Note Book Report-----------------------------------
     debit_note_report(page, config_data)
 

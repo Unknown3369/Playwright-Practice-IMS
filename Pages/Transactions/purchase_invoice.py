@@ -63,16 +63,14 @@ class PurchaseInvoice:
 
     def handle_dialog(dialog):
         print("Alert says:", dialog.message)
-        dialog.accept()
-
-    self.page.once("dialog", handle_dialog)
+        self.page.wait_for_timeout(5000)
+        dialog.dismiss() 
+        print("Alert dismissed")
 
     self.page.locator(self.save_button).click()
     print("Save button clicked successfully!")
 
-    time.sleep(3)
+    self.page.once("dialog", handle_dialog)
 
-    print("Print button clicked!")
+    
 
-    time.sleep(5)
-    self.page.keyboard.press("esc")

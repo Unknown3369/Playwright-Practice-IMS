@@ -6,6 +6,7 @@ def close_print_preview(page):
     time.sleep(20)
     
     page.keyboard.press("esc")
+    print("Escape Pressed")
 
     time.sleep(3)
 
