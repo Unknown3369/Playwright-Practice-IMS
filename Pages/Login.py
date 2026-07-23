@@ -4,7 +4,6 @@ class login:
    def __init__(self, page: Page):
       self.page = page
 
-      # locators (same XPath strategy as Selenium)
       self.username = "//input[@placeholder='Username']"
       self.password = "//input[@placeholder='Password']"
       self.login_button = "//button[contains(text(), 'Login')]"
