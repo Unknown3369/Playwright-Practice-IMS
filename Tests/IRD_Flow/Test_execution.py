@@ -231,9 +231,12 @@ def test_ird_flow(page, config_data):
             run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
             print("Completed Test Generate Sales Invoice")
             time.sleep(10)
-            close_print_preview(page)
-            page.bring_to_front()
-            time.sleep(1)
+            try:
+                close_print_preview(page)
+                page.bring_to_front()
+                time.sleep(1)
+            except:
+                pass
 
 
     if "test_reprint_sales_invoice" not in SKIP_TESTS:
