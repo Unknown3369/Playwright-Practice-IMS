@@ -9,6 +9,13 @@ import pytest
 class AbbvInvoice:
 
    def __init__(self, page: Page):
+
+      page.add_init_script("""
+         window.print = () => {
+            console.log("window.print() suppressed");
+         };
+      """)
+
       self.page = page
       self.refno = "#refnoInput"
       self.customer_enter = "#customerselectid"
@@ -144,7 +151,7 @@ class AbbvInvoice:
 
       final_save.click(force=True)
       print("Final Save clicked!")
-
+      
       for i in range(1):
          
          # Wait up to 15s for the PDF to arrive
@@ -165,9 +172,13 @@ class AbbvInvoice:
             print(f"Invoice successfully saved to {pdf_path}")
          else:
             pytest.fail("No PDF response detected within timeout. Invoice not saved.")
-            
+
+         time.sleep(5)
+         self.page.keyboard.press("Escape")
+         time.sleep(15)
       # -----------------------------------------------------------
       # Settle the browser page before the test closes
       # -----------------------------------------------------------
       print("Settling page to prevent abrupt teardown errors...")
       self.page.wait_for_timeout(2000)
+

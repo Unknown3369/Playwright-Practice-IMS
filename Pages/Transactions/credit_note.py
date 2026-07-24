@@ -3,10 +3,17 @@ import time as _time
 import csv
 from datetime import datetime
 import os
-
+import time
 
 class CreditNotePage:
     def __init__(self, page: Page):
+
+        page.add_init_script("""
+            window.print = () => {
+                console.log("window.print() suppressed");
+            };
+        """)
+        
         self.page = page
 
         self.ref_bill = "#refbill"
@@ -96,46 +103,9 @@ class CreditNotePage:
             f.write(body)
 
         print("PDF response saved.")
+        time.sleep(5)
+        self.page.keyboard.press("Escape")
+        time.sleep(15)
 
 #------------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------------------------
-
-        # # Wait for save to complete
-        # self.page.wait_for_timeout(6000)
-
-        # # Handle success popup if present
-        # try:
-        #     alert = self.page.locator("//div[contains(@class,'modal') and contains(@class,'show')]")
-
-        #     if alert.count() > 0 and alert.is_visible():
-        #         print(alert.inner_text())
-
-        #         ok = alert.locator("button").last
-        #         ok.click()
-
-        # except Exception:
-        #     pass
-
-        # # Save evidence
-        # os.makedirs("reports/screenshots", exist_ok=True)
-
-        # self.page.screenshot(
-        #     path="reports/screenshots/credit_note_saved.png",
-        #     full_page=True
-        # )
-
-        # with self.page.expect_response(
-        #     lambda r: "Pdf" in r.url
-        # ) as response_info:
-
-        #     save_btn.click()
-
-        #     response = response_info.value
-
-        #     print(response.url)
-        #     print(response.headers)
-
-        #     print(response.text())
-
-        #     print("Credit Note saved successfully.")

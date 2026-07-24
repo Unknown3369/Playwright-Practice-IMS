@@ -217,8 +217,7 @@ def test_ird_flow(page, config_data):
     if "test_abbv_invoice" not in SKIP_TESTS:
         run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
         print("Completed Test Generate Abbreviated Invoice")
-        time.sleep(20)
-        page.keyboard.press("esc")
+        time.sleep(10)
         try:
             close_print_preview(page)
             page.bring_to_front()
@@ -231,8 +230,7 @@ def test_ird_flow(page, config_data):
         if "test_sales_invoice" not in SKIP_TESTS:
             run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
             print("Completed Test Generate Sales Invoice")
-            time.sleep(20)
-            page.keyboard.press("esc")
+            time.sleep(10)
             close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
@@ -247,11 +245,9 @@ def test_ird_flow(page, config_data):
                 close_print_preview(page)
                 page.bring_to_front()
                 time.sleep(1)
-                page.keyboard.press("esc")
             except:
                 print('Print Preview Not Found')
 #----------------------------Sales Book Report-----------------------------------------
-    page.keyboard.press("esc")
     time.sleep(4)
     sales_book_report(page, config_data)
 
@@ -265,8 +261,7 @@ def test_ird_flow(page, config_data):
     if "test_generate_credit_note" not in SKIP_TESTS:
         run_test(run_generate_credit_note, page, config_data, "test_generate_credit_note")
         print("Completed Test Generate Credit Note")
-        time.sleep(20)
-        page.keyboard.press("esc")
+        time.sleep(10)
         try:
             close_print_preview(page)
             page.bring_to_front()
@@ -297,7 +292,6 @@ def test_ird_flow(page, config_data):
         run_test(run_debit_note, page, config_data, "test_debit_note")
         print("Completed Test Generate Debit Note")
         time.sleep(15)
-        page.keyboard.press("esc")
         try:
             close_print_preview(page)
             page.bring_to_front()

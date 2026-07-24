@@ -10,6 +10,13 @@ import csv
 class SalesInvoice:
 
    def __init__(self, page: Page):
+
+      page.add_init_script("""
+         window.print = () => {
+            console.log("window.print() suppressed");
+         };
+      """)
+
       self.page = page
       self.refno = "#refnoInput"
       self.customer_enter = "#customerselectid"
@@ -183,6 +190,10 @@ class SalesInvoice:
             
          else:
             pytest.fail("No PDF response detected within timeout. Invoice not saved.")
+
+         time.sleep(5)
+         self.page.keyboard.press("Escape")
+         time.sleep(15)
 
       # -----------------------------------------------------------
       # Settle the browser page before the test closes

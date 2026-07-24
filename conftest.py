@@ -65,7 +65,11 @@ def config_data(request):
 def browser():
    with sync_playwright() as p:
       browser = p.chromium.launch(
-         headless=False
+         headless=False,
+         args=[
+            "--kiosk-printing",
+            "--disable-print-preview",
+         ]
       )
 
       yield browser

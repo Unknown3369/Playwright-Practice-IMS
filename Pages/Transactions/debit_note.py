@@ -4,6 +4,13 @@ import csv
 
 class DebitNote:
    def __init__(self, page: Page):
+
+      page.add_init_script("""
+         window.print = () => {
+            console.log("window.print() suppressed");
+         };
+      """)
+
       self.page = page
 
       self.ref_no = "#invoiceNO"
@@ -77,4 +84,8 @@ class DebitNote:
       expect(save_button).to_be_enabled()
       save_button.click()
       print("Save button clicked successfully!")
+
+      time.sleep(5)
+      self.page.keyboard.press("Escape")
+      time.sleep(15)
       
