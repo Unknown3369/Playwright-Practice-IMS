@@ -20,6 +20,13 @@ class CreditNoteBookReportPage:
         self.page.get_by_title("Reports").first.click()
         self.page.get_by_title("Sales Report").nth(1).click()
         self.page.get_by_role("link", name="Credit Note Book Report").click()
+        expect(
+            self.page.get_by_role(
+            "group",
+            name="Branch Selection:"
+            )
+        ).to_be_visible(timeout=60000)
+        print("Current URL:", self.page.url)
 
         #     # Customer Selection
         # print("Selecting customer...")

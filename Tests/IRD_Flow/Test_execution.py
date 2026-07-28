@@ -237,10 +237,10 @@ def test_ird_flow(page, config_data):
                 time.sleep(1)
             except:
                 pass
-
+                
 
     if "test_reprint_sales_invoice" not in SKIP_TESTS:
-        for i in range (1):
+        for i in range (3):
             run_test(run_reprint_invoice, page, config_data, "test_reprint_sales_invoice")
             print("Completed Test Reprint Invoice")
             time.sleep(20)

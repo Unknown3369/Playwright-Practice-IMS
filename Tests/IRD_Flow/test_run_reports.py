@@ -1,12 +1,48 @@
 from Pages.Login import login
-from Pages.Reports.Materialized_View import MaterializedViewReportPage
-from Pages.Reports.Credit_note_report import CreditNoteBookReportPage
-from Pages.Reports.Debit_note_report import DebitNoteBookReportPage
-from Pages.Reports.Vat_sales_register_report import VatSalesRegisterReportPage
-from Pages.Reports.Vat_purchase_register_report import VatPurchaseRegisterReportPage
-from Pages.Reports.Stock_summary_report import StockSummaryReport
+from Tests.IRD_Flow.test_09_materialized_report import (
+    test_materialized_view_report as run_materialized_view_report
+)
+from Tests.IRD_Flow.test_11_credit_note_report import (
+    test_generate_credit_note_book_report as run_generate_credit_note_book_report
+)
+from Tests.IRD_Flow.test_15_debit_note_report import (
+    test_generate_debit_note_book_report as run_generate_debit_note_book_report
+)
+from Tests.IRD_Flow.test_11_vat_sales_register_report import (
+    test_vat_sales_register_report as run_vat_sales_register_report
+)
+from Tests.IRD_Flow.test_16_vat_purchase_report import (
+    test_vat_purchase_register_report as run_vat_purchase_register_report
+)
+from Tests.IRD_Flow.test_17_stock_summary_report import (
+    test_stock_summary_report as run_stock_summary_report
+)
 import time
 
+
+def materialized_view_report(page, config_data):
+    run_materialized_view_report(page, config_data)
+    print("Completed Test Materialized View Report")
+
+def credit_note_report(page, config_data):
+    run_generate_credit_note_book_report(page, config_data)
+    print("Completed Test Generate Credit Note Book Report")
+
+def debit_note_report(page, config_data):
+    run_generate_debit_note_book_report(page, config_data)
+    print("Completed Test Generate Debit Note Book Report")
+
+def vat_sales_report(page,config_data):
+    run_vat_sales_register_report(page, config_data)
+    print("Completed Test VAT Sales Register Report")
+
+def vat_purchase_report(page,config_data):
+    run_vat_purchase_register_report(page, config_data)
+    print("Completed Test VAT Purchase Register Report")
+
+def stock_summary_report(page,config_data):
+    run_stock_summary_report(page, config_data)
+    print("Completed Test Stock Summary Report")
 
 def test_print_all_final_reports(page, config_data):
     username = config_data["username"]
@@ -14,51 +50,32 @@ def test_print_all_final_reports(page, config_data):
 
 #----------------------------------------------------------------------------------
     login_page = login(page)
-    materialized_view_report_page = MaterializedViewReportPage(page)
 
     try:
         login_page.perform_login(username, password)
-    except:
-        print("Logged into IMS")
+    except Exception as e:
+        print("Logged into IMS", e)
+    
+    materialized_view_report(page, config_data)
 
-    materialized_view_report_page.generate_materialized_view_report()
-    materialized_view_report_page.download_materialized_view_report()
-    print("Materialized View Report generated successfully.")
-    time.sleep(2)
+    
+#----------------------------------------------------------------------------------
+    page.reload(wait_until="networkidle")
+    credit_note_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    credit_report_page = CreditNoteBookReportPage(page)
-    credit_report_page.generate_credit_note_book_report()
-    credit_report_page.download_credit_note_report()
-    print("Credit Note Book Report generated successfully.")
-    time.sleep(2)
+    page.reload(wait_until="networkidle")
+    debit_note_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    debit_report_page = DebitNoteBookReportPage(page)
-    debit_report_page.generate_debit_note_book_report()
-    debit_report_page.download_debit_note_report()
-    print("Debit Note Book Report generated successfully.")
-    time.sleep(2)
+    page.reload(wait_until="networkidle")
+    vat_sales_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    vat_sales_report = VatSalesRegisterReportPage(page)
-    vat_sales_report.generate_vat_sales_register_report()
-    vat_sales_report.download_vat_sales_report()
-    print("VAT Sales Register Report generated successfully.")
-    time.sleep(2)
+    page.reload(wait_until="networkidle")
+    vat_purchase_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    vat_purchase_report = VatPurchaseRegisterReportPage(page)
-    vat_purchase_report.generate_vat_purchase_register_report()
-    vat_purchase_report.download_vat_purchase_report()
-    print("Vat Purchase Register Report generated successfully.") 
-    time.sleep(2) 
-
-#----------------------------------------------------------------------------------
-    stock_report = StockSummaryReport(page)
-    stock_report.open_stock_summary_report()
-    stock_report.run_report()
-    stock_report.download_stock_summary_report()
-
-    print("Stock Summary Report generated successfully.")
-    time.sleep(2)
+    page.reload(wait_until="networkidle")
+    stock_summary_report(page,config_data)
+    time.sleep(5)
