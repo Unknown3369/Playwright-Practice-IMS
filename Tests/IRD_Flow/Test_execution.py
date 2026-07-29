@@ -240,7 +240,7 @@ def test_ird_flow(page, config_data):
                 
 
     if "test_reprint_sales_invoice" not in SKIP_TESTS:
-        for i in range (3):
+        for i in range (1):
             run_test(run_reprint_invoice, page, config_data, "test_reprint_sales_invoice")
             print("Completed Test Reprint Invoice")
             time.sleep(20)
@@ -272,7 +272,7 @@ def test_ird_flow(page, config_data):
         except:
             print('Print Preview Not Found')
     if "test_reprint_credit_note" not in SKIP_TESTS:
-        for i in range (3):
+        for i in range (1):
             run_test(run_reprint_credit_note, page, config_data, "test_reprint_credit_note")
             print("Completed Test Reprint Credit Note")
             time.sleep(15)

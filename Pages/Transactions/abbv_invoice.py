@@ -68,6 +68,7 @@ class AbbvInvoice:
       quantity.fill(
          str(enter_quantity)
       )
+      time.sleep(2)
 
       quantity.press("Enter")
       self.page.wait_for_timeout(1500)
