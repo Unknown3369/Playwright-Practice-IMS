@@ -66,6 +66,8 @@ Playwright-Practice-IMS/
   - Closes the context
 - **`pytest_runtest_makereport`** hook — After every test's `call` phase, takes a full-page screenshot named `<test_name>_<timestamp>.png` into `Reports/screenshots/` and attaches it to the pytest-html report via `pytest_html.extras.png`.
 
+![Flow of Automation](Flow.png)
+
 > ⚠️ Because `page` is function-scoped but `browser` is session-scoped, **every test gets a brand-new context** (and therefore a fresh, logged-out page) — but the *orchestrator* (`Test_execution.py`) calls the individual `test_*` functions directly as plain Python functions within **one single test (`test_ird_flow`)**, so in practice the whole IRD journey runs inside **one shared page/context**, logging in once at the start.
 
 ### 3.2 Two ways this codebase is exercised
