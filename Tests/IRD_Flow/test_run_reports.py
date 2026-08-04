@@ -55,27 +55,22 @@ def test_print_all_final_reports(page, config_data):
         login_page.perform_login(username, password)
     except Exception as e:
         print("Logged into IMS", e)
-    
+
+
     materialized_view_report(page, config_data)
 
-    
 #----------------------------------------------------------------------------------
-    page.reload(wait_until="networkidle")
     credit_note_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    page.reload(wait_until="networkidle")
     debit_note_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    page.reload(wait_until="networkidle")
     vat_sales_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    page.reload(wait_until="networkidle")
     vat_purchase_report(page, config_data)
 
 #----------------------------------------------------------------------------------
-    page.reload(wait_until="networkidle")
     stock_summary_report(page,config_data)
     time.sleep(5)

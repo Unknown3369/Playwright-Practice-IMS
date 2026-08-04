@@ -1,3 +1,5 @@
+test_results = []
+
 from Tests.IRD_Flow.test_01_Login import (
     test_login_to_ims as run_login_to_ims
 )
@@ -82,6 +84,10 @@ from Tests.IRD_Flow.test_reprint_credit_note import (
     test_reprint_credit_note as run_reprint_credit_note
 )
 
+from Tests.IRD_Flow.test_logout import (
+    test_logout as run_logout
+)
+
 from Tests.IRD_Flow.test_run_reports import (
     test_print_all_final_reports as run_print_all_final_reports
 )
@@ -92,37 +98,46 @@ import os
 import time
 SKIP_TESTS = os.getenv("SKIP_TESTS", "").split(",")
 
+test_results = []
+
 def run_test(test_function, page, config_data, test_name):
     if test_name in SKIP_TESTS:
-        print(f"Skipped {test_name}")
+        print(f" Skipped : {test_name}")
+
+        test_results.append({
+            "name": test_name,
+            "status": "FAILED",
+            "reason": "Test SKIPPED"
+        })
         return
 
     try:
         print(f"\n========== Running {test_name} ==========")
+
         test_function(page, config_data)
+
         print(f"PASSED : {test_name}")
 
-    except Exception as e:
-        print("\n" + "=" * 80)
-        print(f"FAILED : {test_name}")
-        print(f"Error : {e}")
-        print("=" * 80)
+        test_results.append({
+            "name": test_name,
+            "status": "PASSED",
+            "reason": ""
+        })
 
-        while True:
-            choice = input(
-                "\nEnter 'continue' to skip this test and continue\n"
-                "or 'stop' to terminate execution:\n> "
-            ).strip().lower()
+    except Exception:
 
-            if choice == "continue":
-                print(f"Skipping {test_name}...\n")
-                return
+        print("\n" + "=" * 60)
+        print("TEST FAILED")
+        print("=" * 60)
+        print(f"Test Case : {test_name}")
+        print("=" * 60)
 
-            elif choice == "stop":
-                raise
+        test_results.append({
+            "name": test_name,
+            "status": "FAILED"
+        })
 
-            else:
-                print("Invalid input.")
+        return
 
 def sales_book_report(page, config_data):
     if "test_sales_book_report" not in SKIP_TESTS:
@@ -169,112 +184,128 @@ def transaction_activity_report(page, config_data):
         run_transaction_activity_report(page, config_data)
         print("Completed Test Transaction Activity Report")
 
+
+
 def test_ird_flow(page, config_data):
 
-    if "test_login_to_ims" not in SKIP_TESTS:
-        run_login_to_ims(page, config_data)
-        print("Completed Test Login")
+    try:
+        if "test_login_to_ims" not in SKIP_TESTS:
+            run_login_to_ims(page, config_data)
+            print("Completed Test Login")
 
 #---------------------------Add Product/Customer/Vendor/Product_Group------------------
-    if "test_add_product_group_master" not in SKIP_TESTS:
-        run_test(run_add_product_group_master,page, config_data, "test_add_product_group_master")
-        print("Completed Test Add Product Group")
-    if "test_add_customer" not in SKIP_TESTS:
-        run_test(run_add_customer,page, config_data, "test_add_customer")
-        print("Completed Test Add Customer")
-    if "test_create_vendor" not in SKIP_TESTS:
-        run_test(run_create_vendor,page, config_data, "test_create_vendor")                
-        print("Completed Test Add Vendor")
-    if "test_add_prod" not in SKIP_TESTS:
-        run_test(run_add_prod,page, config_data, "test_add_prod")
-        print("Completed Test Add Product")
-
-# #----------------------------Purchase Invoice------------------------------------------
-#     if "test_purchase_invoice" not in SKIP_TESTS:
-#         run_purchase_invoice(page, config_data)
-#         print("Completed Test Generate Purchase invoice")
+        if "test_add_product_group_master" not in SKIP_TESTS:
+            run_test(run_add_product_group_master,page, config_data, "test_add_product_group_master")
+            print("Completed Test Add Product Group")
+        if "test_add_customer" not in SKIP_TESTS:
+            run_test(run_add_customer,page, config_data, "test_add_customer")
+            print("Completed Test Add Customer")
+        if "test_create_vendor" not in SKIP_TESTS:
+            run_test(run_create_vendor,page, config_data, "test_create_vendor")                
+            print("Completed Test Add Vendor")
+        if "test_add_prod" not in SKIP_TESTS:
+            run_test(run_add_prod,page, config_data, "test_add_prod")
+            print("Completed Test Add Product")
 
 #----------------------------Purchase Invoice/Print Preview---------------------------------------------
-    if "test_purchase_invoice" not in SKIP_TESTS:
-        run_test(run_purchase_invoice, page, config_data,"test_purchase_invoice")
-        print("Completed Test Generate Purchase invoice")
-        time.sleep(25)
+        if "test_purchase_invoice" not in SKIP_TESTS:
+            run_test(run_purchase_invoice, page, config_data,"test_purchase_invoice")
+            print("Completed Test Generate Purchase invoice")
+            time.sleep(25)
 
-    try:
-        close_print_preview(page)
-        page.bring_to_front()
-        time.sleep(1)
-    except:
-        pass
-
-    time.sleep(4)
-
-#----------------------------Purchase Book Report--------------------------------------
-    purchase_book_report(page, config_data)
-
-#----------------------------Abbv Invoice/ Sales Bill----------------------------------
-
-    if "test_abbv_invoice" not in SKIP_TESTS:
-        run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
-        print("Completed Test Generate Abbreviated Invoice")
-        time.sleep(10)
         try:
             close_print_preview(page)
             page.bring_to_front()
             time.sleep(1)
         except:
-            print('Print Preview Not Found')
+            pass
 
+        time.sleep(4)
 
-#----------------------------Sales Invoice---------------------------------------------
-        if "test_sales_invoice" not in SKIP_TESTS:
-            run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
-            print("Completed Test Generate Sales Invoice")
+#----------------------------Purchase Book Report--------------------------------------
+        purchase_book_report(page, config_data)
+
+#----------------------------Abbv Invoice/ Sales Bill----------------------------------
+
+        if "test_abbv_invoice" not in SKIP_TESTS:
+            run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
+            print("Completed Test Generate Abbreviated Invoice")
             time.sleep(10)
             try:
                 close_print_preview(page)
                 page.bring_to_front()
                 time.sleep(1)
             except:
-                pass
-                
+                print('Print Preview Not Found')
 
-    if "test_reprint_sales_invoice" not in SKIP_TESTS:
-        for i in range (1):
-            run_test(run_reprint_invoice, page, config_data, "test_reprint_sales_invoice")
-            print("Completed Test Reprint Invoice")
-            time.sleep(20)
+
+#----------------------------Sales Invoice---------------------------------------------
+            if "test_sales_invoice" not in SKIP_TESTS:
+                run_test(run_sales_invoice, page, config_data, "test_sales_invoice")
+                print("Completed Test Generate Sales Invoice")
+                time.sleep(10)
+                try:
+                    close_print_preview(page)
+                    page.bring_to_front()
+                    time.sleep(1)
+                except:
+                    pass
+                
+        if "test_reprint_sales_invoice" not in SKIP_TESTS:
+            for i in range (1):
+                run_test(run_reprint_invoice, page, config_data, "test_reprint_sales_invoice")
+                print("Completed Test Reprint Invoice")
+                time.sleep(20)
+                try:
+                    close_print_preview(page)
+                    page.bring_to_front()
+                    time.sleep(1)
+                except:
+                    print('Print Preview Not Found')
+#----------------------------Sales Book Report-----------------------------------------
+        time.sleep(4)
+        sales_book_report(page, config_data)
+
+#-----------------------------VAT Sales register Report--------------------------------
+        vat_sales_report(page, config_data)
+
+#----------------------------Materialized View Report----------------------------------
+        materialized_view_report(page, config_data)
+
+#----------------------------Credit Note-----------------------------------------------
+        if "test_generate_credit_note" not in SKIP_TESTS:
+            run_test(run_generate_credit_note, page, config_data, "test_generate_credit_note")
+            print("Completed Test Generate Credit Note")
+            time.sleep(10)
             try:
                 close_print_preview(page)
                 page.bring_to_front()
                 time.sleep(1)
             except:
                 print('Print Preview Not Found')
-#----------------------------Sales Book Report-----------------------------------------
-    time.sleep(4)
-    sales_book_report(page, config_data)
+        if "test_reprint_credit_note" not in SKIP_TESTS:
+            for i in range (1):
+                run_test(run_reprint_credit_note, page, config_data, "test_reprint_credit_note")
+                print("Completed Test Reprint Credit Note")
+                time.sleep(15)
+                try:
+                    close_print_preview(page)
+                    page.bring_to_front()
+                    time.sleep(1)
+                except:
+                    print('Print Preview Not Found')
+        time.sleep(4)
 
-#-----------------------------VAT Sales register Report--------------------------------
-    vat_sales_report(page, config_data)
+#-----------------------------Credit Note Book Report----------------------------------
+        credit_note_report(page, config_data)
 
-#----------------------------Materialized View Report----------------------------------
-    materialized_view_report(page, config_data)
+#-----------------------------VAT Purchase register Report-----------------------------
+        vat_purchase_report(page, config_data)
 
-#----------------------------Credit Note-----------------------------------------------
-    if "test_generate_credit_note" not in SKIP_TESTS:
-        run_test(run_generate_credit_note, page, config_data, "test_generate_credit_note")
-        print("Completed Test Generate Credit Note")
-        time.sleep(10)
-        try:
-            close_print_preview(page)
-            page.bring_to_front()
-            time.sleep(1)
-        except:
-            print('Print Preview Not Found')
-    if "test_reprint_credit_note" not in SKIP_TESTS:
-        for i in range (1):
-            run_test(run_reprint_credit_note, page, config_data, "test_reprint_credit_note")
-            print("Completed Test Reprint Credit Note")
+#-----------------------------Debit Note-----------------------------------------------
+        if "test_debit_note" not in SKIP_TESTS:
+            run_test(run_debit_note, page, config_data, "test_debit_note")
+            print("Completed Test Generate Debit Note")
             time.sleep(15)
             try:
                 close_print_preview(page)
@@ -282,40 +313,44 @@ def test_ird_flow(page, config_data):
                 time.sleep(1)
             except:
                 print('Print Preview Not Found')
-    time.sleep(4)
-
-#-----------------------------Credit Note Book Report----------------------------------
-    credit_note_report(page, config_data)
-
-#-----------------------------VAT Purchase register Report-----------------------------
-    vat_purchase_report(page, config_data)
-
-#-----------------------------Debit Note-----------------------------------------------
-    if "test_debit_note" not in SKIP_TESTS:
-        run_test(run_debit_note, page, config_data, "test_debit_note")
-        print("Completed Test Generate Debit Note")
-        time.sleep(15)
-        try:
-            close_print_preview(page)
-            page.bring_to_front()
-            time.sleep(1)
-        except:
-            print('Print Preview Not Found')
-    time.sleep(4)
+        time.sleep(4)
 #-----------------------------Debit Note Book Report-----------------------------------
-    debit_note_report(page, config_data)
+        debit_note_report(page, config_data)
 
 #-----------------------------Stock Summary Report-------------------------------------
-    stock_summary_report(page,config_data)
+        stock_summary_report(page,config_data)
+
+#-----------------------------Logout--------------------------------------------------
+        if "test_logout" not in SKIP_TESTS:
+            run_test(run_logout,page, config_data, "test_logout")
+            print("Completed logout")
 
 #-----------------------------Reprint Reports------------------------------------------
-    if "test_print_all_final_reports" not in SKIP_TESTS:
-        run_test(run_print_all_final_reports, page, config_data, "test_print_all_final_reports")
-        print("Completed Test Print All Final Reports")
+        if "test_print_all_final_reports" not in SKIP_TESTS:
+            page.reload(wait_until="load")
+            run_test(run_print_all_final_reports, page, config_data, "test_print_all_final_reports")
+            print("Completed Test Print All Final Reports")
 
 #-----------------------------Transacction Activity Report-----------------------------
-    transaction_activity_report(page, config_data)
+        transaction_activity_report(page, config_data)
+    finally:
+        print_summary()
 
     page.wait_for_timeout(1000)
     print("test passed")
 
+    def print_summary():
+        failed = [t for t in test_results if t["status"] == "FAILED"]
+
+        if not failed:
+            print("\n All test cases passed.")
+        return
+
+        print("\n" + "=" * 60)
+        print("FAILED TEST CASE(S)")
+        print("=" * 60)
+
+        for i, test in enumerate(failed, start=1):
+            print(f"{i}. {test['name']}")
+
+        print("=" * 60)
