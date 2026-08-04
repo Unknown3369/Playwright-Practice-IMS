@@ -185,6 +185,23 @@ def transaction_activity_report(page, config_data):
         print("Completed Test Transaction Activity Report")
 
 
+def print_summary():
+        failed = [t for t in test_results if t["status"] == "FAILED"]
+
+        if not failed:
+            print("\n All test cases passed.")
+        return
+
+        print("\n" + "=" * 60)
+        print("FAILED TEST CASE(S)")
+        print("=" * 60)
+
+        for i, test in enumerate(failed, start=1):
+            print(f"{i}. {test['name']}")
+
+        print("=" * 60)
+
+
 
 def test_ird_flow(page, config_data):
 
@@ -339,18 +356,4 @@ def test_ird_flow(page, config_data):
     page.wait_for_timeout(1000)
     print("test passed")
 
-    def print_summary():
-        failed = [t for t in test_results if t["status"] == "FAILED"]
-
-        if not failed:
-            print("\n All test cases passed.")
-        return
-
-        print("\n" + "=" * 60)
-        print("FAILED TEST CASE(S)")
-        print("=" * 60)
-
-        for i, test in enumerate(failed, start=1):
-            print(f"{i}. {test['name']}")
-
-        print("=" * 60)
+    
