@@ -8,10 +8,13 @@ class logout:
         self.logout_button = "a[title='log out']"
 
     def perform_logout(self):
-        self.page.locator(self.logout_link).click()
-        self.page.locator(self.logout_button).wait_for(state="visible", timeout=10000)
-        self.page.locator(self.logout_button).click()
-        print('logout clicked')
+
         self.page.on("dialog", lambda dialog: dialog.accept())
-        print('popup handled')
-        time.sleep(2)
+
+        self.page.locator(self.logout_link).click()
+        self.page.locator(self.logout_button).wait_for(state="visible")
+        self.page.locator(self.logout_button).click()
+
+        time.sleep(3)
+
+        print("Logout clicked")

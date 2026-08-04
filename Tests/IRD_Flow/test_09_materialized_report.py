@@ -15,9 +15,6 @@ def test_materialized_view_report(page,config_data):
     except:
         print('Already logged In')
 
-    page.reload(wait_until="networkidle")
-    page.reload(wait_until="load")
-
     materialized_view_report = MaterializedViewReportPage(page)
     materialized_view_report.generate_materialized_view_report()
     materialized_view_report.download_materialized_view_report()

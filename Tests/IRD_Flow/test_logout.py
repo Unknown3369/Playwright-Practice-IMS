@@ -1,4 +1,4 @@
-import os
+import time
 
 from Pages.Logout import logout
 from Pages.Login import login
@@ -13,5 +13,8 @@ def test_logout(page, config_data):
     except:
         print('already logged in')
     logout_page = logout(page)
+    time.sleep(2)
     logout_page.perform_logout()
     print('loggedout sucessfully')
+
+    time.sleep(10)

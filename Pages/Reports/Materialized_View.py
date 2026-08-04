@@ -18,6 +18,11 @@ class MaterializedViewReportPage:
         self.page.get_by_title("Reports").first.click()
         self.page.get_by_title("VAT Report").nth(1).click()
         self.page.get_by_role("link", name="Materialized View").click()
+        try:
+            branch_select = self.page.locator("//select[contains(@class,'selectText')]")
+            branch_select.select_option(label="ALL")
+        except:
+            print('Branch All Not Found')
 
         # Run Button
         self.page.locator(self.run_btn).click()
