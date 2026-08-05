@@ -42,7 +42,7 @@ class BulkSalesPriceUpdate:
 
       ok_button.click()
       print("OK button clicked.")
-      time.sleep(20)
+      time.sleep(15)
 
    def update_prices(self):
 

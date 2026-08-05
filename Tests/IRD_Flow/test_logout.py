@@ -17,4 +17,4 @@ def test_logout(page, config_data):
     logout_page.perform_logout()
     print('loggedout sucessfully')
 
-    time.sleep(10)
+    time.sleep(8)

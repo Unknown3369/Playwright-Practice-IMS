@@ -86,17 +86,3 @@ class PurchaseBookReport:
 
         self.page.wait_for_timeout(2000)
 
-        # # Check "Data Not Found" popup
-        # try:
-        #     popup = self.page.locator(
-        #         "//div[contains(text(),'Data Not found with given filters')]"
-        #     )
-
-        #     if popup.is_visible(timeout=7000):
-        #         self.page.locator(self.ok_button).click()
-        #         pytest.fail(
-        #             "Test failed: 'Data Not found with given filters' alert appeared."
-        #         )
-
-        # except:
-        #     print("No popup detected.")

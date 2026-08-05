@@ -27,47 +27,11 @@ class CreditNoteBookReportPage:
             )
         ).to_be_visible(timeout=60000)
         print("Current URL:", self.page.url)
-
-        #     # Customer Selection
-        # print("Selecting customer...")
-
-        # customer_input = self.page.locator(self.customer_input)
-        # customer_input.scroll_into_view_if_needed()
-        # customer_input.click()
-
-        # self.page.wait_for_timeout(1000)
-
-        # customer_input.press("Enter")
-
-        # self.page.wait_for_timeout(2000)
-
-        # self.page.locator(self.customer_option).dblclick()
-
-        # print("Selected customer.")
-
-        # self.page.wait_for_timeout(2000)
-
-        # Detail Report Radio Button
-        # print("Selecting 'Detail Report' option...")
-
-        # detail_report_radio = self.page.locator(
-        #         self.detail_report_radio
-        #     )
-
-        # detail_report_radio.scroll_into_view_if_needed()
-
-        # if not detail_report_radio.is_checked():
-        #         detail_report_radio.check(force=True)
-
-        # print("Selected 'Detail Report' radio button.")
-
-        # self.page.wait_for_timeout(2000)
     
         branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
 
         branch.select_option(label="ALL")
 
-            # Run Button
         print("Clicking 'RUN' button...")
 
         run_button = self.page.locator(
@@ -78,20 +42,6 @@ class CreditNoteBookReportPage:
         run_button.click()
 
         print("Clicked 'RUN' button successfully.")
-
-        # download_pdf = self.page.locator("svg[role='img'][data-icon='file-pdf']")
-        # os.makedirs("downloads", exist_ok=True)
-
-        # with self.page.expect_download(timeout=60000) as download_info:
-        #     download_pdf.click()
-
-        # download = download_info.value
-
-        # download.save_as(f"downloads/{download.suggested_filename}")
-
-        # print(f"Downloaded: {download.suggested_filename}")
-        
-        # self.page.wait_for_timeout(2000)
 
     def download_credit_note_report(self):
         download_pdf = self.page.locator("svg[data-icon='file-export']")

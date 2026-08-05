@@ -114,4 +114,4 @@ def test_add_prod(page, config_data):
       save_product_to_csv(item_code=item_code,item_name=random_item_name,hs_code=random_hs_code,description=random_description,purchase_price=random_purchase_price,sales_price=random_sales_price,vatable=vatable_status)
 
       page.wait_for_timeout(2000)
-      time.sleep(10)
+      time.sleep(8)

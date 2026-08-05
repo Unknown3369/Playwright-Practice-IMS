@@ -17,4 +17,4 @@ def test_purchase_book_report(page,config_data):
 
     purchase_report.open_purchase_book_report()
 
-    time.sleep(10)
+    time.sleep(8)

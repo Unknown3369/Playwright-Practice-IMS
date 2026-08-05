@@ -105,7 +105,7 @@ class CreditNotePage:
         print("PDF response saved.")
         time.sleep(5)
         self.page.keyboard.press("Escape")
-        time.sleep(15)
+        time.sleep(10)
 
 #------------------------------------------------------------------------------------
 

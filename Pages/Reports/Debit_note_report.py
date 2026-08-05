@@ -41,24 +41,6 @@ class DebitNoteBookReportPage:
         self.page.get_by_title("Purchase Reports").nth(1).click()
         self.page.get_by_role("link", name="Debit Note Book Report").click()
 
-            # Select Detail Report
-            # print("Selecting 'Detail Report' option...")
-
-            # detail_radio = self.page.locator(
-            #     self.detail_report_radio
-            # )
-
-            # detail_radio.scroll_into_view_if_needed()
-
-            # if not detail_radio.is_checked():
-            #     detail_radio.check(force=True)
-
-            # print(
-            #     "Selected 'Detail Report' radio button."
-            # )
-
-            # self.page.wait_for_timeout(2000)
-
         branch = self.page.get_by_role("group", name="Branch Selection:").get_by_role("combobox")
 
         branch.select_option(label="ALL")

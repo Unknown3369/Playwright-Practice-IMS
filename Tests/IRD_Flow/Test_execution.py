@@ -190,7 +190,7 @@ def print_summary():
 
         if not failed:
             print("\n All test cases passed.")
-        return
+            return
 
         print("\n" + "=" * 60)
         print("FAILED TEST CASE(S)")
@@ -228,7 +228,7 @@ def test_ird_flow(page, config_data):
         if "test_purchase_invoice" not in SKIP_TESTS:
             run_test(run_purchase_invoice, page, config_data,"test_purchase_invoice")
             print("Completed Test Generate Purchase invoice")
-            time.sleep(25)
+            time.sleep(20)
 
         try:
             close_print_preview(page)
@@ -237,7 +237,7 @@ def test_ird_flow(page, config_data):
         except:
             pass
 
-        time.sleep(4)
+        time.sleep(3)
 
 #----------------------------Purchase Book Report--------------------------------------
         purchase_book_report(page, config_data)
@@ -247,7 +247,7 @@ def test_ird_flow(page, config_data):
         if "test_abbv_invoice" not in SKIP_TESTS:
             run_test(run_abbv_invoice, page, config_data, "test_abbv_invoice")
             print("Completed Test Generate Abbreviated Invoice")
-            time.sleep(10)
+            time.sleep(8)
             try:
                 close_print_preview(page)
                 page.bring_to_front()

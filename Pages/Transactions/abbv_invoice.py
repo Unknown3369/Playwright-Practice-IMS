@@ -176,7 +176,7 @@ class AbbvInvoice:
 
          time.sleep(5)
          self.page.keyboard.press("Escape")
-         time.sleep(15)
+         time.sleep(10)
       # -----------------------------------------------------------
       # Settle the browser page before the test closes
       # -----------------------------------------------------------
