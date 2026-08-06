@@ -35,6 +35,8 @@ class SalesBookReportPage:
 
         # Click Run Button
         self.page.locator(self.run_button).click()
+        time.sleep(5)
+
         print("Run button clicked successfully!")
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")

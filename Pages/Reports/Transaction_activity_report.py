@@ -1,6 +1,7 @@
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
+import time
 
 class TransactionActivityReport:
 
@@ -24,6 +25,7 @@ class TransactionActivityReport:
 
         run_button.scroll_into_view_if_needed()
         run_button.click()
+        time.sleep(5)
 
         print("Run button clicked successfully!")
 

@@ -40,6 +40,7 @@ class CreditNoteBookReportPage:
 
         run_button.scroll_into_view_if_needed()
         run_button.click()
+        time.sleep(5)
 
         print("Clicked 'RUN' button successfully.")
 
