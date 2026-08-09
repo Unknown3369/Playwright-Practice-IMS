@@ -1,3 +1,4 @@
+import traceback
 test_results = []
 
 from Tests.IRD_Flow.test_01_Login import (
@@ -124,17 +125,20 @@ def run_test(test_function, page, config_data, test_name):
             "reason": ""
         })
 
-    except Exception:
 
+
+    except Exception as e:
         print("\n" + "=" * 60)
         print("TEST FAILED")
         print("=" * 60)
         print(f"Test Case : {test_name}")
-        print("=" * 60)
+        print(f"Error : {e}")
+        traceback.print_exc()
 
         test_results.append({
-            "name": test_name,
-            "status": "FAILED"
+        "name": test_name,
+        "status": "FAILED",
+        "reason": str(e)
         })
 
         return
