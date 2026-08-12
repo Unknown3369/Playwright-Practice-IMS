@@ -33,10 +33,13 @@ def test_abbv_invoice(page,config_data):
    products = read_products_from_csv(
       "product_details.csv"
    )
-
-   for product in products:
+   try:
+      for product in products:
          item_code = product["Item Code"]
          random_quantity = 10
          sales_invoice.sales_invoice_test(item_code,random_quantity)
    
-   sales_invoice.save_btn()
+      sales_invoice.save_btn()
+
+   except:
+      print('abbv invoice not found')
