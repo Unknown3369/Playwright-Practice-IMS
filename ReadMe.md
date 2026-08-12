@@ -6,27 +6,74 @@ This repository contains **IRD Process automation** for the WebPOS/IMS applicati
 
 - **Framework:** Playwright (Python)
 - **Test Runner:** Pytest
-- **Application:** IMS/WebPOS on `http://{}.variantqa.himshang.com.np`
+- **Application:** IMS/WebPOS on `https://{link}.variantqa.himshang.com.np`
 
 ## Repository Structure
 
 ```
-C:.
-├───Pages
-│   ├───Masters
-│   ├───Reports
-│   └───Transactions
-├───Reports
-│   ├───data
-│   └───screenshots
-├───Tests
-│   ├───IRD_Flow
-│   ├───Masters
-│   └───Transactions
-├───downloads
-├───invoices
-├───scratch
-└───screenshots
+Playwright-Practice-IMS/
+├── conftest.py                  
+├── generate_pdf.py              
+├── requirements.txt             
+├── ReadMe.md                    
+├── Flow.png                     
+├── customers.csv                
+├── vendors.csv                  
+├── product_groups.csv           
+├── product_details.csv          
+├── Pages/                      
+│   ├── Login.py                 
+│   ├── invoice_reprint.py       
+│   ├── reprint_invoice.py       
+│   ├── Masters/                 
+│   │   ├── Add_Category.py
+│   │   ├── Add_Customer.py
+│   │   ├── Add_Product.py
+│   │   ├── Add_Product_Group.py
+│   │   ├── Add_Vendor.py
+│   │   └── Bulk_Price_Change.py
+│   ├── Transactions/            
+│   │   ├── Purchase_Invoice.py
+│   │   ├── Sales_Invoice.py
+│   │   ├── Abbreviated_Invoice.py
+│   │   ├── Credit_Note.py
+│   │   ├── Debit_Note.py
+│   │   └── Opening_Stock.py
+│   └── Reports/                 
+│       ├── Purchase_Book_Report.py
+│       ├── Sales_Book_Report.py
+│       ├── Credit_Note_Book_Report.py
+│       ├── Debit_Note_Book_Report.py
+│       ├── VAT_Sales_Register.py
+│       ├── VAT_Purchase_Register.py
+│       ├── Stock_Summary_Report.py
+│       ├── Transaction_Activity_Report.py
+│       └── Materialized_View_Report.py
+├── Tests/                       
+│   ├── IRD_Flow/                
+│   │   ├── Test_execution.py    
+│   │   ├── printpreview.py      
+│   │   └── test_run_reports.py  
+│   ├── Masters/                 
+│   │   └── test_*.py
+│   └── Transactions/            
+│       └── test_*.py
+├── Reports/                     
+│   ├── report.html              
+│   ├── data/                    
+│   └── screenshots/            
+├── downloads/                   
+├── invoices/                    
+├── scratch/                     
+├── venv/                        
+│   ├── Include/
+│   ├── Lib/
+│   │   └── site-packages/
+│   └── Scripts/
+├── .pytest_cache/               
+│   └── v/
+│       └── cache/
+└── __pycache__/                
 ```
 
 ## Local Testing
@@ -44,7 +91,7 @@ git clone https://github.com/Unknown3369/Playwright-Practice-IMS.git
 cd Playwright-Practice-IMS
 
 # Create virtual environment
-python3 -m venv venv   || python -m venv [environment name]
+python3 -m venv venv   || python -m venv [environment_name]
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies

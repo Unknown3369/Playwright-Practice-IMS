@@ -13,7 +13,7 @@
 | **Reporting** | `pytest-html` report |
 | **Author** | Sagan Krishna Tamrakar |
 
-This is not a classic "one test = one independent scenario" suite. It automates a single **continuous business journey** — the full IRD tax-compliance flow of an IMS system, from login through creating masters, raising invoices, and pulling every necessary report — chained together into one long run (`test_ird_flow`).
+This is not a classic "one test = one independent scenario" suite. It automates a single **continuous business journey** — the full IRD tax-compliance flow of the system, from login through creating masters, raising invoices, and pulling every necessary report — chained together into one long run (`test_ird_flow`).
 
 ---
 
@@ -23,36 +23,66 @@ This is not a classic "one test = one independent scenario" suite. It automates 
 Playwright-Practice-IMS/
 ├── conftest.py                  # Pytest fixtures: config_data, browser, page
 ├── generate_pdf.py              # Standalone helper: renders an HTML invoice to PDF via headless Chromium
-├── requirements.txt             # Dependency list (raw pip-freeze dump — see §8)
-├── ReadMe.md                    # Original project README
-├── Flow.png                     # Flow diagram of the automation, embedded below
+├── requirements.txt             # Dependency list
+├── ReadMe.md                    # Project README
+├── Flow.png                     # Flow diagram of the automation
 ├── customers.csv                # Log of customers created during runs
 ├── vendors.csv                  # Log of vendors created during runs
 ├── product_groups.csv           # Log of product groups created during runs
 ├── product_details.csv          # FIFO log (max 10 rows) of products created during runs
-│
 ├── Pages/                       # Page Object Model classes
 │   ├── Login.py                 # Login + "already logged in" popup handling
-│   ├── invoice_reprint.py / reprint_invoice.py   # Reprint Credit Note / Sales Invoice, save PDF to invoices/
-│   ├── Masters/                 # Add Category / Customer / Product / Product Group / Vendor / Bulk Price Change
-│   ├── Transactions/            # Purchase Invoice, Sales Invoice, Abbreviated Invoice, Credit Note, Debit Note, Opening Stock
-│   └── Reports/                 # Purchase/Sales/Credit/Debit book reports, VAT Sales & Purchase registers,
-│                                 # Stock Summary, Transaction Activity, Materialized View
-│
+│   ├── invoice_reprint.py       # Invoice / Credit Note reprint and PDF handling
+│   ├── reprint_invoice.py       # Invoice reprint functionality
+│   ├── Masters/                 # Master-data Page Objects
+│   │   ├── Add_Category.py
+│   │   ├── Add_Customer.py
+│   │   ├── Add_Product.py
+│   │   ├── Add_Product_Group.py
+│   │   ├── Add_Vendor.py
+│   │   └── Bulk_Price_Change.py
+│   ├── Transactions/            # Transaction Page Objects
+│   │   ├── Purchase_Invoice.py
+│   │   ├── Sales_Invoice.py
+│   │   ├── Abbreviated_Invoice.py
+│   │   ├── Credit_Note.py
+│   │   ├── Debit_Note.py
+│   │   └── Opening_Stock.py
+│   └── Reports/                 # Report Page Objects
+│       ├── Purchase_Book_Report.py
+│       ├── Sales_Book_Report.py
+│       ├── Credit_Note_Book_Report.py
+│       ├── Debit_Note_Book_Report.py
+│       ├── VAT_Sales_Register.py
+│       ├── VAT_Purchase_Register.py
+│       ├── Stock_Summary_Report.py
+│       ├── Transaction_Activity_Report.py
+│       └── Materialized_View_Report.py
 ├── Tests/                       # Pytest test modules
-│   ├── IRD_Flow/                # The main end-to-end IRD journey
-│   │   ├── Test_execution.py    # Orchestrator: calls each numbered test in business order, with retry prompt
-│   │   ├── printpreview.py      # close_print_preview(page) — dismisses Chrome's native print dialog
-│   │   └──test_run_reports.py  # Batch re-run of all final reports (imported by Test_execution.py)
-│   ├── Masters/                 # Standalone master-data tests (e.g. bulk price change) — hardcoded creds (not part of IRD flow)
-│   └── Transactions/            # Standalone transaction tests (e.g. opening stock) — hardcoded creds (not part of IRD flow)
-│
-├── Reports/
-│   └── report.html              # Generated pytest-html report (after a run)
-├── downloads/                   # Excel (.xlsx) exports downloaded during report tests
-├── invoices/                    # PDF copies of invoices/reprints (Sales Invoice, Credit Note, reprints)
-├── scratch/                     # Developer scratch scripts and DOM dumps used for debugging locators
-└── .pytest_cache/
+│   ├── IRD_Flow/                # Main end-to-end IRD journey
+│   │   ├── Test_execution.py    # Main orchestrator; runs tests in business order
+│   │   ├── printpreview.py      # Handles Chrome native print preview
+│   │   └── test_run_reports.py  # Batch execution of final report tests
+│   ├── Masters/                 # Standalone master-data tests
+│   │   └── test_*.py
+│   └── Transactions/            # Standalone transaction tests
+│       └── test_*.py
+├── Reports/                     # Test execution reports and artifacts
+│   ├── report.html              # Generated pytest-html report
+│   ├── data/                    # Report-related data
+│   └── screenshots/             # Screenshots captured during test execution
+├── downloads/                   # Excel (.xlsx) files downloaded during report tests
+├── invoices/                    # Generated PDF invoices / credit notes / reprints
+├── scratch/                     # Developer scratch scripts and DOM dumps
+├── venv/                        # Python virtual environment
+│   ├── Include/
+│   ├── Lib/
+│   │   └── site-packages/
+│   └── Scripts/
+├── .pytest_cache/               # Pytest temporary cache
+│   └── v/
+│       └── cache/
+└── __pycache__/                 # Python bytecode cache
 ```
 
 ---
@@ -130,14 +160,6 @@ pytest Tests/IRD_Flow/Test_execution.py \
   --vender-address "Lalitpur" \
   -v --html=Reports/report.html --self-contained-html -s
 ```
-> The Customer and Vendor addresses used in TC steps that create a Customer/Vendor master now come directly from these two flags/prompts, rather than being randomly generated (as they were in earlier versions of this suite).
-
-> **Interactive failure prompt:** Most steps in `test_ird_flow` are now wrapped in a `run_test()` helper. If a step raises an exception, execution **pauses and prompts on the console**:
-> ```
-> Enter 'continue' to skip this test and continue
-> or 'stop' to terminate execution:
-> ```
-> This means an unattended/CI run can hang indefinitely on a failure unless something is piping a response to stdin. Plan around this for automated pipelines (see §9).
 
 ### 4.5 Skip specific steps
 
@@ -163,7 +185,6 @@ Valid skip-names correspond to the identifiers checked in `Test_execution.py`: `
 pytest Tests/Masters/test_10_bulk_price_change.py -v
 pytest Tests/Transactions/test_03_opening_stock.py -v
 ```
-These use hardcoded credentials `Testuser` / `Test@1234` and don't require `--url`/`--username`/`--password`/`--customer-address`/`--vender-address` — the `page` fixture will otherwise prompt for them interactively.
 
 **Note:** Only tests under `Tests/Masters/` and `Tests/Transactions/` skip the CLI-flag requirement; everything under `Tests/IRD_Flow/` needs the full `config_data` set.
 
@@ -198,8 +219,6 @@ These use hardcoded credentials `Testuser` / `Test@1234` and don't require `--ur
 
 Report steps (7, 11–13, 16, 17, 19–21, 22) download an Excel file into `downloads/`.
 
-> **Change from earlier revisions of this suite:** VAT Sales Register Report and Materialized View Report previously ran twice in the flow; they now each run exactly once. Reprint Sales Invoice and Reprint Credit Note previously looped 3×; they now loop once (`for i in range(1)` — a leftover loop construct that is effectively a no-op).
-
 ---
 
 ## 6. Page Object Model Conventions
@@ -224,20 +243,16 @@ Report steps (7, 11–13, 16, 17, 19–21, 22) download an Excel file into `down
 | `downloads/` | Excel (`.xlsx`) report exports downloaded during the run |
 | `invoices/` | PDF copies of the Sales Invoice and reprinted Sales Invoice / Credit Note documents |
 | `Reports/report.html` | Self-contained pytest-html report |
-| `scratch/dom_dump_*.html` | Saved DOM snapshots used while debugging locators (developer artifact, not part of test execution) |
 
 ---
 
 ## 8. Key Dependencies (from `requirements.txt`)
 
-- `playwright==1.48.0`, `pytest-playwright==0.8.0`
-- `pytest==9.0.3`, `pytest-html==4.1.1`, `pytest-base-url==2.1.0`, `pytest-rerunfailures==16.3`, `pytest-xdist==3.8.0`, `pytest-metadata==3.1.1`
+- `playwright`, `pytest-playwright`
+- `pytest`, `pytest-html`, `pytest-base-url`, `pytest-rerunfailures`, `pytest-xdist`, `pytest-metadata`
 - `pandas`, `openpyxl` (data/report handling)
 - `PyAutoGUI`, `PyMsgBox`, `PyRect`, `pytweening`, `keyboard` (native OS interaction — likely used for print-dialog/clipboard handling)
 - `Flask`, `Flask-SocketIO`, `eventlet`, `python-socketio`, `python-engineio`, `simple-websocket` (present but not referenced anywhere in the test flow — an auxiliary tool, not required to run the suite)
-
-> ⚠️ **`requirements.txt` is currently a raw, unfiltered `pip freeze` dump** (UTF-16 encoded, likely from PowerShell) rather than a curated dependency list. It includes packages with no relation to this project — e.g. `pyright`, `pylance`, `lance-namespace`, `numpy`, `pyarrow`, `pydantic`, `dnspython`, `webdriver-manager` — which appear to be artifacts of the developer's local Python/IDE environment rather than actual test dependencies. `allure-pytest` and `allure-python-commons`, present in earlier versions, have been removed (consistent with Allure no longer being used — see §6). Recommend regenerating this file with `pip freeze` from a clean virtualenv containing only this project's actual imports, saved as UTF-8, before relying on it for a fresh setup.
-
 ---
 
 ## 9. Known Gotchas / Notes for Future Maintainers
@@ -258,20 +273,18 @@ Report steps (7, 11–13, 16, 17, 19–21, 22) download an Excel file into `down
 
 ```bash
 # Full IRD flow, headless (default), with HTML report
-pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s
+pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s --tb=short
 
 # Full IRD flow, credentials/addresses passed inline (recommended for CI)
 pytest Tests/IRD_Flow/Test_execution.py \
   --url <url> --username <user> --password <pass> \
   --customer-address <address> --vender-address <address> \
-  -v --html=Reports/report.html --self-contained-html -s
+  -v --html=Reports/report.html --self-contained-html -s --tb=short
 
 # Skip specific steps
 SKIP_TESTS="test_debit_note,test_generate_debit_note_book_report" pytest Tests/IRD_Flow/Test_execution.py -v --html=Reports/report.html --self-contained-html -s
 
-# Run only the bulk price change master test
-pytest Tests/Masters/test_10_bulk_price_change.py -v
+# Run specific test
+pytest Tests/Masters/[test_name].py -v -s
 
-# Run only the opening stock transaction test
-pytest Tests/Transactions/test_03_opening_stock.py -v
 ```
