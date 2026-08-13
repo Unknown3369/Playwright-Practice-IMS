@@ -1,3 +1,4 @@
+from os import name
 from playwright.sync_api import Page, expect
 import os
 from datetime import datetime
@@ -34,34 +35,74 @@ class VatPurchaseRegisterReportPage:
 
         print("RUN button clicked to generate report.")
 
+    # def download_vat_purchase_report(self):
+
+    #     download_pdf = self.page.locator("svg[data-icon='file-export']")
+    #     os.makedirs("downloads", exist_ok=True)
+
+    #     with self.page.expect_download(timeout=60000) as download_info:
+    #         download_pdf.click()
+    #         self.page.wait_for_timeout(1000)
+    #         default = self.page.locator("//span[normalize-space()='Default Format']")
+    #         default.page.wait_for_timeout(1500)
+    #         default.click()
+
+    #     download = download_info.value
+
+    #     # Current time
+    #     timestamp = datetime.now().strftime("%H-%M-%S")
+
+    #     # Original filename
+    #     filename = download.suggested_filename
+    #     name, ext = os.path.splitext(filename)
+
+    #     # New filename with timestamp
+    #     new_filename = f"{name} {timestamp}{ext}"
+
+    #     download.save_as(
+    #         os.path.join("downloads", new_filename)
+    #     )
+
+    #     print(f"Downloaded: {new_filename}")
+
+    #     self.page.wait_for_timeout(2000)
     def download_vat_purchase_report(self):
 
-        download_pdf = self.page.locator("svg[data-icon='file-export']")
+        download_pdf = self.page.locator(
+            "svg[data-icon='file-export']"
+        )
+
         os.makedirs("downloads", exist_ok=True)
 
+        # Open export menu
+        download_pdf.click()
+
+        print("Export button clicked.")
+
+    # Wait for Default Format option
+        default = self.page.locator("//span[normalize-space()='Default Format']")
+
+        default.wait_for(state="visible",timeout=30000)
+
+        print("Default Format option is visible.")
+
         with self.page.expect_download(timeout=60000) as download_info:
-            download_pdf.click()
-            self.page.wait_for_timeout(1000)
-            default = self.page.locator("//span[normalize-space()='Default Format']")
-            default.page.wait_for_timeout(1500)
             default.click()
 
         download = download_info.value
 
-        # Current time
         timestamp = datetime.now().strftime("%H-%M-%S")
 
-        # Original filename
         filename = download.suggested_filename
         name, ext = os.path.splitext(filename)
 
-        # New filename with timestamp
         new_filename = f"{name} {timestamp}{ext}"
 
-        download.save_as(
-            os.path.join("downloads", new_filename)
-        )
+        download_path = os.path.join("downloads",new_filename)
+
+        download.save_as(download_path)
 
         print(f"Downloaded: {new_filename}")
+        print(f"Saved to: {download_path}")
 
         self.page.wait_for_timeout(2000)
