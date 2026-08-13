@@ -2,7 +2,7 @@ import csv
 import os
 import random
 import uuid
-
+import time
 from Pages.Login import login
 from Pages.Masters.add_vendor import AddVendor
 
@@ -81,4 +81,5 @@ def test_create_vendor(page,config_data):
       "PARTYTYPE": "Supplier"
    }
    write_vendor_to_csv(vendor_data)
+   time.sleep(3)
    print(f"Vendor '{vendor_name}' created successfully!")

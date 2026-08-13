@@ -2,7 +2,7 @@ import os
 import random
 import uuid
 import csv
-
+import time
 from Pages.Login import login
 from Pages.Masters.add_customer import AddCustomer
 
@@ -62,4 +62,5 @@ def test_add_customer(page,config_data):
       "Email": ""
    }
    write_customer_to_csv(customer_data)
+   time.sleep(3)
    print(f"Customer '{customer_name}' added successfully!")
