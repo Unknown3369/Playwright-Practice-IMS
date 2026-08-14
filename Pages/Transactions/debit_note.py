@@ -55,6 +55,7 @@ class DebitNote:
       vendor_select.wait_for(state="visible",timeout=30000)
       vendor_select.dblclick()
       print(f"Vendor '{vendor_name}' selected successfully!")
+      time.sleep(1)
 
    def debit_note_test(self, item_code: str, enter_quantity: int):
 
