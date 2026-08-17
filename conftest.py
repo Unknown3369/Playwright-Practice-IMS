@@ -36,22 +36,37 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="session")
 def config_data(request):
 
-    url = request.config.getoption("--url") or ""
-    username = request.config.getoption("--username") or ""
-    password = request.config.getoption("--password") or ""
-    customer_address = request.config.getoption("--customer-address") or ""
-    vender_address = request.config.getoption("--vender-address") or ""
+    def get_required_input(prompt):
+        while True:
+            value = input(prompt).strip()
 
+            if value:
+                return value
+
+            print("This field is required. Please enter a value.")
+
+    url = request.config.getoption("--url")
+    username = request.config.getoption("--username")
+    password = request.config.getoption("--password")
+    customer_address = request.config.getoption("--customer-address")
+    vender_address = request.config.getoption("--vender-address")
+
+    # If values are not provided through command line,
+    # ask for them and make them compulsory.
     if not url:
-        url = input("\nEnter URL: ").strip()
+        url = get_required_input("\nEnter URL: ")
+
     if not username:
-        username = input("Enter Username: ").strip()
+        username = get_required_input("Enter Username: ")
+
     if not password:
-        password = input("Enter Password: ").strip()
+        password = get_required_input("Enter Password: ")
+
     if not customer_address:
-        customer_address = input("Enter Customer Address: ").strip()
+        customer_address = get_required_input("Enter Customer Address: ")
+
     if not vender_address:
-        vender_address = input("Enter Vender Address: ").strip()
+        vender_address = get_required_input("Enter Vender Address: ")
 
     return {
         "url": url,
@@ -89,25 +104,6 @@ def page(browser, config_data):
     page.goto(config_data["url"])
 
     yield page
-
-    # # Always capture final state screenshot per test
-    # os.makedirs("reports/screenshots", exist_ok=True)
-
-    # screenshot_path = (
-    #     f"reports/screenshots/final_"
-    #     f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    # )
-
-    # try:
-    #     if not page.is_closed():
-    #         page.screenshot(
-    #             path=screenshot_path,
-    #             full_page=True
-    #         )
-    # except Exception as e:
-    #     print(f"Final screenshot failed: {e}")
-
-    # context.close()
 
 
 @pytest.hookimpl(hookwrapper=True)
