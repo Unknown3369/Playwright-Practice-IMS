@@ -52,7 +52,10 @@ class DebitNoteBookReportPage:
         run_button.click()
 
         print("Clicked 'RUN' button successfully.")
-        time.sleep(5)
+        self.page.locator("//th[normalize-space()='Date (A.D.)']").wait_for(
+            state="visible",
+            timeout=30000
+        )
     
     def download_debit_note_report(self):
 

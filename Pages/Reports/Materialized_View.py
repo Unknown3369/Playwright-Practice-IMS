@@ -26,7 +26,10 @@ class MaterializedViewReportPage:
 
         # Run Button
         self.page.locator(self.run_btn).click()
-        time.sleep(5)
+        self.page.locator("//th[contains(normalize-space(.), 'Fiscal_Year')]").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
         print("Clicked RUN button")
     

@@ -46,7 +46,11 @@ class PurchaseBookReport:
         # Run Report
         self.page.locator(self.run_button).click()
         print("Run button clicked successfully!")
-        time.sleep(5)
+
+        self.page.locator("//tr/th[normalize-space()='Supplier Name']").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
         download_pdf = self.page.locator("svg[data-icon='file-export']")
         os.makedirs("downloads", exist_ok=True)

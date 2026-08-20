@@ -25,7 +25,10 @@ class TransactionActivityReport:
 
         run_button.scroll_into_view_if_needed()
         run_button.click()
-        time.sleep(5)
+        self.page.locator("//th[contains(normalize-space(.), 'UserId')]").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
         print("Run button clicked successfully!")
 

@@ -31,7 +31,10 @@ class VatPurchaseRegisterReportPage:
 
         run_btn.scroll_into_view_if_needed()
         run_btn.click()
-        time.sleep(5)
+        self.page.locator("//th[normalize-space()='Invoice Detail']").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
         print("RUN button clicked to generate report.")
 

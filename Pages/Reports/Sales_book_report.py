@@ -35,7 +35,10 @@ class SalesBookReportPage:
 
         # Click Run Button
         self.page.locator(self.run_button).click()
-        time.sleep(5)
+        self.page.locator("//th[normalize-space()='Date (A.D.)']").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
         print("Run button clicked successfully!")
 

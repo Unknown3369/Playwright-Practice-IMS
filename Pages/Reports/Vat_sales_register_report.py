@@ -46,7 +46,10 @@ class VatSalesRegisterReportPage:
             ).click()
 
         print("Clicked RUN button.")
-        time.sleep(5)
+        self.page.locator("//th[normalize-space()='INVOICE']").wait_for(
+            state="visible",
+            timeout=30000
+        )
 
     def download_vat_sales_report(self):
 
