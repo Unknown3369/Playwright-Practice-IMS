@@ -111,10 +111,6 @@ class SalesInvoice:
       save_btn.click()
       print("Save button clicked!")
 
-      # -------------------------------------------------------
-      # Wait for the success alert modal to appear then vanish
-      # The alert modal blocks all button clicks until it closes
-      # -------------------------------------------------------
       try:
          # Wait for the alert modal to appear (up to 5s)
          self.page.wait_for_selector(
@@ -148,11 +144,6 @@ class SalesInvoice:
       final_save = self.page.locator(self.final_save)
       final_save.wait_for(state="visible", timeout=30000)
 
-      # -----------------------------------------------------------
-      # Intercept the PDF response the server sends after Final Save
-      # The app returns the invoice as application/pdf from the server.
-      # We capture the response body before Chrome's PDF viewer takes it.
-      # -----------------------------------------------------------
       captured_pdf = []
 
       def handle_response(response):
@@ -195,8 +186,5 @@ class SalesInvoice:
          self.page.keyboard.press("Escape")
          time.sleep(10)
 
-      # -----------------------------------------------------------
-      # Settle the browser page before the test closes
-      # -----------------------------------------------------------
       print("Settling page to prevent abrupt teardown errors...")
       self.page.wait_for_timeout(2000)
