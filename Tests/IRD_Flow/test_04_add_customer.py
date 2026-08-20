@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 CUSTOMER_CSV = BASE_DIR / "customers.csv"
 
 def random_name():
-    return "IRD_Customer_" + uuid.uuid4().hex[:2]
+    return "IRD_Customer" # + uuid.uuid4().hex[:2]
 
 def random_phone():
     return "98" + str(random.randint(10000000, 99999999))

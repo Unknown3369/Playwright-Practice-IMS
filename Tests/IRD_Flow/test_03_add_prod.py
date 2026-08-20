@@ -11,7 +11,7 @@ import time
 MAX_PRODUCTS = 10
 
 def random_name():
-   return "IRD_PRODUCT"+ uuid.uuid4().hex[:2]
+   return "IRD_PRODUCT" #+ uuid.uuid4().hex[:2]
 
 def clear_csv(filename="added_products.csv"):
    with open(filename, mode="w", newline="", encoding="utf-8") as file:

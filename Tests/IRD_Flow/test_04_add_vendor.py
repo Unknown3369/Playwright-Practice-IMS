@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 VENDOR_CSV = BASE_DIR / "vendors.csv"
 
 def random_name():
-    return "IRD_VENDOR_" + uuid.uuid4().hex[:2]
+    return "IRD_VENDOR" # + uuid.uuid4().hex[:2]
 
 def random_vat_no():
     return str(random.randint(100000000, 999999999))
