@@ -1,4 +1,4 @@
-# QA-TestCases - Playwright Automation
+# QA-TestCases - Playwright Automation- IRD Process Automation for IMS Software WebPOS
 
 This repository contains **IRD Process automation** for the WebPOS/IMS application using **Playwright**.
 
